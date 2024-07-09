@@ -1,0 +1,36 @@
+server:
+  port: 8080
+  mode: prod
+
+jwt:
+  key: nuxbt
+
+log:
+  level: debug
+  mode:
+    - console
+    - file
+  path: ./log
+
+mysql:
+  host: 192.168.2.3
+  port: 3306
+  username: root
+  password: 123456
+  database: nuxbt
+
+redis:
+  host: 192.168.2.4
+  port: 6379
+  password:
+  poolSize: 1000
+
+oss:
+  type: minio # minio,r2 等等
+  endpoint: 127.0.0.1:9000
+  accessKey: ChYm7ufIwNAOzq6PQPCA
+  secretKey: udicP52IwRbmo2hf6lFvjUS7NP5BhlAdsGNIuDE5
+  region: local
+  bucket: nuxbt
+  useSsl: false
+  hostnameImmutable: true
