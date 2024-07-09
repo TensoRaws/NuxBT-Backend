@@ -12,7 +12,8 @@ log:
     - file
   path: ./log
 
-mysql:
+db:
+  type: postgres # mysql, postgres
   host: 192.168.2.3
   port: 3306
   username: root
@@ -26,7 +27,7 @@ redis:
   poolSize: 1000
 
 oss:
-  type: minio # minio,r2 等等
+  type: minio # minio, cos
   endpoint: 127.0.0.1:9000
   accessKey: ChYm7ufIwNAOzq6PQPCA
   secretKey: udicP52IwRbmo2hf6lFvjUS7NP5BhlAdsGNIuDE5

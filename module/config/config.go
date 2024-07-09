@@ -16,47 +16,9 @@ var (
 	once   sync.Once
 )
 
-type MySQL struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Database string `yaml:"database"`
-}
-
-type Redis struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Password string `yaml:"password"`
-	PoolSize int    `yaml:"poolSize"`
-	Database int    `yaml:"database"`
-}
-
-type OSS struct {
-	Endpoint  string `yaml:"endpoint"`
-	AccessKey string `yaml:"accessKey"`
-	SecretKey string `yaml:"secretKey"`
-	Region    string `yaml:"region"`
-	Bucket    string `yaml:"bucket"`
-
-	// 如果是使用 minio，并且没有使用 https，需要设置为 false
-	UseSsl *bool `yaml:"useSsl"`
-	// 如果是使用 minio，需要设置为 true
-	HostnameImmutable *bool `yaml:"hostnameImmutable"`
-}
-
-type Default struct {
-	Avatar        string `json:"avatar"`
-	BackgroundIMG string `json:"backgroundIMG"`
-	Signature     string `json:"signature"`
-}
-
 var (
-	mysql      MySQL
-	redis      Redis
 	OSSConfig  OSS
 	OSS_PREFIX string
-	DEFAULT    Default
 )
 
 func Init() {
@@ -106,7 +68,8 @@ func initialize() {
 				"path":  "./log",
 			})
 
-			config.SetDefault("mysql", map[string]interface{}{
+			config.SetDefault("db", map[string]interface{}{
+				"type":     "postgres",
 				"host":     "127.0.0.1",
 				"port":     3306,
 				"username": "root",
@@ -122,21 +85,30 @@ func initialize() {
 			})
 		}
 	}
-	err := config.UnmarshalKey("mysql", &mysql)
+
+	err := config.UnmarshalKey("server", &Server{})
 	if err != nil {
-		log.Fatalf("unable to decode into mysql struct, %v", err)
+		log.Fatalf("unable to decode into server struct, %v", err)
 	}
-	err = config.UnmarshalKey("redis", &redis)
+	err = config.UnmarshalKey("jwt", &Jwt{})
+	if err != nil {
+		log.Fatalf("unable to decode into jwt struct, %v", err)
+	}
+	err = config.UnmarshalKey("log", &Log{})
+	if err != nil {
+		log.Fatalf("unable to decode into log struct, %v", err)
+	}
+	err = config.UnmarshalKey("db", &DB{})
+	if err != nil {
+		log.Fatalf("unable to decode into db struct, %v", err)
+	}
+	err = config.UnmarshalKey("redis", &Redis{})
 	if err != nil {
 		log.Fatalf("unable to decode into redis struct, %v", err)
 	}
-	err = config.UnmarshalKey("oss", &OSSConfig)
+	err = config.UnmarshalKey("oss", &OSS{})
 	if err != nil {
 		log.Fatalf("unable to decode into oss struct, %v", err)
-	}
-	err = config.UnmarshalKey("default", &DEFAULT)
-	if err != nil {
-		log.Fatalf("unable to decode into default struct, %v", err)
 	}
 
 	// use env var to set oss config when some field is nil
@@ -176,8 +148,6 @@ func initialize() {
 		OSS_PREFIX = fmt.Sprintf("%v%v/%v/", protocol, OSSConfig.Endpoint, OSSConfig.Bucket)
 	}
 	fmt.Printf("OSS PREFIX: %v\n", OSS_PREFIX)
-
-	fmt.Printf("default: %v\n", DEFAULT)
 }
 
 func Get(key string) interface{} {
@@ -186,11 +156,4 @@ func Get(key string) interface{} {
 
 func GetString(key string) string {
 	return config.GetString(key)
-}
-
-func MySQLDSN() string {
-	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v"+
-		"?charset=utf8mb4&parseTime=True&loc=Local",
-		mysql.Username, mysql.Password, mysql.Host,
-		mysql.Port, mysql.Database)
 }
