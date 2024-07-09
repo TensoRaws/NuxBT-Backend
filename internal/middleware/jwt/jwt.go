@@ -4,22 +4,20 @@ import (
 	"errors"
 	"fmt"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
+	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/golang-jwt/jwt/v5"
 	"strconv"
 	"time"
-
-	"github.com/TensoRaws/NuxBT-Backend/module/log"
-
-	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 )
 
-// 根据使用情况调整 jwt 过期时间
-const (
-	TokenExpiredDuration = time.Hour * 24
+// 根据配置文件获取 jwt 的过期时间 和 签名密钥
+var (
+	timeout = config.GetString("jwt.timeout")
+	// 转换成 time.Duration 类型
+	timeoutInt, _        = strconv.Atoi(timeout)
+	TokenExpiredDuration = time.Minute * time.Duration(timeoutInt)
+	mySigningKey         = []byte(config.GetString("jwt.key"))
 )
-
-var mySigningKey = []byte(config.GetString("jwt.key"))
 
 // GenerateTokne 用户登录成功后，根据 username 查询到用户后生成一个 token
 func GenerateToken(username string) string {

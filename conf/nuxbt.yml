@@ -3,6 +3,7 @@ server:
   mode: prod
 
 jwt:
+  timeout: 60 # 1 hour
   key: nuxbt
 
 log:

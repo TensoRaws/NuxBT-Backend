@@ -6,7 +6,8 @@ type Server struct {
 }
 
 type Jwt struct {
-	Key string `yaml:"key"`
+	Timeout int    `yaml:"timeout"`
+	Key     string `yaml:"key"`
 }
 
 type Log struct {

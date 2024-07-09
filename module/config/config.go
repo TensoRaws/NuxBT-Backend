@@ -59,7 +59,8 @@ func initialize() {
 			})
 
 			config.SetDefault("jwt", map[string]interface{}{
-				"key": "nuxbt",
+				"timeout": 60,
+				"key":     "nuxbt",
 			})
 
 			config.SetDefault("log", map[string]interface{}{
