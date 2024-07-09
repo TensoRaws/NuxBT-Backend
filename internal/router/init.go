@@ -46,7 +46,7 @@ func Init() {
 	// Listen for the interrupt signal.
 	<-ctx.Done()
 
-	// Restore default behavior on the interrupt signal and notify users of shutdown.
+	// Restore default behavior on the interrupt signal and notify user of shutdown.
 	stop()
 	log.Logger.Info("shutting down gracefully, press Ctrl+C again to force")
 

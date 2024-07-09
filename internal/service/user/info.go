@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/module/response"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Info /douyin/users/ - 用户信息
+// Info /douyin/user/ - 用户信息
 func Info(c *gin.Context) {
 	userID := util.GetUserIDFromGinContext(c)
 
@@ -17,6 +17,6 @@ func Info(c *gin.Context) {
 	}
 
 	response.OKRespWithData(c, map[string]interface{}{
-		"users": *userinfo,
+		"user": *userinfo,
 	})
 }

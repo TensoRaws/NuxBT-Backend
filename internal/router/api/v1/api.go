@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/logger"
-	users_service "github.com/TensoRaws/NuxBT-Backend/internal/service/users"
+	user_service "github.com/TensoRaws/NuxBT-Backend/internal/service/user"
 )
 
 func NewAPI() *gin.Engine {
@@ -27,12 +27,12 @@ func NewAPI() *gin.Engine {
 	api := r.Group("/api/v1/")
 	{
 
-		user := api.Group("users/")
+		user := api.Group("user/")
 		{
 			// 用户注册
-			user.POST("register/", users_service.Register)
+			user.POST("register/", user_service.Register)
 			// 用户登录
-			user.POST("login/", users_service.Login)
+			user.POST("login/", user_service.Login)
 		}
 	}
 

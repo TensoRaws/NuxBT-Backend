@@ -27,7 +27,7 @@ func TestSingToken1(t *testing.T) {
 	user := &model.User{Name: userName, Password: "abc", Signature: "newtess", Avatar: "avatar", BackgroundImage: "background"}
 	err := u.Create(user)
 	if err != nil {
-		t.Fatalf("create users failed, err: %v", err)
+		t.Fatalf("create user failed, err: %v", err)
 	}
 
 	// 模拟登录（生成 JWT token）

@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Register /douyin/users/register/ - 用户注册接口
+// Register /douyin/user/register/ - 用户注册接口
 func Register(c *gin.Context) {
 	// 优先从 url 中获取参数
 	username := c.Query("username")
@@ -31,7 +31,7 @@ func Register(c *gin.Context) {
 	count, _ := u.Where(u.Name.Eq(username)).Count()
 	if count > 0 {
 		c.Abort()
-		response.ErrRespWithMsg(c, "users already exist")
+		response.ErrRespWithMsg(c, "user already exist")
 		return
 	}
 
@@ -54,14 +54,14 @@ func Register(c *gin.Context) {
 	// pass pointer of data to Create
 	err = u.Create(&newuser)
 	if err != nil {
-		response.ErrRespWithMsg(c, "singup: create new users failed")
+		response.ErrRespWithMsg(c, "singup: create new user failed")
 		return
 	}
 
 	user, err := u.Where(u.Name.Eq(username)).First()
 	// 数据库查询出现错误，服务端错误
 	if err != nil {
-		response.ErrRespWithMsg(c, "signup: insert users success but search failed")
+		response.ErrRespWithMsg(c, "signup: insert user success but search failed")
 		return
 	}
 
