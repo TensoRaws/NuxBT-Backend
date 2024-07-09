@@ -22,6 +22,7 @@ type DB struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
+	SSL      *bool  `yaml:"ssl"`
 }
 
 type Redis struct {
@@ -38,9 +39,8 @@ type OSS struct {
 	SecretKey string `yaml:"secretKey"`
 	Region    string `yaml:"region"`
 	Bucket    string `yaml:"bucket"`
-
 	// 如果是使用 minio，并且没有使用 https，需要设置为 false
-	UseSsl *bool `yaml:"useSsl"`
+	UseSsl *bool `yaml:"ssl"`
 	// 如果是使用 minio，需要设置为 true
 	HostnameImmutable *bool `yaml:"hostnameImmutable"`
 }

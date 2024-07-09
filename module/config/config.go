@@ -75,6 +75,7 @@ func initialize() {
 				"username": "root",
 				"password": "123456",
 				"database": "nuxbt",
+				"ssl":      false,
 			})
 
 			config.SetDefault("redis", map[string]interface{}{
@@ -106,48 +107,14 @@ func initialize() {
 	if err != nil {
 		log.Fatalf("unable to decode into redis struct, %v", err)
 	}
-	err = config.UnmarshalKey("oss", &OSS{})
+	err = config.UnmarshalKey("oss", OSSConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into oss struct, %v", err)
 	}
 
-	// use env var to set oss config when some field is nil
-	if OSSConfig.Endpoint == "" {
-		OSSConfig.Endpoint = config.GetString("oss.endpoint")
-	}
-	if OSSConfig.AccessKey == "" {
-		OSSConfig.AccessKey = config.GetString("oss.accesskey")
-	}
-	if OSSConfig.SecretKey == "" {
-		OSSConfig.SecretKey = config.GetString("oss.secretkey")
-	}
-	if OSSConfig.Region == "" {
-		OSSConfig.Region = config.GetString("oss.region")
-	}
-	if OSSConfig.Bucket == "" {
-		OSSConfig.Bucket = config.GetString("oss.bucket")
-	}
-
-	ossType := config.GetString("oss.type")
-	useSsl := config.GetString("oss.useSsl")
-	var protocol string
-	if useSsl == "true" {
-		protocol = "https://"
-	} else {
-		protocol = "http://"
-	}
-
-	fmt.Printf("oss type: %v\n", ossType)
-	switch ossType {
-	case "minio":
-		OSS_PREFIX = fmt.Sprintf("%v%v/%v/", protocol, OSSConfig.Endpoint, OSSConfig.Bucket)
-	case "cos":
-		OSS_PREFIX = fmt.Sprintf("https://%v.%v/", OSSConfig.Bucket, OSSConfig.Endpoint)
-	default:
-		// 默认使用 minio
-		OSS_PREFIX = fmt.Sprintf("%v%v/%v/", protocol, OSSConfig.Endpoint, OSSConfig.Bucket)
-	}
-	fmt.Printf("OSS PREFIX: %v\n", OSS_PREFIX)
+	OSS_PREFIX = GenerateOSSPrefix()
+	fmt.Printf("OSS TYPE: %v", config.GetString("oss.type"))
+	fmt.Printf(" OSS PREFIX: %v\n", OSS_PREFIX)
 }
 
 func Get(key string) interface{} {
