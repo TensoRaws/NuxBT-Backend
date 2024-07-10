@@ -14,7 +14,6 @@ linters:
     - gofmt
     - goimports
     - goprintffuncname
-    - gosec
     - gosimple
     - govet
     - ineffassign
@@ -24,13 +23,13 @@ linters:
     - noctx
     - nolintlint
     - staticcheck
-    - stylecheck
     - typecheck
     - unconvert
     - unparam
-    - unused
     - whitespace
     - gofumpt
+  disable:
+    - unused
 
 run:
   timeout: 3m

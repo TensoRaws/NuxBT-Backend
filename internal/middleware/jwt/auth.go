@@ -40,8 +40,8 @@ func RequireAuth() gin.HandlerFunc {
 			return
 		}
 
-		userId := claims.ID
-		c.Set("user_id", userId)
+		userID := claims.ID
+		c.Set("user_id", userID)
 		c.Set("is_login", true)
 		// 放行
 		c.Next()

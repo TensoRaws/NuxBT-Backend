@@ -50,14 +50,14 @@ func GenerateToken(email string) string {
 
 // GenToken 生成 jwt(json web token)
 func GenToken(u *model.User) string {
-	userId := strconv.FormatInt(int64(u.UserID), 10)
+	userID := strconv.FormatInt(int64(u.UserID), 10)
 	claims := jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(GetJWTTokenExpiredDuration())),
 		NotBefore: jwt.NewNumericDate(time.Now()),
 		Issuer:    "TensoRaws",
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 		Subject:   "token",
-		ID:        userId, // jwt 中保存合法用户的 ID
+		ID:        userID, // jwt 中保存合法用户的 ID
 	}
 
 	// 使用指定的签名算法创建用于签名的字符串对象，使用 json 序列化和 base64Url 编码生成 jwt 的 1、2 部分
