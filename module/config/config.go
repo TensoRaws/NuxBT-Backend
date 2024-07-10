@@ -66,7 +66,6 @@ func initialize() {
 			config.SetDefault("log", map[string]interface{}{
 				"level": "debug",
 				"mode":  []string{"console", "file"},
-				"path":  "./log",
 			})
 
 			config.SetDefault("db", map[string]interface{}{

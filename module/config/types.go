@@ -13,7 +13,6 @@ type Jwt struct {
 type Log struct {
 	Level string   `yaml:"level"`
 	Mode  []string `yaml:"mode"`
-	Path  string   `yaml:"path"`
 }
 
 type DB struct {
