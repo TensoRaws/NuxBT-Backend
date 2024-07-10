@@ -4,12 +4,12 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func NewApp() *cli.App { //nolint:typecheck
-	app := cli.NewApp() //nolint:typecheck
+func NewApp() *cli.App {
+	app := cli.NewApp()
 	app.EnableBashCompletion = true
 
 	// 子命令集
-	subCmdWithConfig := []*cli.Command{ //nolint:typecheck
+	subCmdWithConfig := []*cli.Command{
 		CmdWeb,
 	}
 

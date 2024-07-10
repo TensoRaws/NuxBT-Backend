@@ -1,15 +1,14 @@
 package v1
 
 import (
-	middleware_cache "github.com/TensoRaws/NuxBT-Backend/internal/middleware/cache"
 	"net/http"
 	"time"
 
-	"github.com/TensoRaws/NuxBT-Backend/module/cache"
-	"github.com/gin-gonic/gin"
-
+	middleware_cache "github.com/TensoRaws/NuxBT-Backend/internal/middleware/cache"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/logger"
 	user_service "github.com/TensoRaws/NuxBT-Backend/internal/service/user"
+	"github.com/TensoRaws/NuxBT-Backend/module/cache"
+	"github.com/gin-gonic/gin"
 )
 
 func NewAPI() *gin.Engine {
@@ -26,7 +25,6 @@ func NewAPI() *gin.Engine {
 
 	api := r.Group("/api/v1/")
 	{
-
 		user := api.Group("user/")
 		{
 			// 用户注册

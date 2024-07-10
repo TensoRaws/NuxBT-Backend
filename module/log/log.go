@@ -1,11 +1,12 @@
 package log
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/module/config"
-	"github.com/charmbracelet/log"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/TensoRaws/NuxBT-Backend/module/config"
+	"github.com/charmbracelet/log"
 )
 
 var (

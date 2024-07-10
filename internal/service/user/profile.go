@@ -1,9 +1,10 @@
 package user
 
 import (
+	"strconv"
+
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 // ProfileMe 获取用户自己的信息 (GET /user/profile/me)

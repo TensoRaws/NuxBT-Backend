@@ -3,12 +3,12 @@ package router
 import (
 	"context"
 	"fmt"
-	"github.com/TensoRaws/NuxBT-Backend/internal/router/api/v1"
 	"net/http"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/TensoRaws/NuxBT-Backend/internal/router/api/v1"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/gin-gonic/gin"

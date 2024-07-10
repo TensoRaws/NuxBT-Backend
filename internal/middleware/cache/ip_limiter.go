@@ -2,13 +2,13 @@ package cache
 
 import (
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/module/cache"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
 func NewRateLimiter(redisClient *cache.Client, key string, limit int, slidingWindow time.Duration) gin.HandlerFunc {

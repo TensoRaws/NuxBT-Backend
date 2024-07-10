@@ -3,13 +3,14 @@ package jwt
 import (
 	"errors"
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/golang-jwt/jwt/v5"
-	"strconv"
-	"time"
 )
 
 var (

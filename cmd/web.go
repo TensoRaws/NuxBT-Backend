@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/TensoRaws/NuxBT-Backend/internal/router"
 	"github.com/urfave/cli/v2"
 
@@ -13,13 +14,13 @@ import (
 )
 
 // CmdWeb api 子命令
-var CmdWeb = &cli.Command{ //nolint:typecheck
+var CmdWeb = &cli.Command{
 	Name:        "server",
 	Usage:       "Start NuxBT api server",
 	Description: `Star NuxBT api server`,
-	Action:      runWeb, //nolint:typecheck
+	Action:      runWeb,
 	Flags: []cli.Flag{
-		&cli.StringFlag{ //nolint:typecheck
+		&cli.StringFlag{
 			Name:    "port",
 			Aliases: []string{"p"},
 			Value:   "3000",
@@ -28,7 +29,7 @@ var CmdWeb = &cli.Command{ //nolint:typecheck
 	},
 }
 
-func runWeb(ctx *cli.Context) error { //nolint:typecheck
+func runWeb(ctx *cli.Context) error {
 	defer func() {
 		for k := range cache.Clients {
 			err := cache.Clients[k].C.Close()

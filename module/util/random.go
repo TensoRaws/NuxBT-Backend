@@ -1,9 +1,8 @@
 package util
 
 import (
-	"math/big"
-
 	"crypto/rand"
+	"math/big"
 )
 
 // GetRandomString 生成随机字符串，不为空则成功生成

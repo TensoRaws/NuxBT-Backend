@@ -1,6 +1,8 @@
 package db
 
 import (
+	"sync"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
@@ -8,7 +10,6 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"sync"
 )
 
 var (

@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Login 用户登录 (POST /user/login)
 func Login(c *gin.Context) {
 	username := c.Query("email")
 	password := c.Query("password")
@@ -24,7 +25,7 @@ func Login(c *gin.Context) {
 	// GORM 查询
 
 	// verify password
-	//err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	// err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	err := bcrypt.CompareHashAndPassword([]byte("fdasa"), []byte(password))
 	if err == nil {
 		// 注册之后的下次登录成功，才会为其生成 token
