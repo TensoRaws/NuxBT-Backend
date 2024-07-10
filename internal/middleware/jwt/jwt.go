@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/golang-jwt/jwt/v5"
@@ -38,9 +37,9 @@ func GetJWTSigningKey() []byte {
 	return mySigningKey
 }
 
-// GenerateTokne 用户登录成功后，根据 email 查询到用户后生成一个 token
+// GenerateToken 根据 email 查询到用户后生成一个 token
 func GenerateToken(email string) string {
-	user, err := query.User.Where(query.User.Email.Eq(email)).First()
+	user, err := GetUserByEmail(email)
 	if err != nil {
 		log.Logger.Info(err)
 		return ""

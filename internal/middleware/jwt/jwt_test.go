@@ -5,14 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/TensoRaws/NuxBT-Backend/module/log"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
-
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/db"
+	"github.com/TensoRaws/NuxBT-Backend/module/log"
+	"github.com/TensoRaws/NuxBT-Backend/module/util"
 )
 
 func TestSingToken(t *testing.T) {
@@ -24,16 +22,14 @@ func TestSingToken(t *testing.T) {
 	gmail := util.GetRandomString(10) + "@gmail.com"
 
 	// 模拟注册（新建一个用户）
-	u := query.User
-	user := &model.User{
+	err := jwt.CreateUser(&model.User{
 		Username:   gmail,
 		Email:      gmail,
 		Password:   "abc",
 		Signature:  "野兽先辈114514",
 		Avatar:     "avatar",
 		LastActive: time.Now(),
-	}
-	err := u.Create(user)
+	})
 	if err != nil {
 		t.Fatalf("create user failed, err: %v", err)
 	}
