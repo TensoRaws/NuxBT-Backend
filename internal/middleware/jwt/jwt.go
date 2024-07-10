@@ -37,9 +37,9 @@ func GetJWTSigningKey() []byte {
 	return mySigningKey
 }
 
-// GenerateTokne 用户登录成功后，根据 username 查询到用户后生成一个 token
-func GenerateToken(username string) string {
-	user, err := query.User.Where(query.User.Username.Eq(username)).First()
+// GenerateTokne 用户登录成功后，根据 email 查询到用户后生成一个 token
+func GenerateToken(email string) string {
+	user, err := query.User.Where(query.User.Email.Eq(email)).First()
 	if err != nil {
 		log.Logger.Info(err)
 		return ""
@@ -53,7 +53,7 @@ func GenToken(u *model.User) string {
 	claims := jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(GetJWTTokenExpiredDuration())),
 		NotBefore: jwt.NewNumericDate(time.Now()),
-		Issuer:    "gopher-dance",
+		Issuer:    "TensoRaws",
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 		Subject:   "token",
 		ID:        userId, // jwt 中保存合法用户的 ID

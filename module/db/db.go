@@ -43,6 +43,7 @@ func initialize() {
 func ConnectDB(dbType, dsn string) (db *gorm.DB) {
 	var err error
 
+	log.Logger.Debugf("DBType: %v", dbType)
 	log.Logger.Debugf("DSN: %v", dsn)
 
 	switch dbType {

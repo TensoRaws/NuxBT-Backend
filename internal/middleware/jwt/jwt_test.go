@@ -3,6 +3,7 @@ package jwt_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
@@ -14,24 +15,31 @@ import (
 	"github.com/TensoRaws/NuxBT-Backend/module/db"
 )
 
-func TestSingToken1(t *testing.T) {
+func TestSingToken(t *testing.T) {
 	// 配置初始化
 	config.Init()
 	log.Init()
 	db.Init()
 
-	userName := util.GetRandomString(10) + "@gmail.com"
+	gmail := util.GetRandomString(10) + "@gmail.com"
 
 	// 模拟注册（新建一个用户）
 	u := query.User
-	user := &model.User{Name: userName, Password: "abc", Signature: "newtess", Avatar: "avatar", BackgroundImage: "background"}
+	user := &model.User{
+		Username:   gmail,
+		Email:      gmail,
+		Password:   "abc",
+		Signature:  "野兽先辈114514",
+		Avatar:     "avatar",
+		LastActive: time.Now(),
+	}
 	err := u.Create(user)
 	if err != nil {
 		t.Fatalf("create user failed, err: %v", err)
 	}
 
 	// 模拟登录（生成 JWT token）
-	token := jwt.GenerateToken(userName)
+	token := jwt.GenerateToken(gmail)
 	fmt.Printf("token: %#v\n", token)
 
 	useClaims, err := jwt.ParseToken(token)

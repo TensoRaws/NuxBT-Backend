@@ -36,7 +36,7 @@ func Init() {
 		ModelPkgPath: "model",
 		Mode:         gen.WithDefaultQuery | gen.WithoutContext | gen.WithQueryInterface,
 
-		WithUnitTest: true,
+		WithUnitTest: false,
 
 		FieldNullable:     false,
 		FieldCoverable:    true,

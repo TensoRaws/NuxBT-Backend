@@ -70,7 +70,7 @@ func initialize() {
 			})
 
 			config.SetDefault("db", map[string]interface{}{
-				"type":     "postgres",
+				"type":     "mysql",
 				"host":     "127.0.0.1",
 				"port":     5432,
 				"username": "root",
