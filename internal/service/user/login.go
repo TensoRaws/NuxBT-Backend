@@ -4,14 +4,13 @@ import (
 	"errors"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
-	"github.com/TensoRaws/NuxBT-Backend/module/middleware/jwt"
-	"github.com/TensoRaws/NuxBT-Backend/module/response"
+	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
+	"github.com/TensoRaws/NuxBT-Backend/internal/response"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-// Login /douyin/user/login/ - 用户登录
 func Login(c *gin.Context) {
 	u := query.User
 	username := c.Query("username")

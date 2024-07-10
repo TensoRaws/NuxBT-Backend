@@ -14,16 +14,16 @@ log:
   path: ./log
 
 db:
-  type: postgres # mysql, postgres
-  host: 192.168.2.3
-  port: 3306
+  type: mysql # mysql, postgres
+  host: 127.0.0.1
+  port: 5432
   username: root
   password: 123456
   database: nuxbt
   ssl: false
 
 redis:
-  host: 192.168.2.4
+  host: 127.0.0.1
   port: 6379
   password:
   poolSize: 1000

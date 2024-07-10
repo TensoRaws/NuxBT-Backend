@@ -72,7 +72,7 @@ func initialize() {
 			config.SetDefault("db", map[string]interface{}{
 				"type":     "postgres",
 				"host":     "127.0.0.1",
-				"port":     3306,
+				"port":     5432,
 				"username": "root",
 				"password": "123456",
 				"database": "nuxbt",
@@ -108,7 +108,7 @@ func initialize() {
 	if err != nil {
 		log.Fatalf("unable to decode into redis struct, %v", err)
 	}
-	err = config.UnmarshalKey("oss", OSSConfig)
+	err = config.UnmarshalKey("oss", &OSSConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into oss struct, %v", err)
 	}

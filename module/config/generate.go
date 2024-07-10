@@ -19,8 +19,8 @@ func GenerateDSN() (string, string, error) {
 		dsn = fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
 			dbConfig.Username, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.Database)
 	case "postgres":
-		dsn = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%v",
-			dbConfig.Host, dbConfig.Port, dbConfig.Username, dbConfig.Password, dbConfig.Database, dbConfig.SSL)
+		dsn = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=allow",
+			dbConfig.Host, dbConfig.Port, dbConfig.Username, dbConfig.Password, dbConfig.Database)
 
 	default: // 默认使用 mysql
 		dsn = fmt.Sprintf("%v:%v@tcp(%v:%v)/%v"+

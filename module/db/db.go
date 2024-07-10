@@ -29,7 +29,7 @@ func initialize() {
 		return
 	}
 	DB = ConnectDB(dbType, dsn)
-	err := DB.AutoMigrate(
+	err = DB.AutoMigrate(
 		model.User{},
 	)
 	if err != nil {

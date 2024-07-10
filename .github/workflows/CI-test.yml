@@ -22,13 +22,13 @@ jobs:
     runs-on: ${{ matrix.os-version }}
 
     services:
-      mysql:
-        image: mysql:8.0
+      db:
+        image: mysql:8.4.1
         env:
           MYSQL_ROOT_PASSWORD: 123456
           MYSQL_DATABASE: nuxbt
         ports:
-          - "3306:3306"
+          - "5432:3306"
       redis:
         image: redis
         options: >- # wait until redis has started
@@ -38,7 +38,7 @@ jobs:
           --health-retries 10
         ports:
           - 6379:6379
-      minio:
+      oss:
         image: bitnami/minio:latest
         env:
           MINIO_ACCESS_KEY: ChYm7ufIwNAOzq6PQPCA
