@@ -3,12 +3,11 @@ package cache
 import (
 	"fmt"
 	"github.com/redis/go-redis/v9"
-	"net/http"
 	"time"
 
-	"github.com/TensoRaws/NuxBT-Backend/internal/response"
 	"github.com/TensoRaws/NuxBT-Backend/module/cache"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
+	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,10 +33,7 @@ func NewRateLimiter(redisClient *cache.Client, key string, limit int, slidingWin
 		reqs, _ := redisClient.ZRange(userCntKey, 0, -1).Result()
 
 		if len(reqs) >= limit {
-			c.AbortWithStatusJSON(http.StatusOK, gin.H{
-				"status_code": response.OK,
-				"status_msg":  "too many request",
-			})
+			util.AbortWithMsg(c, "Too many request...")
 			log.Logger.Warnf("------------------> too many request, key: %v", userCntKey)
 			return
 		}

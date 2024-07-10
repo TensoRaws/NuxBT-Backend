@@ -3,6 +3,8 @@ package jwt
 import (
 	"errors"
 	"fmt"
+	"github.com/TensoRaws/NuxBT-Backend/dal/model"
+	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/golang-jwt/jwt/v5"
@@ -10,18 +12,34 @@ import (
 	"time"
 )
 
-// 根据配置文件获取 jwt 的过期时间 和 签名密钥
 var (
-	timeout = config.GetString("jwt.timeout")
-	// 转换成 time.Duration 类型
-	timeoutInt, _        = strconv.Atoi(timeout)
-	TokenExpiredDuration = time.Minute * time.Duration(timeoutInt)
-	mySigningKey         = []byte(config.GetString("jwt.key"))
+	TokenExpiredDuration time.Duration
+	mySigningKey         []byte
 )
+
+// GetJWTTokenExpiredDuration 根据配置文件获取 jwt 的过期时间
+func GetJWTTokenExpiredDuration() time.Duration {
+	if TokenExpiredDuration != 0 {
+		return TokenExpiredDuration
+	}
+	timeout := config.GetString("jwt.timeout")
+	timeoutInt, _ := strconv.Atoi(timeout)
+	TokenExpiredDuration = time.Minute * time.Duration(timeoutInt)
+	return TokenExpiredDuration
+}
+
+// GetJWTSigningKey 根据配置文件获取 jwt 的签名密钥
+func GetJWTSigningKey() []byte {
+	if len(mySigningKey) != 0 {
+		return mySigningKey
+	}
+	mySigningKey = []byte(config.GetString("jwt.key"))
+	return mySigningKey
+}
 
 // GenerateTokne 用户登录成功后，根据 username 查询到用户后生成一个 token
 func GenerateToken(username string) string {
-	user, err := query.User.Where(query.User.Name.Eq(username)).First()
+	user, err := query.User.Where(query.User.Username.Eq(username)).First()
 	if err != nil {
 		log.Logger.Info(err)
 		return ""
@@ -31,9 +49,9 @@ func GenerateToken(username string) string {
 
 // GenToken 生成 jwt(json web token)
 func GenToken(u *model.User) string {
-	userId := strconv.FormatInt(u.ID, 10)
+	userId := strconv.FormatInt(int64(u.UserID), 10)
 	claims := jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(TokenExpiredDuration)),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(GetJWTTokenExpiredDuration())),
 		NotBefore: jwt.NewNumericDate(time.Now()),
 		Issuer:    "gopher-dance",
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -46,7 +64,7 @@ func GenToken(u *model.User) string {
 	// 以上面生成 token 作为签名值，使用 secret 进行签名获取签名值
 	// 将 token 和生成的签名值使用 '.' 拼接后就生成了 jwt
 	// 这里一定要使用字节切片
-	tokenStr, err := token.SignedString(mySigningKey)
+	tokenStr, err := token.SignedString(GetJWTSigningKey())
 	if err != nil {
 		log.Logger.Info(err)
 		return ""
