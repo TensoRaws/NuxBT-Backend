@@ -28,9 +28,9 @@ func NewAPI() *gin.Engine {
 		user := api.Group("user/")
 		{
 			// 用户注册
-			user.POST("register/", user_service.Register)
+			user.POST("register", user_service.Register)
 			// 用户登录
-			user.POST("login/", user_service.Login)
+			user.POST("login", user_service.Login)
 		}
 	}
 

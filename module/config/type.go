@@ -1,8 +1,10 @@
 package config
 
 type Server struct {
-	Port int    `yaml:"port"`
-	Mode string `yaml:"mode"`
+	Port              int    `yaml:"port"`
+	Mode              string `yaml:"mode"`
+	AllowResgister    *bool  `yaml:"allowResgister"`
+	UseInvitationCode *bool  `yaml:"useInvitationCode"`
 }
 
 type Jwt struct {

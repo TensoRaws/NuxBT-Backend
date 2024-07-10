@@ -20,6 +20,7 @@ func GetUserIDFromGinContext(c *gin.Context) int64 {
 	return userID
 }
 
+// OKWithMsg 返回成功信息
 func OKWithMsg(c *gin.Context, ok string) {
 	resp := map[string]interface{}{
 		"success": true,
@@ -28,7 +29,18 @@ func OKWithMsg(c *gin.Context, ok string) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// OKWithData 返回成功信息，携带自定义数据
 func OKWithData(c *gin.Context, data map[string]interface{}) {
+	resp := map[string]interface{}{
+		"success": true,
+		"message": "ok",
+		"data":    data,
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+// OKWithDataStruct 返回成功信息，携带自定义数据（结构体）
+func OKWithDataStruct(c *gin.Context, data interface{}) {
 	resp := map[string]interface{}{
 		"success": true,
 		"message": "ok",

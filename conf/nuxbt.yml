@@ -1,6 +1,8 @@
 server:
   port: 8080
   mode: prod
+  allowRegister: true
+  useInvitationCode: false
 
 jwt:
   timeout: 60 # 1 hour

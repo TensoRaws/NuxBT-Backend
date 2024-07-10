@@ -54,8 +54,10 @@ func initialize() {
 			// 配置文件未找到错误
 			fmt.Println("config file not found use default config")
 			config.SetDefault("server", map[string]interface{}{
-				"port": 8080,
-				"mode": "prod",
+				"port":              8080,
+				"mode":              "prod",
+				"allowRegister":     true,
+				"useInvitationCode": false,
 			})
 
 			config.SetDefault("jwt", map[string]interface{}{
