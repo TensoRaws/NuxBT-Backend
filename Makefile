@@ -19,3 +19,7 @@ gen: ## generate CURD code
 .PHONY: test
 test: tidy ## go test
 	${GO} test ./...
+
+.PHONY: lint
+lint: ## go lint
+	golangci-lint run

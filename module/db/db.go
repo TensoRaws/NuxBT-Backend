@@ -1,7 +1,6 @@
 package db
 
 import (
-	"gorm.io/gorm/schema"
 	"sync"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -11,6 +10,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 var (
@@ -31,17 +31,7 @@ func initialize() {
 		return
 	}
 
-	//var dataMap = map[string]func(gorm.ColumnType) (dataType string){
-	//	// int mapping
-	//	"int": func(columnType gorm.ColumnType) (dataType string) {
-	//		if n, ok := columnType.Nullable(); ok && n {
-	//			return "*int64"
-	//		}
-	//		return "int64"
-	//	},
-	//}
-
-	var cfg = gorm.Config{
+	cfg := gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,

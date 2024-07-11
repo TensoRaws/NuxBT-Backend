@@ -1,7 +1,6 @@
 package user
 
 import (
-	"golang.org/x/crypto/bcrypt"
 	"strconv"
 	"time"
 
@@ -10,6 +9,7 @@ import (
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // RegisterRequest Query binding 需要打 form 标签
@@ -79,6 +79,4 @@ func Register(c *gin.Context) {
 		Username: user.Username,
 	})
 	log.Logger.Info("register success: " + util.StructToString(user))
-
-	return
 }

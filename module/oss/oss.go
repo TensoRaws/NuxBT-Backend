@@ -2,10 +2,10 @@ package oss
 
 import (
 	"context"
-	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"io"
 	"sync"
 
+	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/eleven26/goss/v4"
 )
@@ -23,7 +23,7 @@ func Init() {
 }
 
 func initialize() {
-	var cfg = &goss.Config{
+	cfg := &goss.Config{
 		Endpoint:          config.OSSConfig.Endpoint,
 		AccessKey:         config.OSSConfig.AccessKey,
 		SecretKey:         config.OSSConfig.SecretKey,
