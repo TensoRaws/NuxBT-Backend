@@ -23,3 +23,5 @@ test: tidy ## go test
 .PHONY: lint
 lint: ## go lint
 	golangci-lint run
+	pre-commit install
+	pre-commit run --all-files

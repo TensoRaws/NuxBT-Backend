@@ -29,11 +29,20 @@ archives:
     # - goos: windows
     #  format: zip
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 
 signs:
   - artifacts: checksum
-    args: ["--batch", "-u", "{{ .Env.GPG_FINGERPRINT }}", "--output", "${signature}", "--detach-sign", "${artifact}"]
+    args:
+      [
+        "--batch",
+        "-u",
+        "{{ .Env.GPG_FINGERPRINT }}",
+        "--output",
+        "${signature}",
+        "--detach-sign",
+        "${artifact}",
+      ]
 
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
@@ -41,9 +50,8 @@ changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-
+      - "^docs:"
+      - "^test:"
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
