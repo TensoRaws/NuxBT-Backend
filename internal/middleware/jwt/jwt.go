@@ -35,18 +35,8 @@ func GetJWTSigningKey() []byte {
 	return mySigningKey
 }
 
-// GenerateToken 根据 email 查询到用户后生成一个 token
-func GenerateToken(email string) string {
-	user, err := GetUserByEmail(email)
-	if err != nil {
-		log.Logger.Info(err)
-		return ""
-	}
-	return GenToken(user)
-}
-
-// GenToken 生成 jwt(json web token)
-func GenToken(u *model.User) string {
+// GenerateToken 生成 jwt(json web token)
+func GenerateToken(u *model.User) string {
 	userID := strconv.FormatInt(int64(u.UserID), 10)
 	claims := jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(GetJWTTokenExpiredDuration())),
