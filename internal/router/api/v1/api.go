@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
+	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"net/http"
 	"time"
 
@@ -16,7 +17,7 @@ func NewAPI() *gin.Engine {
 	r := gin.New()
 	r.Use(logger.DefaultLogger(), gin.Recovery()) // 日志中间件
 	r.Use(middleware_cache.NewRateLimiter(
-		middleware_cache.Clients[cache.IPLimit], "general", 250, 60*time.Second))
+		middleware_cache.Clients[cache.IPLimit], "general", config.ServerConfig.RequestLimit, 60*time.Second))
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

@@ -5,6 +5,7 @@ type Server struct {
 	Mode              string `yaml:"mode"`
 	AllowResgister    bool   `yaml:"allowResgister"`
 	UseInvitationCode bool   `yaml:"useInvitationCode"`
+	RequestLimit      int    `yaml:"requestLimit"`
 }
 
 type Jwt struct {
@@ -32,7 +33,6 @@ type Redis struct {
 	Port     int    `yaml:"port"`
 	Password string `yaml:"password"`
 	PoolSize int    `yaml:"poolSize"`
-	Database int    `yaml:"database"`
 }
 
 type OSS struct {

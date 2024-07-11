@@ -63,6 +63,7 @@ func initialize() {
 				"mode":              "prod",
 				"allowRegister":     true,
 				"useInvitationCode": false,
+				"requestLimit":      50,
 			})
 
 			config.SetDefault("jwt", map[string]interface{}{
