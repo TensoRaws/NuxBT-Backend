@@ -3,6 +3,7 @@ module github.com/TensoRaws/NuxBT-Backend
 go 1.21
 
 require (
+	github.com/bytedance/sonic v1.11.9
 	github.com/charmbracelet/log v0.4.0
 	github.com/eleven26/goss/v4 v4.0.1
 	github.com/fsnotify/fsnotify v1.7.0
@@ -41,7 +42,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.21.1 // indirect
 	github.com/aws/smithy-go v1.14.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-	github.com/bytedance/sonic v1.11.9 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/charmbracelet/lipgloss v0.11.0 // indirect
