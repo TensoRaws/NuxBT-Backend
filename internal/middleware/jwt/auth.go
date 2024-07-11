@@ -12,8 +12,6 @@ import (
 // 如果用户携带的 token 验证通过，将 user_id 存入上下文中然后执行下一个 Handler
 func RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		url := c.Request.URL
-		log.Logger.Infof("url: %v", url.Path)
 		// 从输入的 url 中查询 token 值
 		token := c.Query("token")
 		if len(token) == 0 {
@@ -42,7 +40,6 @@ func RequireAuth() gin.HandlerFunc {
 
 		userID := claims.ID
 		c.Set("user_id", userID)
-		c.Set("is_login", true)
 		// 放行
 		c.Next()
 	}

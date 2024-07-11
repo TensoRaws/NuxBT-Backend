@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
 	"net/http"
 	"time"
 
@@ -31,6 +32,8 @@ func NewAPI() *gin.Engine {
 			user.POST("register", user_service.Register)
 			// 用户登录
 			user.POST("login", user_service.Login)
+			// 用户信息
+			user.GET("profile/me", jwt.RequireAuth(), user_service.ProfileMe)
 		}
 	}
 

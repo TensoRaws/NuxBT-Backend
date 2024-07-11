@@ -1,6 +1,6 @@
 package util
 
-import "encoding/json"
+import "github.com/bytedance/sonic"
 
 type Color string
 
@@ -38,6 +38,7 @@ func HighlightString(color Color, str string) string {
 
 // StructToString 结构体转字符串
 func StructToString(s interface{}) string {
-	v, _ := json.Marshal(s)
+	//v, _ := json.Marshal(s)
+	v, _ := sonic.Marshal(s)
 	return string(v)
 }
