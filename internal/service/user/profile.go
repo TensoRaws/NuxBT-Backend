@@ -1,17 +1,12 @@
 package user
 
 import (
+	"strconv"
+
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
-
-//type RegisterDataResponse struct {
-//	Email    string `json:"email"`
-//	UserID   string `json:"user_id"`
-//	Username string `json:"username"`
-//}
 
 type ProfileMeResponse struct {
 	Avatar     string   `json:"avatar"`

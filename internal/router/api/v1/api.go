@@ -1,15 +1,15 @@
 package v1
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
-	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"net/http"
 	"time"
 
 	middleware_cache "github.com/TensoRaws/NuxBT-Backend/internal/middleware/cache"
+	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/logger"
 	user_service "github.com/TensoRaws/NuxBT-Backend/internal/service/user"
 	"github.com/TensoRaws/NuxBT-Backend/module/cache"
+	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/gin-gonic/gin"
 )
 
