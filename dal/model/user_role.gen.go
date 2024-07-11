@@ -14,8 +14,8 @@ const TableNameUserRole = "user_role"
 
 // UserRole mapped from table <user_role>
 type UserRole struct {
-	RoleID    int64          `gorm:"column:role_id;type:int;primaryKey;autoIncrement:true" json:"role_id"`
-	UserID    int64          `gorm:"column:user_id;type:int;not null;uniqueIndex:uk_user_role,priority:1" json:"user_id"`
+	RoleID    int32          `gorm:"column:role_id;type:int;primaryKey;autoIncrement:true" json:"role_id"`
+	UserID    int32          `gorm:"column:user_id;type:int;not null;uniqueIndex:uk_user_role,priority:1" json:"user_id"`
 	Role      string         `gorm:"column:role;type:varchar(255);not null;uniqueIndex:uk_user_role,priority:2" json:"role"`
 	CreatedAt *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:datetime" json:"deleted_at"`

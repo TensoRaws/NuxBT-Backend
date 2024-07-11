@@ -27,13 +27,13 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 
 	tableName := _user.userDo.TableName()
 	_user.ALL = field.NewAsterisk(tableName)
-	_user.UserID = field.NewInt64(tableName, "user_id")
+	_user.UserID = field.NewInt32(tableName, "user_id")
 	_user.Username = field.NewString(tableName, "username")
 	_user.Email = field.NewString(tableName, "email")
 	_user.Password = field.NewString(tableName, "password")
 	_user.Private = field.NewBool(tableName, "private")
-	_user.Experience = field.NewInt64(tableName, "experience")
-	_user.Inviter = field.NewInt64(tableName, "inviter")
+	_user.Experience = field.NewInt32(tableName, "experience")
+	_user.Inviter = field.NewInt32(tableName, "inviter")
 	_user.CreatedAt = field.NewTime(tableName, "created_at")
 	_user.LastActive = field.NewTime(tableName, "last_active")
 	_user.Avatar = field.NewString(tableName, "avatar")
@@ -50,13 +50,13 @@ type user struct {
 	userDo
 
 	ALL        field.Asterisk
-	UserID     field.Int64
+	UserID     field.Int32
 	Username   field.String
 	Email      field.String
 	Password   field.String
 	Private    field.Bool
-	Experience field.Int64
-	Inviter    field.Int64
+	Experience field.Int32
+	Inviter    field.Int32
 	CreatedAt  field.Time
 	LastActive field.Time
 	Avatar     field.String
@@ -79,13 +79,13 @@ func (u user) As(alias string) *user {
 
 func (u *user) updateTableName(table string) *user {
 	u.ALL = field.NewAsterisk(table)
-	u.UserID = field.NewInt64(table, "user_id")
+	u.UserID = field.NewInt32(table, "user_id")
 	u.Username = field.NewString(table, "username")
 	u.Email = field.NewString(table, "email")
 	u.Password = field.NewString(table, "password")
 	u.Private = field.NewBool(table, "private")
-	u.Experience = field.NewInt64(table, "experience")
-	u.Inviter = field.NewInt64(table, "inviter")
+	u.Experience = field.NewInt32(table, "experience")
+	u.Inviter = field.NewInt32(table, "inviter")
 	u.CreatedAt = field.NewTime(table, "created_at")
 	u.LastActive = field.NewTime(table, "last_active")
 	u.Avatar = field.NewString(table, "avatar")

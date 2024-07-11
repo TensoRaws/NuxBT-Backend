@@ -27,8 +27,8 @@ func newUserRole(db *gorm.DB, opts ...gen.DOOption) userRole {
 
 	tableName := _userRole.userRoleDo.TableName()
 	_userRole.ALL = field.NewAsterisk(tableName)
-	_userRole.RoleID = field.NewInt64(tableName, "role_id")
-	_userRole.UserID = field.NewInt64(tableName, "user_id")
+	_userRole.RoleID = field.NewInt32(tableName, "role_id")
+	_userRole.UserID = field.NewInt32(tableName, "user_id")
 	_userRole.Role = field.NewString(tableName, "role")
 	_userRole.CreatedAt = field.NewTime(tableName, "created_at")
 	_userRole.DeletedAt = field.NewField(tableName, "deleted_at")
@@ -42,8 +42,8 @@ type userRole struct {
 	userRoleDo
 
 	ALL       field.Asterisk
-	RoleID    field.Int64
-	UserID    field.Int64
+	RoleID    field.Int32
+	UserID    field.Int32
 	Role      field.String
 	CreatedAt field.Time
 	DeletedAt field.Field
@@ -63,8 +63,8 @@ func (u userRole) As(alias string) *userRole {
 
 func (u *userRole) updateTableName(table string) *userRole {
 	u.ALL = field.NewAsterisk(table)
-	u.RoleID = field.NewInt64(table, "role_id")
-	u.UserID = field.NewInt64(table, "user_id")
+	u.RoleID = field.NewInt32(table, "role_id")
+	u.UserID = field.NewInt32(table, "user_id")
 	u.Role = field.NewString(table, "role")
 	u.CreatedAt = field.NewTime(table, "created_at")
 	u.DeletedAt = field.NewField(table, "deleted_at")

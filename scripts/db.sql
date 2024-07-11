@@ -7,7 +7,7 @@ CREATE TABLE `user` (
   `password` VARCHAR(255) NOT NULL, -- 用户密码
   `private` BOOLEAN NOT NULL DEFAULT false, -- 是否私密，默认为 false
   `experience` INT DEFAULT 0, -- 用户经验值，默认为 0
-  `inviter` INT, -- 邀请人ID
+  `inviter` INT NOT NULL DEFAULT 0, -- 邀请人ID
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 账户创建时间
   `last_active` DATETIME, -- 最后活跃时间
   `avatar` VARCHAR(255), -- 用户头像链接
