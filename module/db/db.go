@@ -1,6 +1,7 @@
 package db
 
 import (
+	"gorm.io/gorm/schema"
 	"sync"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -29,9 +30,29 @@ func initialize() {
 		log.Logger.Error(err)
 		return
 	}
-	DB = ConnectDB(dbType, dsn)
+
+	//var dataMap = map[string]func(gorm.ColumnType) (dataType string){
+	//	// int mapping
+	//	"int": func(columnType gorm.ColumnType) (dataType string) {
+	//		if n, ok := columnType.Nullable(); ok && n {
+	//			return "*int64"
+	//		}
+	//		return "int64"
+	//	},
+	//}
+
+	var cfg = gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+	}
+
+	DB = ConnectDB(dbType, dsn, &cfg)
+
 	err = DB.AutoMigrate(
 		model.User{},
+		model.UserRole{},
 	)
 	if err != nil {
 		log.Logger.Error(err)
@@ -41,7 +62,7 @@ func initialize() {
 	log.Logger.Debugf("Set query default database")
 }
 
-func ConnectDB(dbType, dsn string) (db *gorm.DB) {
+func ConnectDB(dbType, dsn string, config *gorm.Config) (db *gorm.DB) {
 	var err error
 
 	log.Logger.Debugf("DBType: %v", dbType)
@@ -49,11 +70,11 @@ func ConnectDB(dbType, dsn string) (db *gorm.DB) {
 
 	switch dbType {
 	case "mysql":
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		db, err = gorm.Open(mysql.Open(dsn), config)
 	case "postgres":
-		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		db, err = gorm.Open(postgres.Open(dsn), config)
 	default:
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		db, err = gorm.Open(mysql.Open(dsn), config)
 	}
 
 	if err != nil {
