@@ -1,8 +1,6 @@
 package jwt
 
 import (
-	"time"
-
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
@@ -29,12 +27,7 @@ func RequireAuth() gin.HandlerFunc {
 		// 解析 token
 		claims, err := ParseToken(token)
 		if err != nil {
-			util.AbortWithMsg(c, "ERR_INVALID_TOKEN")
-			return
-		}
-		// validate expire time
-		if time.Now().Unix() > claims.ExpiresAt.Unix() {
-			util.AbortWithMsg(c, "TOKEN IS ALREADY EXPIRED, Please Log In Again")
+			util.AbortWithMsg(c, "TOKEN IS INVALID, Please Log In")
 			return
 		}
 

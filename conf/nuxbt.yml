@@ -3,6 +3,7 @@ server:
   mode: prod
   allowRegister: true
   useInvitationCode: false
+  requestLimit: 50 # 50 times per minute
 
 jwt:
   timeout: 60 # 1 hour
