@@ -7,7 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Login 用户登录 (POST /user/login)
+// Login 用户登录 (POST /login)
 func Login(c *gin.Context) {
 	username := c.Query("email")
 	password := c.Query("password")

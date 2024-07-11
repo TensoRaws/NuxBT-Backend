@@ -2,6 +2,7 @@ package user
 
 import (
 	"golang.org/x/crypto/bcrypt"
+	"strconv"
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -11,11 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// RegisterRequest Query binding 需要打 form 标签
 type RegisterRequest struct {
-	Username       string  `json:"username" binding:"required"`
-	Password       string  `json:"password" binding:"required"`
-	Email          string  `json:"email" binding:"required,email"`
-	InvitationCode *string `json:"invitation_code" binding:"omitempty"`
+	Username       string  `form:"username" binding:"required"`
+	Password       string  `form:"password" binding:"required"`
+	Email          string  `form:"email" binding:"required,email"`
+	InvitationCode *string `form:"invitation_code" binding:"omitempty"`
 }
 
 type RegisterDataResponse struct {
@@ -24,12 +26,11 @@ type RegisterDataResponse struct {
 	Username string `json:"username"`
 }
 
+// Register 注册 (POST /register)
 func Register(c *gin.Context) {
-	log.Logger.Debug(c.Query("username"), c.Query("password"), c.Query("email"), c.Query("invitation_code"))
-
 	var req RegisterRequest
 	if err := c.ShouldBindQuery(&req); err != nil {
-		log.Logger.Debug("invalid request: ", err.Error())
+		log.Logger.Debug("invalid request: " + err.Error())
 		util.AbortWithMsg(c, "invalid request")
 		return
 	}
@@ -42,11 +43,14 @@ func Register(c *gin.Context) {
 	} else {
 		// 有邀请码注册，检查邀请码是否有效
 		// do something
+		// 未实现
+		// OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+		log.Logger.Info("invitation code: ", *req.InvitationCode)
 	}
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		util.AbortWithMsg(c, "failed to hash password")
-		log.Logger.Error("failed to hash password: ", err.Error())
+		log.Logger.Error("failed to hash password: " + err.Error())
 		return
 	}
 	// 注册
@@ -58,21 +62,23 @@ func Register(c *gin.Context) {
 	})
 	if err != nil {
 		util.AbortWithMsg(c, "failed to register: ")
-		log.Logger.Error("failed to register: ", err.Error())
+		log.Logger.Error("failed to register: " + err.Error())
 		return
 	}
 
 	user, err := GetUserByEmail(req.Email)
 	if err != nil {
 		util.AbortWithMsg(c, "failed to get user by email")
-		log.Logger.Error("failed to get user by email: ", err.Error())
+		log.Logger.Error("failed to get user by email: " + err.Error())
 		return
 	}
+
 	util.OKWithDataStruct(c, RegisterDataResponse{
 		Email:    user.Email,
-		UserID:   string(user.UserID),
+		UserID:   strconv.FormatInt(user.UserID, 10),
 		Username: user.Username,
 	})
+	log.Logger.Info("register success: " + util.StructToString(user))
 
 	return
 }

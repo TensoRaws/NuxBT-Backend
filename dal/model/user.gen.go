@@ -14,13 +14,13 @@ const TableNameUser = "user"
 
 // User mapped from table <user>
 type User struct {
-	UserID     int32          `gorm:"column:user_id;type:int;primaryKey;autoIncrement:true" json:"user_id"`
+	UserID     int64          `gorm:"column:user_id;type:int;primaryKey;autoIncrement:true" json:"user_id"`
 	Username   string         `gorm:"column:username;type:varchar(255);not null;uniqueIndex:username,priority:1" json:"username"`
 	Email      string         `gorm:"column:email;type:varchar(255);not null;uniqueIndex:email,priority:1" json:"email"`
 	Password   string         `gorm:"column:password;type:varchar(255);not null" json:"password"`
 	Private    bool           `gorm:"column:private;type:tinyint(1);not null" json:"private"`
-	Experience int32          `gorm:"column:experience;type:int" json:"experience"`
-	Inviter    int32          `gorm:"column:inviter;type:int" json:"inviter"`
+	Experience *int64         `gorm:"column:experience;type:int" json:"experience"`
+	Inviter    *int64         `gorm:"column:inviter;type:int" json:"inviter"`
 	CreatedAt  *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	LastActive time.Time      `gorm:"column:last_active;type:datetime" json:"last_active"`
 	Avatar     string         `gorm:"column:avatar;type:varchar(255)" json:"avatar"`

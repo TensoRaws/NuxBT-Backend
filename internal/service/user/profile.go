@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ProfileMe 获取用户自己的信息 (GET /user/profile/me)
+// ProfileMe 获取用户自己的信息 (GET /profile/me)
 func ProfileMe(c *gin.Context) {
 	userID := util.GetUserIDFromGinContext(c)
 

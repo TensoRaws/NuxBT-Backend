@@ -1,12 +1,7 @@
 # scripts
 MySQL
 ```bash
-docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=nuxbt -p 5432:3306 -d mysql:8.4.1
-```
-
-Postgre
-```bash
-docker run --name some-postgres -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=nuxbt -p 5432:5432 -d postgres:16.3
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=nuxbt -e TZ=Asia/Shanghai -p 5432:3306 -d mysql:8.4.1
 ```
 Redis
 ```bash

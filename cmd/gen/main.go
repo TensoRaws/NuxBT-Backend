@@ -53,6 +53,18 @@ func Init() {
 
 	g.UseDB(DB) // reuse your gorm db
 
+	var dataMap = map[string]func(gorm.ColumnType) (dataType string){
+		// int mapping
+		"int": func(columnType gorm.ColumnType) (dataType string) {
+			if n, ok := columnType.Nullable(); ok && n {
+				return "*int64"
+			}
+			return "int64"
+		},
+	}
+
+	g.WithDataTypeMap(dataMap)
+
 	// Generate basic type-safe DAO API for struct `model.User` following conventions
 	g.ApplyBasic(g.GenerateAllTable()...)
 
