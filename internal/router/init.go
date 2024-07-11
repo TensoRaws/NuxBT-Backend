@@ -2,6 +2,7 @@ package router
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"os/signal"
@@ -20,7 +21,7 @@ func Init() {
 	defer stop()
 
 	var mode string
-	if config.Get("server.mode") != "prod" {
+	if config.ServerConfig.Mode != "prod" {
 		mode = gin.DebugMode
 	} else {
 		mode = gin.ReleaseMode
@@ -29,16 +30,16 @@ func Init() {
 	gin.SetMode(mode)
 
 	e := v1.NewAPI()
-	log.Logger.Debugf("server port: %v", config.GetString("server.port"))
+	log.Logger.Debugf("server port: %v", config.ServerConfig.Port)
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%v", config.GetString("server.port")),
+		Addr:    fmt.Sprintf(":%v", config.ServerConfig.Port),
 		Handler: e,
 	}
 
 	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Logger.Fatalf("listen: %s", err)
 		}
 	}()

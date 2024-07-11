@@ -3,7 +3,6 @@ package cache
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
@@ -23,13 +22,12 @@ type Client struct {
 }
 
 func NewRedisClients(clients map[RDB]*Client) {
-	poolSize, _ := strconv.ParseInt(config.GetString("redis.poolSize"), 10, 64)
 	for k := range clients {
 		r := redis.NewClient(&redis.Options{
-			Addr:     fmt.Sprintf("%v:%v", config.Get("redis.host"), config.Get("redis.port")),
-			Password: fmt.Sprintf("%v", config.Get("redis.password")),
+			Addr:     fmt.Sprintf("%v:%v", config.RedisConfig.Host, config.RedisConfig.Port),
+			Password: fmt.Sprintf("%v", config.RedisConfig.Password),
 			DB:       int(k) + 1,
-			PoolSize: int(poolSize),
+			PoolSize: config.RedisConfig.PoolSize,
 		})
 		ctx := context.Background()
 		clients[k] = &Client{C: r, Ctx: ctx}
@@ -39,8 +37,8 @@ func NewRedisClients(clients map[RDB]*Client) {
 func NewRedisClient(n int) *Client {
 	ctx := context.Background()
 	r := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%v:%v", config.Get("redis.host"), config.Get("redis.port")),
-		Password: fmt.Sprintf("%v", config.Get("redis.password")),
+		Addr:     fmt.Sprintf("%v:%v", config.RedisConfig.Host, config.RedisConfig.Port),
+		Password: fmt.Sprintf("%v", config.RedisConfig.Password),
 		DB:       n,
 	})
 	return &Client{C: r, Ctx: ctx}

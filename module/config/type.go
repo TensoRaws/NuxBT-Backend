@@ -3,8 +3,8 @@ package config
 type Server struct {
 	Port              int    `yaml:"port"`
 	Mode              string `yaml:"mode"`
-	AllowResgister    *bool  `yaml:"allowResgister"`
-	UseInvitationCode *bool  `yaml:"useInvitationCode"`
+	AllowResgister    bool   `yaml:"allowResgister"`
+	UseInvitationCode bool   `yaml:"useInvitationCode"`
 }
 
 type Jwt struct {
@@ -24,7 +24,7 @@ type DB struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
-	SSL      *bool  `yaml:"ssl"`
+	SSL      bool   `yaml:"ssl"`
 }
 
 type Redis struct {
@@ -36,13 +36,12 @@ type Redis struct {
 }
 
 type OSS struct {
-	Endpoint  string `yaml:"endpoint"`
-	AccessKey string `yaml:"accessKey"`
-	SecretKey string `yaml:"secretKey"`
-	Region    string `yaml:"region"`
-	Bucket    string `yaml:"bucket"`
-	// 如果是使用 minio，并且没有使用 https，需要设置为 false
-	UseSsl *bool `yaml:"ssl"`
-	// 如果是使用 minio，需要设置为 true
-	HostnameImmutable *bool `yaml:"hostnameImmutable"`
+	Type              string `yaml:"type"`
+	Endpoint          string `yaml:"endpoint"`
+	AccessKey         string `yaml:"accessKey"`
+	SecretKey         string `yaml:"secretKey"`
+	Region            string `yaml:"region"`
+	Bucket            string `yaml:"bucket"`
+	UseSSL            bool   `yaml:"ssl"`
+	HostnameImmutable bool   `yaml:"hostnameImmutable"`
 }

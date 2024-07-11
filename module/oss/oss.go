@@ -2,10 +2,10 @@ package oss
 
 import (
 	"context"
+	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"io"
 	"sync"
 
-	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/eleven26/goss/v4"
 )
@@ -23,8 +23,16 @@ func Init() {
 }
 
 func initialize() {
-	cfg := &config.OSSConfig
-	oss, err = goss.New(goss.WithConfig((*goss.Config)(cfg)))
+	var cfg = &goss.Config{
+		Endpoint:          config.OSSConfig.Endpoint,
+		AccessKey:         config.OSSConfig.AccessKey,
+		SecretKey:         config.OSSConfig.SecretKey,
+		Region:            config.OSSConfig.Region,
+		Bucket:            config.OSSConfig.Bucket,
+		UseSsl:            &config.OSSConfig.UseSSL,
+		HostnameImmutable: &config.OSSConfig.HostnameImmutable,
+	}
+	oss, err = goss.New(goss.WithConfig(cfg))
 	if err != nil {
 		log.Logger.Errorf("init goss faild: %v", err)
 	}

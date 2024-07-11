@@ -28,7 +28,7 @@ func initialize() {
 		Prefix:          "NuxBT-Backend",
 	})
 
-	level := config.GetString("log.level")
+	level := config.LogConfig.Level
 	switch level {
 	case "debug":
 		Logger.SetLevel(log.DebugLevel)

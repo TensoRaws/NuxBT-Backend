@@ -22,9 +22,7 @@ func GetJWTTokenExpiredDuration() time.Duration {
 	if TokenExpiredDuration != 0 {
 		return TokenExpiredDuration
 	}
-	timeout := config.GetString("jwt.timeout")
-	timeoutInt, _ := strconv.Atoi(timeout)
-	TokenExpiredDuration = time.Minute * time.Duration(timeoutInt)
+	TokenExpiredDuration = time.Minute * time.Duration(config.JwtConfig.Timeout)
 	return TokenExpiredDuration
 }
 
@@ -33,7 +31,7 @@ func GetJWTSigningKey() []byte {
 	if len(mySigningKey) != 0 {
 		return mySigningKey
 	}
-	mySigningKey = []byte(config.GetString("jwt.key"))
+	mySigningKey = []byte(config.JwtConfig.Key)
 	return mySigningKey
 }
 

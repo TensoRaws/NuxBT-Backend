@@ -30,15 +30,15 @@ type RegisterDataResponse struct {
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindQuery(&req); err != nil {
-		log.Logger.Debug("invalid request: " + err.Error())
 		util.AbortWithMsg(c, "invalid request")
 		return
 	}
 
 	// 无邀请码注册，检查是否允许无邀请码注册
-	if req.InvitationCode == nil {
-		if config.GetString("register.useInvitationCode") == "true" {
+	if req.InvitationCode == nil || *req.InvitationCode == "" {
+		if config.ServerConfig.UseInvitationCode {
 			util.AbortWithMsg(c, "invitation code is required")
+			return
 		}
 	} else {
 		// 有邀请码注册，检查邀请码是否有效
@@ -75,7 +75,7 @@ func Register(c *gin.Context) {
 
 	util.OKWithDataStruct(c, RegisterDataResponse{
 		Email:    user.Email,
-		UserID:   strconv.FormatInt(user.UserID, 10),
+		UserID:   strconv.FormatInt(int64(user.UserID), 10),
 		Username: user.Username,
 	})
 	log.Logger.Info("register success: " + util.StructToString(user))

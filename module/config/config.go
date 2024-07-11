@@ -17,8 +17,13 @@ var (
 )
 
 var (
-	OSSConfig  OSS
-	OSS_PREFIX string
+	ServerConfig Server
+	JwtConfig    Jwt
+	LogConfig    Log
+	DBConfig     DB
+	RedisConfig  Redis
+	OSSConfig    OSS
+	OSS_PREFIX   string
 )
 
 func Init() {
@@ -89,23 +94,23 @@ func initialize() {
 		}
 	}
 
-	err := config.UnmarshalKey("server", &Server{})
+	err := config.UnmarshalKey("server", &ServerConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into server struct, %v", err)
 	}
-	err = config.UnmarshalKey("jwt", &Jwt{})
+	err = config.UnmarshalKey("jwt", &JwtConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into jwt struct, %v", err)
 	}
-	err = config.UnmarshalKey("log", &Log{})
+	err = config.UnmarshalKey("log", &LogConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into log struct, %v", err)
 	}
-	err = config.UnmarshalKey("db", &DB{})
+	err = config.UnmarshalKey("db", &DBConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into db struct, %v", err)
 	}
-	err = config.UnmarshalKey("redis", &Redis{})
+	err = config.UnmarshalKey("redis", &RedisConfig)
 	if err != nil {
 		log.Fatalf("unable to decode into redis struct, %v", err)
 	}
