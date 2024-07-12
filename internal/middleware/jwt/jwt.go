@@ -60,7 +60,7 @@ func GenerateToken(u *model.User) string {
 	return tokenStr
 }
 
-// ParseToken 负责解析客户端 Header 中包含的 jwt，解析成功返回用户的 Claims（包含了用户的信息）
+// ParseToken 解析 jwt，解析成功返回用户的 Claims（包含了用户的信息）
 func ParseToken(tokenString string) (*jwt.RegisteredClaims, error) {
 	// 使用匿名函数先去查询服务器签名时使用的私钥，然后调用签名的验证算法进行验证
 	// 验证通过后，将 tokenString 进行反编码并反序列化到 jwt.Token 结构体相应字段
@@ -68,7 +68,7 @@ func ParseToken(tokenString string) (*jwt.RegisteredClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return mySigningKey, nil
+		return GetJWTSigningKey(), nil
 	})
 	if err != nil {
 		log.Logger.Info(err)

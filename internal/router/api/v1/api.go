@@ -17,7 +17,8 @@ func NewAPI() *gin.Engine {
 	r := gin.New()
 	r.Use(logger.DefaultLogger(), gin.Recovery()) // 日志中间件
 	r.Use(middleware_cache.NewRateLimiter(
-		cache.Clients[cache.IPLimit], config.ServerConfig.RequestLimit, 60*time.Second))
+		cache.Clients[cache.IPLimit], config.ServerConfig.RequestLimit, 60*time.Second), // 限流中间件
+	)
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -35,7 +36,7 @@ func NewAPI() *gin.Engine {
 			user.POST("login", user_service.Login)
 			// 用户登出
 			user.POST("logout",
-				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], true),
+				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
 				jwt.RequireAuth(),
 				user_service.Logout,
 			)
