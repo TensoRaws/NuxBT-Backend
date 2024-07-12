@@ -17,7 +17,7 @@ type ProfileMeResponse struct {
 	Inviter    string   `json:"inviter"`
 	LastActive string   `json:"last_active"`
 	Private    bool     `json:"private"`
-	Roles      []string `json:"roles"`
+	Roles      []string `json:"roles,omitempty"`
 	Signature  string   `json:"signature"`
 	UserID     string   `json:"user_id"`
 	Username   string   `json:"username"`

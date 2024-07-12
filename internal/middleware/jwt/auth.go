@@ -11,7 +11,7 @@ func RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 从输入的 url 中查询 token 值
 		token := c.Query("token")
-		// auth = [[header][cliams][signature]]
+		// auth = [[header][claims][signature]]
 		// 解析 token
 		claims, err := ParseToken(token)
 		if err != nil {
