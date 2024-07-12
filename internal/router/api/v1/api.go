@@ -33,8 +33,18 @@ func NewAPI() *gin.Engine {
 			user.POST("register", user_service.Register)
 			// 用户登录
 			user.POST("login", user_service.Login)
+			// 用户登出
+			user.POST("logout",
+				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], true),
+				jwt.RequireAuth(),
+				user_service.Logout,
+			)
 			// 用户信息
-			user.GET("profile/me", jwt.RequireAuth(), user_service.ProfileMe)
+			user.GET("profile/me",
+				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], false),
+				jwt.RequireAuth(),
+				user_service.ProfileMe,
+			)
 		}
 	}
 
