@@ -43,7 +43,7 @@ func ProfileMe(c *gin.Context) {
 		roles = []string{}
 	}
 
-	util.OKWithDataStruct(c, ProfileMeResponse{
+	util.OKWithData(c, true, ProfileMeResponse{
 		Avatar:     user.Avatar,
 		Background: user.Background,
 		CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),

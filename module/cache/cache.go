@@ -16,11 +16,13 @@ type RDB uint8
 const (
 	IPLimit RDB = iota
 	JWTBlacklist
+	RespCache
 )
 
 var Clients = map[RDB]*Client{
 	IPLimit:      {},
 	JWTBlacklist: {},
+	RespCache:    {},
 }
 
 type Client struct {
