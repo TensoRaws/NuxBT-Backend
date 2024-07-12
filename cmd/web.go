@@ -4,13 +4,12 @@ import (
 	"fmt"
 
 	"github.com/TensoRaws/NuxBT-Backend/internal/router"
-	"github.com/urfave/cli/v2"
-
-	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/cache"
+	"github.com/TensoRaws/NuxBT-Backend/module/cache"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/oss"
+	"github.com/urfave/cli/v2"
 )
 
 // CmdWeb api 子命令

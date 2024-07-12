@@ -41,7 +41,7 @@ signs:
         "--output",
         "${signature}",
         "--detach-sign",
-        "${artifact}",
+        "${artifact}"
       ]
 
 snapshot:

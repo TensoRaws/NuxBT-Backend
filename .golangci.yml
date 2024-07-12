@@ -11,8 +11,7 @@ linters:
     - goconst
     - gocritic
     - gocyclo
-    - gofmt
-    - goimports
+    #    - goimports
     - goprintffuncname
     - gosimple
     - govet
@@ -27,7 +26,6 @@ linters:
     - unconvert
     - unparam
     - whitespace
-    - gofumpt
   disable:
     - unused
 

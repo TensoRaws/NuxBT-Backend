@@ -44,8 +44,6 @@ func NewRedisClient(n int) *Client {
 	return &Client{C: r, Ctx: ctx}
 }
 
-// 封装常用接口
-
 // ClientGetName returns the name of the connection.
 func (c Client) ClientGetName() *redis.StringCmd {
 	return c.C.ClientGetName(c.Ctx)

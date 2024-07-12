@@ -4,15 +4,14 @@ import (
 	"bytes"
 	"sync"
 
-	"github.com/TensoRaws/NuxBT-Backend/module/cache"
 	"github.com/gin-gonic/gin"
 )
 
 var once sync.Once
 
-var Clients = map[cache.RDB]*cache.Client{
-	cache.IPLimit: {},
-	cache.User:    {},
+var Clients = map[RDB]*Client{
+	IPLimit: {},
+	User:    {},
 }
 
 type responseWriter struct {
@@ -29,6 +28,6 @@ func (w responseWriter) Write(b []byte) (int, error) {
 
 func Init() {
 	once.Do(func() {
-		cache.NewRedisClients(Clients)
+		NewRedisClients(Clients)
 	})
 }
