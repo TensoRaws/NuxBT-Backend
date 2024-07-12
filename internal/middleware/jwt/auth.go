@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
@@ -12,17 +11,6 @@ func RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 从输入的 url 中查询 token 值
 		token := c.Query("token")
-		if len(token) == 0 {
-			// 从输入的表单中查询 token 值
-			token = c.PostForm("token")
-		}
-
-		if len(token) == 0 {
-			util.AbortWithMsg(c, "JSON WEB TOKEN IS NULL")
-			return
-		}
-
-		log.Logger.Info("Get token successfully")
 		// auth = [[header][cliams][signature]]
 		// 解析 token
 		claims, err := ParseToken(token)

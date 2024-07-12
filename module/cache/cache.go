@@ -2,16 +2,30 @@ package cache
 
 import (
 	"bytes"
+	"context"
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
 var once sync.Once
 
+type RDB uint8
+
+const (
+	IPLimit RDB = iota
+	JWTBlacklist
+)
+
 var Clients = map[RDB]*Client{
-	IPLimit: {},
-	User:    {},
+	IPLimit:      {},
+	JWTBlacklist: {},
+}
+
+type Client struct {
+	C   *redis.Client
+	Ctx context.Context
 }
 
 type responseWriter struct {

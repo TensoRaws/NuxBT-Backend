@@ -9,18 +9,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type RDB uint8
-
-const (
-	IPLimit RDB = iota
-	User
-)
-
-type Client struct {
-	C   *redis.Client
-	Ctx context.Context
-}
-
 func NewRedisClients(clients map[RDB]*Client) {
 	for k := range clients {
 		r := redis.NewClient(&redis.Options{
@@ -111,4 +99,16 @@ func (c Client) ZRange(key string, start, stop int64) *redis.StringSliceCmd {
 
 func (c Client) ZAddNX(key string, members ...redis.Z) *redis.IntCmd {
 	return c.C.ZAddNX(c.Ctx, key, members...)
+}
+
+func (c Client) SIsMember(key string, member interface{}) *redis.BoolCmd {
+	return c.C.SIsMember(c.Ctx, key, member)
+}
+
+func (c Client) SAdd(key string, members ...interface{}) *redis.IntCmd {
+	return c.C.SAdd(c.Ctx, key, members...)
+}
+
+func (c Client) Set(key string, value interface{}, expiration time.Duration) *redis.StatusCmd {
+	return c.C.Set(c.Ctx, key, value, expiration)
 }
