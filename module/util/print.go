@@ -42,3 +42,9 @@ func StructToString(s interface{}) string {
 	v, _ := sonic.Marshal(s)
 	return string(v)
 }
+
+// StringToStruct 字符串转结构体
+func StringToStruct(str string, s interface{}) error {
+	// return json.Unmarshal([]byte(str), s)
+	return sonic.Unmarshal([]byte(str), s)
+}

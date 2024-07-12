@@ -9,7 +9,7 @@ import (
 )
 
 // JWTBlacklist 检查JWT是否在黑名单中
-func JWTBlacklist(redisClient *cache.Client, enableBlacklist bool) gin.HandlerFunc {
+func JWTBlacklist(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 从输入的 url 中查询 token 值
 		token := c.Query("token")
@@ -37,7 +37,7 @@ func JWTBlacklist(redisClient *cache.Client, enableBlacklist bool) gin.HandlerFu
 		c.Next()
 
 		// 如果启用拉黑模式，处理请求拉黑 Token
-		if enableBlacklist {
+		if addBlacklist {
 			err := redisClient.Set(token, "", jwt.GetJWTTokenExpiredDuration()).Err()
 			if err != nil {
 				log.Logger.Error("Error adding token to blacklist: " + err.Error())

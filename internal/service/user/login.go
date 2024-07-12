@@ -12,6 +12,10 @@ type LoginRequest struct {
 	Password string `form:"password" binding:"required"`
 }
 
+type LoginResponse struct {
+	Token string `json:"token"`
+}
+
 // Login 用户登录 (POST /login)
 func Login(c *gin.Context) {
 	var req LoginRequest
@@ -33,9 +37,8 @@ func Login(c *gin.Context) {
 		// 注册之后的下次登录成功，才会为其生成 token
 		token := jwt.GenerateToken(user)
 		// 打印相应信息和用户信息以及生成的 token 值
-		util.OKWithData(c, map[string]interface{}{
-			"user_id": user.UserID,
-			"token":   token,
+		util.OKWithData(c, false, LoginResponse{
+			Token: token,
 		})
 	} else {
 		util.AbortWithMsg(c, "Invalid Username or Password")
