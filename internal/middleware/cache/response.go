@@ -12,7 +12,7 @@ import (
 )
 
 // Response 缓存接口响应的中间件
-func Response(redisClient *cache.Client, ttl time.Duration, queryFilter []string) gin.HandlerFunc {
+func Response(redisClient *cache.Client, ttl time.Duration, queryFilter ...string) gin.HandlerFunc {
 	redisStore := persist.NewRedisStore(redisClient.C)
 
 	strategy := gin_cache.WithCacheStrategyByRequest(

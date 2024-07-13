@@ -39,7 +39,7 @@ func TestRemoveQueryParameter(t *testing.T) {
 		},
 		{
 			name: "empty query",
-			args: args{rawurl: "https://114514.com/?token=eyJhb", keys: []string{}},
+			args: args{rawurl: "https://114514.com/?token=eyJhb"},
 			want: "https://114514.com/?token=eyJhb",
 		},
 	}
