@@ -1,11 +1,11 @@
 package cache
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/module/cache"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
+	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/TensoRaws/NuxBT-Backend/third_party/gin_cache"
 	"github.com/TensoRaws/NuxBT-Backend/third_party/gin_cache/persist"
 	"github.com/gin-gonic/gin"
@@ -15,21 +15,20 @@ import (
 func Response(redisClient *cache.Client, ttl time.Duration, queryFilter []string) gin.HandlerFunc {
 	redisStore := persist.NewRedisStore(redisClient.C)
 
-	var strategy gin_cache.Option
-	if queryFilter != nil {
-		strategy = gin_cache.WithCacheStrategyByRequest(func(c *gin.Context) (bool, gin_cache.Strategy) {
-			// 剔除 query 参数
-			return true, gin_cache.Strategy{
-				CacheKey: util.RemoveQueryParameter(c.Request.RequestURI, queryFilter...),
+	strategy := gin_cache.WithCacheStrategyByRequest(
+		func(c *gin.Context) (bool, gin_cache.Strategy) {
+			// 去除 query 参数
+			var key string
+			if queryFilter != nil {
+				key = util.RemoveQueryParameter(c.Request.RequestURI, queryFilter...)
+			} else {
+				key = c.Request.RequestURI
 			}
-		})
-	} else {
-		strategy = gin_cache.WithCacheStrategyByRequest(func(c *gin.Context) (bool, gin_cache.Strategy) {
 			return true, gin_cache.Strategy{
-				CacheKey: c.Request.RequestURI,
+				CacheKey: key,
 			}
-		})
-	}
+		},
+	)
 
 	return gin_cache.CacheByRequestURI(
 		redisStore,
