@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,35 +39,12 @@ func AbortWithMsg(c *gin.Context, msg string) {
 }
 
 // OKWithData 返回成功信息，携带自定义数据（结构体）
-func OKWithData(c *gin.Context, cache bool, data interface{}) {
+func OKWithData(c *gin.Context, data interface{}) {
 	resp := map[string]interface{}{
 		"success": true,
 		"message": "ok",
 		"data":    data,
 	}
-	if cache {
-		c.Set("cache",
-			StructToString(
-				map[string]interface{}{
-					"success": true,
-					"message": "cache",
-					"data":    data,
-				},
-			),
-		)
-	}
 
 	c.JSON(http.StatusOK, resp)
-}
-
-// OKWithCache 返回缓存数据，终止请求
-func OKWithCache(c *gin.Context, cache string) {
-	var resp interface{}
-	err := StringToStruct(cache, &resp)
-	if err != nil {
-		log.Logger.Error(err)
-		return
-	}
-	c.JSON(http.StatusOK, resp)
-	c.Abort()
 }

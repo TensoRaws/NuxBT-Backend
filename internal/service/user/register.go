@@ -73,7 +73,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	util.OKWithData(c, false, RegisterDataResponse{
+	util.OKWithData(c, RegisterDataResponse{
 		Email:    user.Email,
 		UserID:   strconv.FormatInt(int64(user.UserID), 10),
 		Username: user.Username,
