@@ -1,35 +1,48 @@
 package cache
 
 import (
+	"time"
+
 	"github.com/TensoRaws/NuxBT-Backend/module/cache"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
+	"github.com/TensoRaws/NuxBT-Backend/third_party/gin_cache"
+	"github.com/TensoRaws/NuxBT-Backend/third_party/gin_cache/persist"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 // Response 缓存接口响应的中间件
-func Response(redisClient *cache.Client, ttl time.Duration) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 生成缓存键，使用请求的 URL 和方法
-		cacheKey := c.Request.Method + ":" + c.Request.URL.String()
+func Response(redisClient *cache.Client, ttl time.Duration, queryFilter ...string) gin.HandlerFunc {
+	redisStore := persist.NewRedisStore(redisClient.C)
 
-		// 尝试从缓存中获取响应
-		cachedResponse, err := redisClient.Get(cacheKey).Result()
-		if err == nil {
-			// 缓存命中，直接返回缓存的响应
-			util.OKWithCache(c, cachedResponse)
-			log.Logger.Debug("Cache hit: " + cacheKey)
-			return
-		}
+	strategy := gin_cache.WithCacheStrategyByRequest(
+		func(c *gin.Context) (bool, gin_cache.Strategy) {
+			// 去除 query 参数
+			var key string
+			if queryFilter != nil {
+				key = util.RemoveQueryParameter(c.Request.RequestURI, queryFilter...)
+			} else {
+				key = c.Request.RequestURI
+			}
+			return true, gin_cache.Strategy{
+				CacheKey: key,
+			}
+		},
+	)
 
-		// 缓存未命中，调用后续的处理函数
-		c.Next()
-
-		// 调用结束后，将结果存入缓存
-		result, exists := c.Get("cache")
-		if exists {
-			redisClient.Set(cacheKey, result, ttl)
-		}
-	}
+	return gin_cache.CacheByRequestURI(
+		redisStore,
+		ttl,
+		gin_cache.WithOnHitCache(
+			func(c *gin.Context) {
+				log.Logger.Info("Cache hit: " + c.Request.RequestURI)
+			},
+		),
+		gin_cache.WithOnMissCache(
+			func(c *gin.Context) {
+				log.Logger.Info("Cache miss, try to cache: " + c.Request.RequestURI)
+			},
+		),
+		strategy,
+	)
 }
