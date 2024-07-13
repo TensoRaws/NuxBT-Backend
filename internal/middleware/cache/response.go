@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Response 缓存接口响应的中间件
+// Response 缓存接口响应的中间件，queryFilter 为需要去除的 query 参数，使用其他的来构建缓存 key
 func Response(redisClient *cache.Client, ttl time.Duration, queryFilter ...string) gin.HandlerFunc {
 	redisStore := persist.NewRedisStore(redisClient.C)
 

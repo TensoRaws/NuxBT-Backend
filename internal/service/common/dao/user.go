@@ -1,4 +1,4 @@
-package user
+package dao
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"

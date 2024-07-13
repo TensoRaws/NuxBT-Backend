@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
+	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
@@ -54,7 +55,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	// 注册
-	err = CreateUser(&model.User{
+	err = dao.CreateUser(&model.User{
 		Username:   req.Username,
 		Email:      req.Email,
 		Password:   string(password),
@@ -66,7 +67,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user, err := GetUserByEmail(req.Email)
+	user, err := dao.GetUserByEmail(req.Email)
 	if err != nil {
 		util.AbortWithMsg(c, "failed to get user by email")
 		log.Logger.Error("failed to get user by email: " + err.Error())
