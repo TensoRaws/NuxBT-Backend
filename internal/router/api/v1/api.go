@@ -44,7 +44,7 @@ func NewAPI() *gin.Engine {
 			user.GET("profile/me",
 				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], false),
 				jwt.RequireAuth(),
-				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
+				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute, nil),
 				user_service.ProfileMe,
 			)
 		}
