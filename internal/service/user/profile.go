@@ -18,7 +18,7 @@ type ProfileResponse struct {
 	Inviter    string   `json:"inviter"`
 	LastActive string   `json:"last_active"`
 	Private    bool     `json:"private"`
-	Roles      []string `json:"roles,omitempty"`
+	Roles      []string `json:"roles"`
 	Signature  string   `json:"signature"`
 	UserID     int32    `json:"user_id"`
 	Username   string   `json:"username"`
@@ -71,19 +71,13 @@ func ProfileOthers(c *gin.Context) {
 	// 绑定参数
 	var req ProfileOthersRequest
 	if err := c.ShouldBindQuery(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request")
+		util.AbortWithMsg(c, "invalid request: "+err.Error())
 		return
 	}
 	// 鉴权
 	userID, err := util.GetUserIDFromGinContext(c)
 	if err != nil {
 		util.AbortWithMsg(c, "Please login first")
-		return
-	}
-	// 仅用于鉴权不使用
-	_, err = dao.GetUserByID(userID)
-	if err != nil {
-		util.AbortWithMsg(c, "User not found")
 		return
 	}
 	// 获取信息
@@ -109,7 +103,7 @@ func ProfileOthers(c *gin.Context) {
 			Experience: "",
 			Inviter:    "",
 			LastActive: "",
-			Private:    user.Private,
+			Private:    true,
 			Roles:      nil,
 			Signature:  "",
 			UserID:     user.UserID,
@@ -125,7 +119,7 @@ func ProfileOthers(c *gin.Context) {
 			Experience: strconv.Itoa(int(user.Experience)),
 			Inviter:    strconv.Itoa(int(user.Inviter)),
 			LastActive: user.LastActive.Format("2006-01-02 15:04:05"),
-			Private:    user.Private,
+			Private:    false,
 			Roles:      roles,
 			Signature:  user.Signature,
 			UserID:     user.UserID,

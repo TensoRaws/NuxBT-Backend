@@ -16,7 +16,7 @@ func ResetPassword(c *gin.Context) {
 	// 绑定参数
 	var req ResetPasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request")
+		util.AbortWithMsg(c, "invalid request: "+err.Error())
 		return
 	}
 

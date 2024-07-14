@@ -13,10 +13,10 @@ func CreateUser(user *model.User) (err error) {
 	return err
 }
 
-// SetUserPassword 修改用户密码
-func SetUserPassword(user *model.User, newpass string) (err error) {
+// SetUserPassword 设置用户密码
+func SetUserPassword(user *model.User, newPassword string) (err error) {
 	u := query.User
-	password, err := bcrypt.GenerateFromPassword([]byte(newpass), bcrypt.DefaultCost)
+	password, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
@@ -27,10 +27,10 @@ func SetUserPassword(user *model.User, newpass string) (err error) {
 	return err
 }
 
-// UpdateUserData 根据map更新用户信息
-func UpdateUserData(user *model.User, maps map[string]interface{}) (err error) {
+// UpdateUserDataByUserID 根据 map 更新用户信息，map 中的 key 为字段名
+func UpdateUserDataByUserID(userID int32, maps map[string]interface{}) (err error) {
 	u := query.User
-	_, err = u.Where(u.UserID.Eq(user.UserID)).Updates(maps)
+	_, err = u.Where(u.UserID.Eq(userID)).Updates(maps)
 	if err != nil {
 		return err
 	}

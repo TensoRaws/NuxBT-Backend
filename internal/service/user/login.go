@@ -21,7 +21,7 @@ type LoginResponse struct {
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request")
+		util.AbortWithMsg(c, "invalid request: "+err.Error())
 		return
 	}
 

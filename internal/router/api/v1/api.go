@@ -40,6 +40,10 @@ func NewAPI() *gin.Engine {
 				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
 				user_service.Logout,
 			)
+			// 修改密码
+			user.POST("password/reset",
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
+				user_service.ResetPassword)
 			// 用户信息
 			user.GET("profile/me",
 				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
@@ -51,16 +55,11 @@ func NewAPI() *gin.Engine {
 				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
 				user_service.ProfileOthers,
 			)
-
-			// 修改密码
-			user.POST("password/reset",
-				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
-				user_service.ResetPassword)
+			// 用户信息更新
+			user.POST("profile/update",
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
+				user_service.ProfileUpdate)
 		}
-		// 更新用户信息
-		user.POST("profile/update",
-			jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
-			user_service.ChangeUser)
 	}
 
 	return r
