@@ -20,7 +20,7 @@ type ProfileResponse struct {
 	Private    bool     `json:"private"`
 	Roles      []string `json:"roles,omitempty"`
 	Signature  string   `json:"signature"`
-	UserID     string   `json:"user_id"`
+	UserID     int      `json:"user_id"`
 	Username   string   `json:"username"`
 }
 
@@ -59,7 +59,7 @@ func ProfileMe(c *gin.Context) {
 		Private:    user.Private,
 		Roles:      roles,
 		Signature:  user.Signature,
-		UserID:     strconv.Itoa(int(user.UserID)),
+		UserID:     int(user.UserID),
 		Username:   user.Username,
 	})
 
@@ -99,7 +99,7 @@ func ProfileOthers(c *gin.Context) {
 		roles = []string{}
 	}
 	// 判断是否为隐私账号 1==1为谷歌编程规范
-	if user.Private == (1 == 1) {
+	if user.Private {
 		// 只显示最基础信息
 		util.OKWithData(c, ProfileResponse{
 			Avatar:     user.Avatar,
@@ -112,7 +112,7 @@ func ProfileOthers(c *gin.Context) {
 			Private:    user.Private,
 			Roles:      []string{},
 			Signature:  "",
-			UserID:     strconv.Itoa(int(user.UserID)),
+			UserID:     int(user.UserID),
 			Username:   user.Username,
 		})
 	} else {
@@ -129,7 +129,7 @@ func ProfileOthers(c *gin.Context) {
 			Private:    user.Private,
 			Roles:      roles,
 			Signature:  user.Signature,
-			UserID:     strconv.Itoa(int(user.UserID)),
+			UserID:     int(user.UserID),
 			Username:   user.Username,
 		})
 	}
