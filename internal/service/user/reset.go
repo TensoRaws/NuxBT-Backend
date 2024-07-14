@@ -16,16 +16,11 @@ func ResetPassword(c *gin.Context) {
 	// 绑定参数
 	var req ResetPasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request")
+		util.AbortWithMsg(c, "invalid request: "+err.Error())
 		return
 	}
 
-	// 鉴权
-	userID, err := util.GetUserIDFromGinContext(c)
-	if err != nil {
-		util.AbortWithMsg(c, "Please login first")
-		return
-	}
+	userID, _ := util.GetUserIDFromGinContext(c)
 
 	user, err := dao.GetUserByID(userID)
 	if err != nil {

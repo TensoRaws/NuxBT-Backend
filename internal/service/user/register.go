@@ -31,7 +31,13 @@ type RegisterDataResponse struct {
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request")
+		util.AbortWithMsg(c, "invalid request: "+err.Error())
+		return
+	}
+
+	err := util.CheckUsername(req.Username)
+	if err != nil {
+		util.AbortWithMsg(c, "invalid username: "+err.Error())
 		return
 	}
 
@@ -42,10 +48,8 @@ func Register(c *gin.Context) {
 			return
 		}
 	} else {
-		// 有邀请码注册，检查邀请码是否有效
-		// do something
-		// 未实现
-		// OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+		// TODO: 邀请码功能, 有邀请码注册，检查邀请码是否有效
+
 		log.Logger.Info("invitation code: " + *req.InvitationCode)
 	}
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -62,7 +66,7 @@ func Register(c *gin.Context) {
 		LastActive: time.Now(),
 	})
 	if err != nil {
-		util.AbortWithMsg(c, "failed to register: ")
+		util.AbortWithMsg(c, "failed to register: "+err.Error())
 		log.Logger.Error("failed to register: " + err.Error())
 		return
 	}

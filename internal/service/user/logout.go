@@ -8,13 +8,9 @@ import (
 
 // Logout 用户登出 (POST /logout)
 func Logout(c *gin.Context) {
-	user, err := util.GetUserIDFromGinContext(c)
-	if err != nil {
-		util.AbortWithMsg(c, "Please login first")
-		return
-	}
+	userID, _ := util.GetUserIDFromGinContext(c)
 
 	util.OKWithMsg(c, "Logout success")
 
-	log.Logger.Info("Logout success: " + util.StructToString(user))
+	log.Logger.Info("Logout success, user ID: " + util.StructToString(userID))
 }
