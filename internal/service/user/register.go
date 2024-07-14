@@ -13,7 +13,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// RegisterRequest Query binding 需要打 form 标签
+// RegisterRequest
+// Query binding 需要打 form 标签，Body json binding 需要打 json 标签
 type RegisterRequest struct {
 	Username       string  `json:"username" binding:"required"`
 	Password       string  `json:"password" binding:"required"`
