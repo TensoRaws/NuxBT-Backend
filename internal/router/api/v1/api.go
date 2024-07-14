@@ -36,23 +36,18 @@ func NewAPI() *gin.Engine {
 			user.POST("login", user_service.Login)
 			// 用户登出
 			user.POST("logout",
-				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
-				jwt.RequireAuth(),
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
 				user_service.Logout,
 			)
 			// 用户信息
 			user.GET("profile/me",
-				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], false),
-				jwt.RequireAuth(),
-				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
 				user_service.ProfileMe,
 			)
-			//修改密码
+			// 修改密码
 			user.POST("password/reset",
-				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
-				jwt.RequireAuth(),
-				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
-				user_service.ReSetPass)
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
+				user_service.ResetPassword)
 		}
 	}
 

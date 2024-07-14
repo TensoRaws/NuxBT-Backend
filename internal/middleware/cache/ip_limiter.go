@@ -11,9 +11,10 @@ import (
 	redisLimiter "github.com/ulule/limiter/v3/drivers/store/redis"
 )
 
-func NewRateLimiter(redisClient *cache.Client, limit int, slidingWindow time.Duration) gin.HandlerFunc {
+// NewRateLimiter returns a new instance of a rate limiter middleware.
+func NewRateLimiter(redisClient *cache.Client, limit int, t time.Duration) gin.HandlerFunc {
 	rate := limiter.Rate{
-		Period: slidingWindow,
+		Period: t,
 		Limit:  int64(limit),
 	}
 	store, err := redisLimiter.NewStore(redisClient.C)

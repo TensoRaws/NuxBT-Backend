@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
+	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
@@ -12,7 +13,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// RegisterRequest Query binding 需要打 form 标签
+// RegisterRequest
+// Query binding 需要打 form 标签，Body json binding 需要打 json 标签
 type RegisterRequest struct {
 	Username       string  `json:"username" binding:"required"`
 	Password       string  `json:"password" binding:"required"`
@@ -45,7 +47,7 @@ func Register(c *gin.Context) {
 		// do something
 		// 未实现
 		// OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-		log.Logger.Info("invitation code: ", *req.InvitationCode)
+		log.Logger.Info("invitation code: " + *req.InvitationCode)
 	}
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -54,7 +56,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	// 注册
-	err = CreateUser(&model.User{
+	err = dao.CreateUser(&model.User{
 		Username:   req.Username,
 		Email:      req.Email,
 		Password:   string(password),
@@ -66,7 +68,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user, err := GetUserByEmail(req.Email)
+	user, err := dao.GetUserByEmail(req.Email)
 	if err != nil {
 		util.AbortWithMsg(c, "failed to get user by email")
 		log.Logger.Error("failed to get user by email: " + err.Error())

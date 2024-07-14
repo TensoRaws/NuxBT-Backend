@@ -3,6 +3,7 @@ package user
 import (
 	"strconv"
 
+	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
@@ -31,13 +32,13 @@ func ProfileMe(c *gin.Context) {
 		return
 	}
 
-	user, err := GetUserByID(int32(userID))
+	user, err := dao.GetUserByID(int32(userID))
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return
 	}
 
-	roles, err := GetUserRolesByID(int32(userID))
+	roles, err := dao.GetUserRolesByID(int32(userID))
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}

@@ -12,27 +12,14 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var (
-	TokenExpiredDuration time.Duration
-	mySigningKey         []byte
-)
-
 // GetJWTTokenExpiredDuration 根据配置文件获取 jwt 的过期时间
 func GetJWTTokenExpiredDuration() time.Duration {
-	if TokenExpiredDuration != 0 {
-		return TokenExpiredDuration
-	}
-	TokenExpiredDuration = time.Minute * time.Duration(config.JwtConfig.Timeout)
-	return TokenExpiredDuration
+	return time.Minute * time.Duration(config.JwtConfig.Timeout)
 }
 
 // GetJWTSigningKey 根据配置文件获取 jwt 的签名密钥
 func GetJWTSigningKey() []byte {
-	if len(mySigningKey) != 0 {
-		return mySigningKey
-	}
-	mySigningKey = []byte(config.JwtConfig.Key)
-	return mySigningKey
+	return []byte(config.JwtConfig.Key)
 }
 
 // GenerateToken 生成 jwt(json web token)

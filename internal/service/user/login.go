@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
+	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -25,7 +26,7 @@ func Login(c *gin.Context) {
 	}
 
 	// GORM 查询
-	user, err := GetUserByEmail(req.Email)
+	user, err := dao.GetUserByEmail(req.Email)
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return
