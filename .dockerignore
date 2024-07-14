@@ -20,7 +20,7 @@
 **/*.jfm
 **/bin
 **/charts
-**/docker-compose*
+scripts/docker-compose-dev.yml
 **/compose*
 **/Dockerfile*
 **/node_modules
