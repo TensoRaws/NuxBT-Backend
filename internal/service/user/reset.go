@@ -13,14 +13,14 @@ type SetRequest struct {
 
 // 重置密码 (POST /password/reset)
 func ReSetPass(c *gin.Context) {
-	//绑定参数
+	// 绑定参数
 	var req SetRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		util.AbortWithMsg(c, "invalid request")
 		return
 	}
 	fmt.Println(req.Newpassword)
-	//鉴权
+	// 鉴权
 	userID, err := util.GetUserIDFromGinContext(c)
 	if err != nil {
 		util.AbortWithMsg(c, "Please login first")
@@ -32,12 +32,11 @@ func ReSetPass(c *gin.Context) {
 		return
 	}
 
-	//修改密码
+	// 修改密码
 	err = SetUserPass(user, req.Newpassword)
 	if err != nil {
 		util.AbortWithMsg(c, "reset password fail")
 	}
-	//返回
+	// 返回
 	util.OKWithMsg(c, "reset password success")
-
 }
