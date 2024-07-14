@@ -3,7 +3,7 @@ package user
 import (
 	"strconv"
 
-	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
@@ -25,7 +25,7 @@ type ProfileResponse struct {
 }
 
 type ProfileOthersRequest struct {
-	UserId int `form:"user_id" binding:"required"`
+	UserId int32 `form:"user_id" binding:"required"`
 }
 
 // ProfileMe 获取用户自己的信息 (GET /profile/me)
@@ -87,7 +87,7 @@ func ProfileOthers(c *gin.Context) {
 		return
 	}
 	// 获取信息
-	user, err := dao.GetUserByID(int32(req.UserId))
+	user, err := dao.GetUserByID(req.UserId)
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return

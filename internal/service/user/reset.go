@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
