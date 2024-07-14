@@ -1,11 +1,12 @@
 package config
 
 type Server struct {
-	Port              int    `yaml:"port"`
-	Mode              string `yaml:"mode"`
-	AllowResgister    bool   `yaml:"allowResgister"`
-	UseInvitationCode bool   `yaml:"useInvitationCode"`
-	RequestLimit      int    `yaml:"requestLimit"`
+	Port              int      `yaml:"port"`
+	Mode              string   `yaml:"mode"`
+	AllowResgister    bool     `yaml:"allowResgister"`
+	UseInvitationCode bool     `yaml:"useInvitationCode"`
+	RequestLimit      int      `yaml:"requestLimit"`
+	Cros              []string `yaml:"cros"`
 }
 
 type Jwt struct {

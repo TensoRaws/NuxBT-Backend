@@ -5,6 +5,7 @@ import (
 	"time"
 
 	middleware_cache "github.com/TensoRaws/NuxBT-Backend/internal/middleware/cache"
+	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/cros"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/logger"
 	user_service "github.com/TensoRaws/NuxBT-Backend/internal/service/user"
@@ -15,7 +16,8 @@ import (
 
 func NewAPI() *gin.Engine {
 	r := gin.New()
-	r.Use(logger.DefaultLogger(), gin.Recovery()) // 日志中间件
+	r.Use(cros.CorsByRules(config.ServerConfig.Cros)) // 跨域中间件
+	r.Use(logger.DefaultLogger(), gin.Recovery())     // 日志中间件
 	r.Use(middleware_cache.NewRateLimiter(cache.Clients[cache.IPLimit],
 		config.ServerConfig.RequestLimit, 60*time.Second)) // 限流中间件
 

@@ -54,6 +54,7 @@ func initialize() {
 				"allowRegister":     true,
 				"useInvitationCode": false,
 				"requestLimit":      50,
+				"cros":              []string{},
 			})
 
 			config.SetDefault("jwt", map[string]interface{}{

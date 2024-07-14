@@ -12,16 +12,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// LogLayout 日志layout
+// LogLayout 日志 layout
 type LogLayout struct {
 	RequestMethod string // 请求方法字段
 	StatusCode    int    // 状态码
 	Time          time.Time
 	Metadata      map[string]interface{} // 存储自定义原数据
 	Path          string                 // 访问路径
-	Query         string                 // 携带query
-	Body          string                 // 携带body数据
-	IP            string                 // ip地址
+	Query         string                 // 携带 query
+	Body          string                 // 携带 body 数据
+	IP            string                 // ip 地址
 	UserAgent     string                 // 代理
 	Error         string                 // 错误
 	Cost          time.Duration          // 花费时间
@@ -31,7 +31,7 @@ type LogLayout struct {
 type Logger struct {
 	// Filter 用户自定义过滤
 	Filter func(c *gin.Context) bool
-	// FilterKeyword 关键字过滤(key)
+	// FilterKeyword 关键字过滤 (key)
 	FilterKeyword func(layout *LogLayout) bool
 	// AuthProcess 鉴权处理
 	AuthProcess func(c *gin.Context, layout *LogLayout)
@@ -76,7 +76,7 @@ func (l Logger) SetLoggerMiddleware() gin.HandlerFunc {
 			l.AuthProcess(c, &layout)
 		}
 		if l.FilterKeyword != nil {
-			// 自行判断key/value 脱敏等
+			// 自行判断 key/value 脱敏等
 			l.FilterKeyword(&layout)
 		}
 		// 自行处理日志

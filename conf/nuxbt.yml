@@ -4,6 +4,8 @@ server:
   allowRegister: true
   useInvitationCode: false
   requestLimit: 50 # 50 times per minute
+  cros:
+    - https://114514.com
 
 jwt:
   timeout: 600 # minute
