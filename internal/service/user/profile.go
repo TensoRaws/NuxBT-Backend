@@ -24,7 +24,7 @@ type ProfileResponse struct {
 	Username   string   `json:"username"`
 }
 
-type UserProfileRequest struct {
+type ProfileOthersRequest struct {
 	UserId int `form:"user_id" binding:"required"`
 }
 
@@ -36,13 +36,13 @@ func ProfileMe(c *gin.Context) {
 		return
 	}
 
-	user, err := dao.GetUserByID(int32(userID))
+	user, err := dao.GetUserByID(userID)
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return
 	}
 
-	roles, err := dao.GetUserRolesByID(int32(userID))
+	roles, err := dao.GetUserRolesByID(userID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}
@@ -59,7 +59,7 @@ func ProfileMe(c *gin.Context) {
 		Private:    user.Private,
 		Roles:      roles,
 		Signature:  user.Signature,
-		UserID:     int32(user.UserID),
+		UserID:     user.UserID,
 		Username:   user.Username,
 	})
 
@@ -69,7 +69,7 @@ func ProfileMe(c *gin.Context) {
 // ProfileOthers 用户查询他人信息 (GET /profile)
 func ProfileOthers(c *gin.Context) {
 	// 绑定参数
-	var req UserProfileRequest
+	var req ProfileOthersRequest
 	if err := c.ShouldBindQuery(&req); err != nil {
 		util.AbortWithMsg(c, "invalid request")
 		return
@@ -81,7 +81,7 @@ func ProfileOthers(c *gin.Context) {
 		return
 	}
 	// 仅用于鉴权不使用
-	_, err = dao.GetUserByID(int32(userID))
+	_, err = dao.GetUserByID(userID)
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return
@@ -93,7 +93,7 @@ func ProfileOthers(c *gin.Context) {
 		return
 	}
 
-	roles, err := dao.GetUserRolesByID(int32(userID))
+	roles, err := dao.GetUserRolesByID(userID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}
@@ -110,14 +110,13 @@ func ProfileOthers(c *gin.Context) {
 			Inviter:    "",
 			LastActive: "",
 			Private:    user.Private,
-			Roles:      []string{},
+			Roles:      nil,
 			Signature:  "",
 			UserID:     user.UserID,
 			Username:   user.Username,
 		})
 	} else {
 		// 显示全部信息
-
 		util.OKWithData(c, ProfileResponse{
 			Avatar:     user.Avatar,
 			Background: user.Background,
