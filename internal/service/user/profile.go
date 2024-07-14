@@ -98,7 +98,7 @@ func ProfileOthers(c *gin.Context) {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}
 	}
-	// 判断是否为隐私账号 1==1为谷歌编程规范
+	// 判断是否为隐私账号
 	if user.Private {
 		// 只显示最基础信息
 		util.OKWithData(c, ProfileResponse{

@@ -1,7 +1,6 @@
 package user
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -24,7 +23,7 @@ type RegisterRequest struct {
 
 type RegisterDataResponse struct {
 	Email    string `json:"email"`
-	UserID   string `json:"user_id"`
+	UserID   int32  `json:"user_id"`
 	Username string `json:"username"`
 }
 
@@ -77,7 +76,7 @@ func Register(c *gin.Context) {
 
 	util.OKWithData(c, RegisterDataResponse{
 		Email:    user.Email,
-		UserID:   strconv.FormatInt(int64(user.UserID), 10),
+		UserID:   user.UserID,
 		Username: user.Username,
 	})
 	log.Logger.Info("register success: " + util.StructToString(user))
