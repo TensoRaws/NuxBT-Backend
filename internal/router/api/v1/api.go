@@ -47,6 +47,12 @@ func NewAPI() *gin.Engine {
 				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
 				user_service.ProfileMe,
 			)
+			//修改密码
+			user.POST("password/reset",
+				middleware_cache.JWTBlacklist(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
+				jwt.RequireAuth(),
+				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
+				user_service.ReSetPass)
 		}
 	}
 

@@ -9,8 +9,8 @@ import (
 )
 
 type LoginRequest struct {
-	Email    string `form:"email" binding:"required,email"`
-	Password string `form:"password" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
 }
 
 type LoginResponse struct {
@@ -20,7 +20,7 @@ type LoginResponse struct {
 // Login 用户登录 (POST /login)
 func Login(c *gin.Context) {
 	var req LoginRequest
-	if err := c.ShouldBindQuery(&req); err != nil {
+	if err := c.ShouldBindJSON(&req); err != nil {
 		util.AbortWithMsg(c, "invalid request")
 		return
 	}

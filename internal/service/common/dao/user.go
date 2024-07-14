@@ -3,12 +3,24 @@ package dao
 import (
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // CreateUser 新建用户
 func CreateUser(user *model.User) (err error) {
 	q := query.User
 	err = q.Create(user)
+	return err
+}
+
+// 修改用户密码
+func SetUserPass(user *model.User, newpass string) (err error) {
+	u := query.User
+	password, err := bcrypt.GenerateFromPassword([]byte(newpass), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	u.Where(u.UserID.Eq(user.UserID)).Update(u.Password, string(password))
 	return err
 }
 
