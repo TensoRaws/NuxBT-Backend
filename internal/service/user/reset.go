@@ -27,7 +27,7 @@ func ResetPassword(c *gin.Context) {
 		return
 	}
 
-	user, err := dao.GetUserByID(int32(userID))
+	user, err := dao.GetUserByID(userID)
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return

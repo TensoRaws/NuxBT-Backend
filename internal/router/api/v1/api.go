@@ -46,6 +46,7 @@ func NewAPI() *gin.Engine {
 			// 用户查询他人信息
 			user.GET("profile/",
 				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
+				middleware_cache.Response(cache.Clients[cache.RespCache], 1*time.Minute),
 				user_service.ProfileOthers,
 			)
 
