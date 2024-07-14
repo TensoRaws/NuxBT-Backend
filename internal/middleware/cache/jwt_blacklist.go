@@ -6,22 +6,30 @@ import (
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 // JWTBlacklist 检查JWT是否在黑名单中
 func JWTBlacklist(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 从输入的 url 中查询 token 值
-		token := c.Query("token")
-		if len(token) == 0 {
-			// 从输入的表单中查询 token 值
-			token = c.PostForm("token")
-		}
+		// 从请求头中获取 Authorization
+		authHeader := c.Request.Header.Get("Authorization")
 
-		if len(token) == 0 {
-			util.AbortWithMsg(c, "JSON WEB TOKEN IS NULL")
+		// 检查 Authorization 头部是否存在
+		if authHeader == "" {
+			util.AbortWithMsg(c, "Authorization header is missing")
 			return
 		}
+
+		// 检查 Authorization 是否以 "Bearer" 开始
+		parts := strings.SplitN(authHeader, " ", 2)
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			util.AbortWithMsg(c, "Invalid Authorization header format")
+			return
+		}
+
+		// 第二部分是 Token
+		token := parts[1]
 
 		log.Logger.Info("Get token successfully")
 
@@ -34,6 +42,7 @@ func JWTBlacklist(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc 
 		}
 
 		// 如果 Token 不在黑名单中，继续处理请求
+		c.Set("token", token)
 		c.Next()
 
 		// 如果启用拉黑模式，处理请求拉黑 Token
