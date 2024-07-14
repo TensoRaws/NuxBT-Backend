@@ -3,7 +3,6 @@ package config
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strings"
 	"sync"
 
@@ -14,16 +13,6 @@ import (
 var (
 	config *viper.Viper
 	once   sync.Once
-)
-
-var (
-	ServerConfig Server
-	JwtConfig    Jwt
-	LogConfig    Log
-	DBConfig     DB
-	RedisConfig  Redis
-	OSSConfig    OSS
-	OSS_PREFIX   string
 )
 
 func Init() {
@@ -49,7 +38,8 @@ func initialize() {
 
 	config.WatchConfig()
 	config.OnConfigChange(func(e fsnotify.Event) {
-		// 配置文件发生变更之后会调用的回调函数
+		// 配置文件发生变更之后，重新初始化配置
+		setConfig()
 		fmt.Println("Config file changed:", e.Name)
 	})
 
@@ -95,32 +85,9 @@ func initialize() {
 		}
 	}
 
-	err := config.UnmarshalKey("server", &ServerConfig)
-	if err != nil {
-		log.Fatalf("unable to decode into server struct, %v", err)
-	}
-	err = config.UnmarshalKey("jwt", &JwtConfig)
-	if err != nil {
-		log.Fatalf("unable to decode into jwt struct, %v", err)
-	}
-	err = config.UnmarshalKey("log", &LogConfig)
-	if err != nil {
-		log.Fatalf("unable to decode into log struct, %v", err)
-	}
-	err = config.UnmarshalKey("db", &DBConfig)
-	if err != nil {
-		log.Fatalf("unable to decode into db struct, %v", err)
-	}
-	err = config.UnmarshalKey("redis", &RedisConfig)
-	if err != nil {
-		log.Fatalf("unable to decode into redis struct, %v", err)
-	}
-	err = config.UnmarshalKey("oss", &OSSConfig)
-	if err != nil {
-		log.Fatalf("unable to decode into oss struct, %v", err)
-	}
+	// 初始化配置
+	setConfig()
 
-	OSS_PREFIX = GenerateOSSPrefix()
 	fmt.Printf("OSS TYPE: %v", config.GetString("oss.type"))
 	fmt.Printf(" OSS PREFIX: %v\n", OSS_PREFIX)
 }
