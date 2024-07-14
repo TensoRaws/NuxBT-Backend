@@ -1,7 +1,10 @@
 package user
 
 import (
+	"strconv"
+
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
@@ -24,11 +27,8 @@ func ProfileUpdate(c *gin.Context) {
 		return
 	}
 
-	userID, err := util.GetUserIDFromGinContext(c)
-	if err != nil {
-		util.AbortWithMsg(c, "Please login first")
-		return
-	}
+	userID, _ := util.GetUserIDFromGinContext(c)
+
 	// 准备更新数据
 	updates := make(map[string]interface{})
 
@@ -37,7 +37,7 @@ func ProfileUpdate(c *gin.Context) {
 	}
 
 	if req.Username != nil && *req.Username != "" {
-		err = util.CheckUsername(*req.Username)
+		err := util.CheckUsername(*req.Username)
 		if err != nil {
 			util.AbortWithMsg(c, "invalid username: "+err.Error())
 			return
@@ -61,11 +61,13 @@ func ProfileUpdate(c *gin.Context) {
 		updates["background"] = *req.Background
 	}
 	// 执行更新
-	err = dao.UpdateUserDataByUserID(userID, updates)
+	err := dao.UpdateUserDataByUserID(userID, updates)
 	if err != nil {
 		util.AbortWithMsg(c, "update failed: "+err.Error())
 		return
 	}
 
 	util.OKWithMsg(c, "update success")
+
+	log.Logger.Info("update user profile success: " + strconv.Itoa(int(userID)))
 }

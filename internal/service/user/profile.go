@@ -25,16 +25,12 @@ type ProfileResponse struct {
 }
 
 type ProfileOthersRequest struct {
-	UserId int32 `form:"user_id" binding:"required"`
+	UserID int32 `form:"user_id" binding:"required"`
 }
 
 // ProfileMe 获取用户自己的信息 (GET /profile/me)
 func ProfileMe(c *gin.Context) {
-	userID, err := util.GetUserIDFromGinContext(c)
-	if err != nil {
-		util.AbortWithMsg(c, "Please login first")
-		return
-	}
+	userID, _ := util.GetUserIDFromGinContext(c)
 
 	user, err := dao.GetUserByID(userID)
 	if err != nil {
@@ -74,20 +70,17 @@ func ProfileOthers(c *gin.Context) {
 		util.AbortWithMsg(c, "invalid request: "+err.Error())
 		return
 	}
-	// 鉴权
-	userID, err := util.GetUserIDFromGinContext(c)
-	if err != nil {
-		util.AbortWithMsg(c, "Please login first")
-		return
-	}
+
+	userID, _ := util.GetUserIDFromGinContext(c)
+
 	// 获取信息
-	user, err := dao.GetUserByID(req.UserId)
+	user, err := dao.GetUserByID(req.UserID)
 	if err != nil {
 		util.AbortWithMsg(c, "User not found")
 		return
 	}
 
-	roles, err := dao.GetUserRolesByID(userID)
+	roles, err := dao.GetUserRolesByID(req.UserID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}
@@ -126,4 +119,7 @@ func ProfileOthers(c *gin.Context) {
 			Username:   user.Username,
 		})
 	}
+
+	log.Logger.Info("Get user profile success: " + strconv.Itoa(int(req.UserID)) +
+		", by user ID: " + strconv.Itoa(int(userID)))
 }

@@ -20,12 +20,7 @@ func ResetPassword(c *gin.Context) {
 		return
 	}
 
-	// 鉴权
-	userID, err := util.GetUserIDFromGinContext(c)
-	if err != nil {
-		util.AbortWithMsg(c, "Please login first")
-		return
-	}
+	userID, _ := util.GetUserIDFromGinContext(c)
 
 	user, err := dao.GetUserByID(userID)
 	if err != nil {
