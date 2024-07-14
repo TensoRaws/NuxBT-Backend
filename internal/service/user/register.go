@@ -47,7 +47,7 @@ func Register(c *gin.Context) {
 		// do something
 		// 未实现
 		// OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-		log.Logger.Info("invitation code: ", *req.InvitationCode)
+		log.Logger.Info("invitation code: " + *req.InvitationCode)
 	}
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
