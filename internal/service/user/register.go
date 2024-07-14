@@ -14,10 +14,10 @@ import (
 
 // RegisterRequest Query binding 需要打 form 标签
 type RegisterRequest struct {
-	Username       string  `form:"username" binding:"required"`
-	Password       string  `form:"password" binding:"required"`
-	Email          string  `form:"email" binding:"required,email"`
-	InvitationCode *string `form:"invitation_code" binding:"omitempty"`
+	Username       string  `json:"username" binding:"required"`
+	Password       string  `json:"password" binding:"required"`
+	Email          string  `json:"email" binding:"required,email"`
+	InvitationCode *string `json:"invitation_code" binding:"omitempty"`
 }
 
 type RegisterDataResponse struct {
@@ -29,7 +29,7 @@ type RegisterDataResponse struct {
 // Register 注册 (POST /register)
 func Register(c *gin.Context) {
 	var req RegisterRequest
-	if err := c.ShouldBindQuery(&req); err != nil {
+	if err := c.ShouldBindJSON(&req); err != nil {
 		util.AbortWithMsg(c, "invalid request")
 		return
 	}
