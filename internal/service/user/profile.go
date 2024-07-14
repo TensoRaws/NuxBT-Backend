@@ -13,12 +13,12 @@ type ProfileResponse struct {
 	Avatar     string   `json:"avatar"`
 	Background string   `json:"background"`
 	CreatedAt  string   `json:"created_at"`
-	Email      string   `json:"email"`
-	Experience string   `json:"experience"`
-	Inviter    string   `json:"inviter"`
+	Email      *string  `json:"email,omitempty"`
+	Experience *int32   `json:"experience,omitempty"`
+	Inviter    *int32   `json:"inviter,omitempty"`
 	LastActive string   `json:"last_active"`
 	Private    bool     `json:"private"`
-	Roles      []string `json:"roles"`
+	Roles      []string `json:"roles,omitempty"`
 	Signature  string   `json:"signature"`
 	UserID     int32    `json:"user_id"`
 	Username   string   `json:"username"`
@@ -48,9 +48,9 @@ func ProfileMe(c *gin.Context) {
 		Avatar:     user.Avatar,
 		Background: user.Background,
 		CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
-		Email:      user.Email,
-		Experience: strconv.Itoa(int(user.Experience)),
-		Inviter:    strconv.Itoa(int(user.Inviter)),
+		Email:      &user.Email,
+		Experience: &user.Experience,
+		Inviter:    &user.Inviter,
 		LastActive: user.LastActive.Format("2006-01-02 15:04:05"),
 		Private:    user.Private,
 		Roles:      roles,
@@ -91,14 +91,14 @@ func ProfileOthers(c *gin.Context) {
 		util.OKWithData(c, ProfileResponse{
 			Avatar:     user.Avatar,
 			Background: user.Background,
-			CreatedAt:  "",
-			Email:      "",
-			Experience: "",
-			Inviter:    "",
-			LastActive: "",
+			CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
+			Email:      nil,
+			Experience: nil,
+			Inviter:    nil,
+			LastActive: user.LastActive.Format("2006-01-02 15:04:05"),
 			Private:    true,
 			Roles:      nil,
-			Signature:  "",
+			Signature:  user.Signature,
 			UserID:     user.UserID,
 			Username:   user.Username,
 		})
@@ -108,9 +108,9 @@ func ProfileOthers(c *gin.Context) {
 			Avatar:     user.Avatar,
 			Background: user.Background,
 			CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
-			Email:      user.Email,
-			Experience: strconv.Itoa(int(user.Experience)),
-			Inviter:    strconv.Itoa(int(user.Inviter)),
+			Email:      &user.Email,
+			Experience: &user.Experience,
+			Inviter:    &user.Inviter,
 			LastActive: user.LastActive.Format("2006-01-02 15:04:05"),
 			Private:    false,
 			Roles:      roles,
