@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/internal/service/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
