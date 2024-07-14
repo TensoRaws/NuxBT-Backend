@@ -57,6 +57,10 @@ func NewAPI() *gin.Engine {
 				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
 				user_service.ResetPassword)
 		}
+		// 更新用户信息
+		user.POST("profile/update",
+			jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
+			user_service.ChangeUser)
 	}
 
 	return r

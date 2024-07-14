@@ -27,6 +27,16 @@ func SetUserPassword(user *model.User, newpass string) (err error) {
 	return err
 }
 
+// UpdateUserData 根据map更新用户信息
+func UpdateUserData(user *model.User, maps map[string]interface{}) (err error) {
+	u := query.User
+	_, err = u.Where(u.UserID.Eq(user.UserID)).Updates(maps)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
 // GetUserByEmail 根据 email 获取用户
 func GetUserByEmail(email string) (user *model.User, err error) {
 	q := query.User
