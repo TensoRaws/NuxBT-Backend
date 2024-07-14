@@ -20,7 +20,7 @@ type ProfileResponse struct {
 	Private    bool     `json:"private"`
 	Roles      []string `json:"roles,omitempty"`
 	Signature  string   `json:"signature"`
-	UserID     int      `json:"user_id"`
+	UserID     int32    `json:"user_id"`
 	Username   string   `json:"username"`
 }
 
@@ -59,7 +59,7 @@ func ProfileMe(c *gin.Context) {
 		Private:    user.Private,
 		Roles:      roles,
 		Signature:  user.Signature,
-		UserID:     int(user.UserID),
+		UserID:     int32(user.UserID),
 		Username:   user.Username,
 	})
 
@@ -112,7 +112,7 @@ func ProfileOthers(c *gin.Context) {
 			Private:    user.Private,
 			Roles:      []string{},
 			Signature:  "",
-			UserID:     int(user.UserID),
+			UserID:     user.UserID,
 			Username:   user.Username,
 		})
 	} else {
@@ -129,7 +129,7 @@ func ProfileOthers(c *gin.Context) {
 			Private:    user.Private,
 			Roles:      roles,
 			Signature:  user.Signature,
-			UserID:     int(user.UserID),
+			UserID:     user.UserID,
 			Username:   user.Username,
 		})
 	}
