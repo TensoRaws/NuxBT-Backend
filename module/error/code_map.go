@@ -5,20 +5,9 @@ package error
 
 // codeToString use a map to store the string representation of Code
 var codeToString = map[Code]string{
-	OK:                 "ok",
-	Canceled:           "canceled",
-	Unknown:            "unknown",
-	InvalidArgument:    "invalidargument",
-	DeadlineExceeded:   "deadlineexceeded",
-	AlreadyExists:      "alreadyexists",
-	PermissionDenied:   "permissiondenied",
-	ResourceExhausted:  "resourceexhausted",
-	FailedPrecondition: "failedprecondition",
-	Aborted:            "aborted",
-	OutOfRange:         "outofrange",
-	Unimplemented:      "unimplemented",
-	Internal:           "internal",
-	Unavailable:        "unavailable",
-	DataLoss:           "dataloss",
-	Unauthenticated:    "unauthenticated",
+	InternalError:   "Internal error",
+	UnknownError:    "Unknown error",
+	InvalidParams:   "Invalid params",
+	InvalidToken:    "Invalid token",
+	InvalidUserName: "Invalid user name",
 }

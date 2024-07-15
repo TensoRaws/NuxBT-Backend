@@ -3,24 +3,15 @@ package error
 type Code uint32
 
 const (
+	// DO NOT EDIT
 	// gen code start
-	OK Code = 10000 + iota
-	Canceled
-	Unknown
-	InvalidArgument
-	DeadlineExceeded
-	AlreadyExists
-	PermissionDenied
-	ResourceExhausted
-	FailedPrecondition
-	Aborted
-	OutOfRange
-	Unimplemented
-	Internal
-	Unavailable
-	DataLoss
-	Unauthenticated
+	InternalError Code = 10000 + iota
+	UnknownError
+	InvalidParams
+	InvalidToken
+	InvalidUserName
 	// gen code end
+	// DO NOT EDIT
 )
 
 func (c Code) String() string {
