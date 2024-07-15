@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"go/format"
 	"os"
 	"path/filepath"
 	"strings"
@@ -66,7 +67,10 @@ func generateMap(constBlock []string) string {
 	for _, line := range mapLines {
 		buffer.WriteString(line + "\n")
 	}
-	return buffer.String()
+
+	source, _ := format.Source([]byte(buffer.String()))
+
+	return string(source)
 }
 
 // generateTypeScriptEnum 生成 TypeScript 的枚举
@@ -79,9 +83,9 @@ func generateTypeScriptEnum(constBlock []string) string {
 	tsLines = append(tsLines, "export const enum ErrorCode {")
 	for i, l := range constBlock {
 		if i == 0 {
-			tsLines = append(tsLines, fmt.Sprintf("    %s = 10000,", l))
+			tsLines = append(tsLines, fmt.Sprintf("  %s = 10000,", l))
 		} else {
-			tsLines = append(tsLines, fmt.Sprintf("    %s,", l))
+			tsLines = append(tsLines, fmt.Sprintf("  %s,", l))
 		}
 	}
 	tsLines = append(tsLines, "}")
