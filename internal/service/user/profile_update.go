@@ -1,8 +1,6 @@
 package user
 
 import (
-	"strconv"
-
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -71,5 +69,5 @@ func ProfileUpdate(c *gin.Context) {
 
 	resp.OK(c)
 
-	log.Logger.Info("update user profile success: " + strconv.Itoa(int(userID)))
+	log.Logger.Infof("update user profile success, userID: %v", userID)
 }

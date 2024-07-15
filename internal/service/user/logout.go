@@ -3,7 +3,6 @@ package user
 import (
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,5 +12,5 @@ func Logout(c *gin.Context) {
 
 	resp.OK(c)
 
-	log.Logger.Info("Logout success, user ID: " + util.StructToString(userID))
+	log.Logger.Infof("Logout success, user ID: %v", userID)
 }

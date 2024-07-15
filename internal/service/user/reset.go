@@ -5,8 +5,8 @@ import (
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type ResetPasswordRequest struct {
@@ -24,18 +24,15 @@ func ResetPassword(c *gin.Context) {
 
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
-	user, err := dao.GetUserByID(userID)
-	if err != nil {
-		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
-		return
-	}
-
+	password, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
 	// 修改密码
-	err = dao.UpdateUserPassword(user, req.NewPassword)
+	err = dao.UpdateUserDataByUserID(userID, map[string]interface{}{
+		"password": password,
+	})
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, "reset password fail")
 	}
 	// 返回
 	resp.OK(c)
-	log.Logger.Info("Reset password success: " + util.StructToString(user))
+	log.Logger.Infof("Reset password success, user ID: %v", userID)
 }

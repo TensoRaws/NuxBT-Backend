@@ -1,13 +1,10 @@
 package user
 
 import (
-	"strconv"
-
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -61,7 +58,7 @@ func ProfileMe(c *gin.Context) {
 		Username:   user.Username,
 	})
 
-	log.Logger.Info("get user profile success: " + util.StructToString(user))
+	log.Logger.Infof("get user profile success, userID: %v", userID)
 }
 
 // ProfileOthers 用户查询他人信息 (GET /profile)
@@ -122,6 +119,5 @@ func ProfileOthers(c *gin.Context) {
 		})
 	}
 
-	log.Logger.Info("Get user profile success: " + strconv.Itoa(int(req.UserID)) +
-		", by user ID: " + strconv.Itoa(int(userID)))
+	log.Logger.Infof("Get user %v profile success, by user ID: %v", req.UserID, userID)
 }

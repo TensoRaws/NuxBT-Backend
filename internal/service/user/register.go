@@ -85,5 +85,5 @@ func Register(c *gin.Context) {
 		UserID:   user.UserID,
 		Username: user.Username,
 	})
-	log.Logger.Info("register success: " + util.StructToString(user))
+	log.Logger.Infof("register success, userID: %v", user.UserID)
 }
