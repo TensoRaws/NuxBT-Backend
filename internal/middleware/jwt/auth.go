@@ -2,8 +2,9 @@ package jwt
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/module/cache"
+	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
+	"github.com/TensoRaws/NuxBT-Backend/module/resp"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,13 +21,13 @@ func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 		exists := redisClient.Exists(token).Val()
 		if exists > 0 {
 			log.Logger.Info("Token has been blacklisted")
-			util.AbortWithMsg(c, "Token has been blacklisted")
+			resp.Abort(c, code.AuthErrorTokenHasBeenBlacklisted)
 			return
 		}
 		// 如果 Token 不在黑名单中，继续处理请求
 		claims, err := ParseToken(token)
 		if err != nil {
-			util.AbortWithMsg(c, "TOKEN IS INVALID, Please Log In")
+			resp.AbortWithMsg(c, code.AuthErrorTokenIsInvalid, "Please Log In")
 			return
 		}
 		userID := claims.ID

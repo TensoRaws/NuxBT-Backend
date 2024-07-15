@@ -5,8 +5,10 @@ import (
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
+	"github.com/TensoRaws/NuxBT-Backend/module/resp"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -31,20 +33,20 @@ type RegisterDataResponse struct {
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request: "+err.Error())
+		resp.AbortWithMsg(c, code.RequestErrorInvalidParams, err.Error())
 		return
 	}
 
 	err := util.CheckUsername(req.Username)
 	if err != nil {
-		util.AbortWithMsg(c, "invalid username: "+err.Error())
+		resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
 		return
 	}
 
 	// 无邀请码注册，检查是否允许无邀请码注册
 	if req.InvitationCode == nil || *req.InvitationCode == "" {
 		if config.ServerConfig.UseInvitationCode {
-			util.AbortWithMsg(c, "invitation code is required")
+			resp.AbortWithMsg(c, code.UserErrorInvalidInvitationCode, "invitation code is required")
 			return
 		}
 	} else {
@@ -54,7 +56,7 @@ func Register(c *gin.Context) {
 	}
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		util.AbortWithMsg(c, "failed to hash password")
+		resp.AbortWithMsg(c, code.UnknownError, "failed to hash password")
 		log.Logger.Error("failed to hash password: " + err.Error())
 		return
 	}
@@ -66,22 +68,22 @@ func Register(c *gin.Context) {
 		LastActive: time.Now(),
 	})
 	if err != nil {
-		util.AbortWithMsg(c, "failed to register: "+err.Error())
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, "failed to register "+err.Error())
 		log.Logger.Error("failed to register: " + err.Error())
 		return
 	}
 
 	user, err := dao.GetUserByEmail(req.Email)
 	if err != nil {
-		util.AbortWithMsg(c, "failed to get user by email")
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "failed to get user by email")
 		log.Logger.Error("failed to get user by email: " + err.Error())
 		return
 	}
 
-	util.OKWithData(c, RegisterDataResponse{
+	resp.OKWithData(c, RegisterDataResponse{
 		Email:    user.Email,
 		UserID:   user.UserID,
 		Username: user.Username,
 	})
-	log.Logger.Info("register success: " + util.StructToString(user))
+	log.Logger.Infof("register success, userID: %v", user.UserID)
 }

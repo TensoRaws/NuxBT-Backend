@@ -1,10 +1,10 @@
 package user
 
 import (
-	"strconv"
-
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
+	"github.com/TensoRaws/NuxBT-Backend/module/resp"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
@@ -23,11 +23,11 @@ func ProfileUpdate(c *gin.Context) {
 	// 参数绑定
 	var req ProfileUpdateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request: "+err.Error())
+		resp.AbortWithMsg(c, code.RequestErrorInvalidParams, err.Error())
 		return
 	}
 
-	userID, _ := util.GetUserIDFromGinContext(c)
+	userID, _ := resp.GetUserIDFromGinContext(c)
 
 	// 准备更新数据
 	updates := make(map[string]interface{})
@@ -39,7 +39,7 @@ func ProfileUpdate(c *gin.Context) {
 	if req.Username != nil && *req.Username != "" {
 		err := util.CheckUsername(*req.Username)
 		if err != nil {
-			util.AbortWithMsg(c, "invalid username: "+err.Error())
+			resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
 			return
 		}
 		updates["username"] = *req.Username
@@ -63,11 +63,11 @@ func ProfileUpdate(c *gin.Context) {
 	// 执行更新
 	err := dao.UpdateUserDataByUserID(userID, updates)
 	if err != nil {
-		util.AbortWithMsg(c, "update failed: "+err.Error())
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, err.Error())
 		return
 	}
 
-	util.OKWithMsg(c, "update success")
+	resp.OK(c)
 
-	log.Logger.Info("update user profile success: " + strconv.Itoa(int(userID)))
+	log.Logger.Infof("update user profile success, userID: %v", userID)
 }

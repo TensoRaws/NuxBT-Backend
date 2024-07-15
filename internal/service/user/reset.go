@@ -2,9 +2,11 @@ package user
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
+	"github.com/TensoRaws/NuxBT-Backend/module/resp"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type ResetPasswordRequest struct {
@@ -16,24 +18,26 @@ func ResetPassword(c *gin.Context) {
 	// 绑定参数
 	var req ResetPasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request: "+err.Error())
+		resp.AbortWithMsg(c, code.RequestErrorInvalidParams, err.Error())
 		return
 	}
 
-	userID, _ := util.GetUserIDFromGinContext(c)
+	userID, _ := resp.GetUserIDFromGinContext(c)
 
-	user, err := dao.GetUserByID(userID)
+	password, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
 	if err != nil {
-		util.AbortWithMsg(c, "User not found")
+		resp.AbortWithMsg(c, code.UnknownError, "failed to hash password")
+		log.Logger.Error("failed to hash password: " + err.Error())
 		return
 	}
-
 	// 修改密码
-	err = dao.SetUserPassword(user, req.NewPassword)
+	err = dao.UpdateUserDataByUserID(userID, map[string]interface{}{
+		"password": password,
+	})
 	if err != nil {
-		util.AbortWithMsg(c, "reset password fail")
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, "reset password fail")
 	}
 	// 返回
-	util.OKWithMsg(c, "reset password success")
-	log.Logger.Info("Reset password success: " + util.StructToString(user))
+	resp.OK(c)
+	log.Logger.Infof("Reset password success, user ID: %v", userID)
 }

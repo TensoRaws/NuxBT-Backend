@@ -3,7 +3,8 @@ package user
 import (
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
+	"github.com/TensoRaws/NuxBT-Backend/module/code"
+	"github.com/TensoRaws/NuxBT-Backend/module/resp"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,14 +22,14 @@ type LoginResponse struct {
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request: "+err.Error())
+		resp.AbortWithMsg(c, code.RequestErrorInvalidParams, err.Error())
 		return
 	}
 
 	// GORM 查询
 	user, err := dao.GetUserByEmail(req.Email)
 	if err != nil {
-		util.AbortWithMsg(c, "User not found")
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
 		return
 	}
 
@@ -38,11 +39,11 @@ func Login(c *gin.Context) {
 		// 注册之后的下次登录成功，才会为其生成 token
 		token := jwt.GenerateToken(user)
 		// 打印相应信息和用户信息以及生成的 token 值
-		util.OKWithData(c, LoginResponse{
+		resp.OKWithData(c, LoginResponse{
 			Token: token,
 		})
 	} else {
-		util.AbortWithMsg(c, "Invalid Username or Password")
+		resp.Abort(c, code.UserErrorInvalidPassword)
 		return
 	}
 }
