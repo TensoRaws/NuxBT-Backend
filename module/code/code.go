@@ -1,4 +1,4 @@
-package error
+package code
 
 type Code uint32
 
