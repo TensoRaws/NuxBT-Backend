@@ -13,8 +13,8 @@ func CreateUser(user *model.User) (err error) {
 	return err
 }
 
-// SetUserPassword 设置用户密码
-func SetUserPassword(user *model.User, newPassword string) (err error) {
+// UpdateUserPassword 设置用户密码
+func UpdateUserPassword(user *model.User, newPassword string) (err error) {
 	u := query.User
 	password, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
 	if err != nil {

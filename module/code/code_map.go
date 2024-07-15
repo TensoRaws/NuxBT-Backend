@@ -5,9 +5,16 @@ package code
 
 // codeToString use a map to store the string representation of Code
 var codeToString = map[Code]string{
-	InternalError:   "Internal error",
-	UnknownError:    "Unknown error",
-	InvalidParams:   "Invalid params",
-	InvalidToken:    "Invalid token",
-	InvalidUserName: "Invalid user name",
+	InternalError:                    "Internal error",
+	UnknownError:                     "Unknown error",
+	AuthErrorTokenHasBeenBlacklisted: "Auth error token has been blacklisted",
+	AuthErrorTokenIsInvalid:          "Auth error token is invalid",
+	RequestErrorInvalidParams:        "Request error invalid params",
+	DatabaseErrorRecordCreateFailed:  "Database error record create failed",
+	DatabaseErrorRecordNotFound:      "Database error record not found",
+	DatabaseErrorRecordUpdateFailed:  "Database error record update failed",
+	UserErrorInvalidUsername:         "User error invalid username",
+	UserErrorInvalidPassword:         "User error invalid password",
+	UserErrorInvalidEmail:            "User error invalid email",
+	UserErrorInvalidInvitationCode:   "User error invalid invitation code",
 }

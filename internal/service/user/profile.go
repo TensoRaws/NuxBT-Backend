@@ -4,7 +4,9 @@ import (
 	"strconv"
 
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
+	"github.com/TensoRaws/NuxBT-Backend/module/resp"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
 )
@@ -30,11 +32,11 @@ type ProfileOthersRequest struct {
 
 // ProfileMe 获取用户自己的信息 (GET /profile/me)
 func ProfileMe(c *gin.Context) {
-	userID, _ := util.GetUserIDFromGinContext(c)
+	userID, _ := resp.GetUserIDFromGinContext(c)
 
 	user, err := dao.GetUserByID(userID)
 	if err != nil {
-		util.AbortWithMsg(c, "User not found")
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
 		return
 	}
 
@@ -44,7 +46,7 @@ func ProfileMe(c *gin.Context) {
 		roles = []string{}
 	}
 
-	util.OKWithData(c, ProfileResponse{
+	resp.OKWithData(c, ProfileResponse{
 		Avatar:     user.Avatar,
 		Background: user.Background,
 		CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
@@ -67,16 +69,16 @@ func ProfileOthers(c *gin.Context) {
 	// 绑定参数
 	var req ProfileOthersRequest
 	if err := c.ShouldBindQuery(&req); err != nil {
-		util.AbortWithMsg(c, "invalid request: "+err.Error())
+		resp.AbortWithMsg(c, code.RequestErrorInvalidParams, err.Error())
 		return
 	}
 
-	userID, _ := util.GetUserIDFromGinContext(c)
+	userID, _ := resp.GetUserIDFromGinContext(c)
 
 	// 获取信息
 	user, err := dao.GetUserByID(req.UserID)
 	if err != nil {
-		util.AbortWithMsg(c, "User not found")
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
 		return
 	}
 
@@ -88,7 +90,7 @@ func ProfileOthers(c *gin.Context) {
 	// 判断是否为隐私账号
 	if user.Private {
 		// 只显示最基础信息
-		util.OKWithData(c, ProfileResponse{
+		resp.OKWithData(c, ProfileResponse{
 			Avatar:     user.Avatar,
 			Background: user.Background,
 			CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
@@ -104,7 +106,7 @@ func ProfileOthers(c *gin.Context) {
 		})
 	} else {
 		// 显示全部信息
-		util.OKWithData(c, ProfileResponse{
+		resp.OKWithData(c, ProfileResponse{
 			Avatar:     user.Avatar,
 			Background: user.Background,
 			CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),

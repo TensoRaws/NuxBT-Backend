@@ -2,14 +2,27 @@ package code
 
 type Code uint32
 
+// 请勿修改，常量之间不要有空行！
+// DO NOT EDIT, no empty line between constants!
 const (
 	// DO NOT EDIT
 	// gen code start
 	InternalError Code = 10000 + iota
 	UnknownError
-	InvalidParams
-	InvalidToken
-	InvalidUserName
+	// AuthError 鉴权错误
+	AuthErrorTokenHasBeenBlacklisted
+	AuthErrorTokenIsInvalid
+	// RequestError 请求错误
+	RequestErrorInvalidParams
+	// DatabaseError 数据库错误
+	DatabaseErrorRecordCreateFailed
+	DatabaseErrorRecordNotFound
+	DatabaseErrorRecordUpdateFailed
+	// UserError 用户侧错误
+	UserErrorInvalidUsername
+	UserErrorInvalidPassword
+	UserErrorInvalidEmail
+	UserErrorInvalidInvitationCode
 	// gen code end
 	// DO NOT EDIT
 )

@@ -118,3 +118,6 @@ $RECYCLE.BIN/
 
 # Air
 tmp
+
+# build files
+/nuxbt

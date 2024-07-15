@@ -5,7 +5,14 @@
 export const enum ErrorCode {
   InternalError = 10000,
   UnknownError,
-  InvalidParams,
-  InvalidToken,
-  InvalidUserName
+  AuthErrorTokenHasBeenBlacklisted,
+  AuthErrorTokenIsInvalid,
+  RequestErrorInvalidParams,
+  DatabaseErrorRecordCreateFailed,
+  DatabaseErrorRecordNotFound,
+  DatabaseErrorRecordUpdateFailed,
+  UserErrorInvalidUsername,
+  UserErrorInvalidPassword,
+  UserErrorInvalidEmail,
+  UserErrorInvalidInvitationCode
 }

@@ -37,6 +37,9 @@ func buildConstBlock(filename string) ([]string, uint32) {
 		if strings.Contains(line, "gen code end") {
 			break
 		}
+		if line == "" || strings.Contains(line, "//") {
+			continue
+		}
 		if buildBlockFlag {
 			if strings.Contains(line, "iota") { // OK Code = 10000 + iota
 				l := strings.Split(line, " ")
