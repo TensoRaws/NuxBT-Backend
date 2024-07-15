@@ -25,6 +25,11 @@ func ResetPassword(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
 	password, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		resp.AbortWithMsg(c, code.UnknownError, "failed to hash password")
+		log.Logger.Error("failed to hash password: " + err.Error())
+		return
+	}
 	// 修改密码
 	err = dao.UpdateUserDataByUserID(userID, map[string]interface{}{
 		"password": password,
