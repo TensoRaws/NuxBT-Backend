@@ -16,12 +16,16 @@ build: ## build binary file
 gen: ## generate CURD code
 	${GO} run ./cmd/gen/main.go
 
+.PHONY: gen_error_code
+gen_error_code: ## generate error code
+	${GO} generate github.com/TensoRaws/NuxBT-Backend/module/error/gen
+
 .PHONY: test
 test: tidy ## go test
 	${GO} test ./...
 
 .PHONY: lint
-lint: ## go lint
+lint: gen_error_code
 	golangci-lint run
 	pre-commit install # pip install pre-commit
 	pre-commit run --all-files
