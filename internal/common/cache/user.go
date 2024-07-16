@@ -127,6 +127,15 @@ func ConsumeInvitationCode(code string, userID int32) error {
 
 	// 更新邀请码状态
 	err = c.HSet(fmt.Sprintf("user:%d:invitations", inviterID), code, util.StructToString(uim)).Err()
+	if err != nil {
+		return err
+	}
+
+	// 删除邀请码
+	err = c.Del(code).Err()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

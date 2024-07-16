@@ -99,7 +99,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 消费邀请码
-	if config.RegisterConfig.UseInvitationCode {
+	if req.InvitationCode != nil && *req.InvitationCode != "" {
 		err = cache.ConsumeInvitationCode(*req.InvitationCode, user.UserID)
 		if err != nil {
 			resp.AbortWithMsg(c, code.UnknownError, "failed to consume invitation code")
