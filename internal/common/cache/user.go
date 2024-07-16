@@ -34,7 +34,7 @@ func GenerateInvitationCode(userID int32) (string, error) {
 	})
 
 	// 将邀请码信息存储到用户的哈希表中，方便查询
-	err = c.HMSet(fmt.Sprintf("user:%d:invitations", userID), map[string]any{code: toMapString}).Err()
+	err = c.HSet(fmt.Sprintf("user:%d:invitations", userID), code, toMapString).Err()
 	if err != nil {
 		return "", err
 	}
@@ -53,8 +53,8 @@ type UserInvitation struct {
 	UserInvitationMapValue
 }
 
-// GetInvitationCodeByUserID 获取用户近期的邀请码信息
-func GetInvitationCodeByUserID(userID int32) ([]UserInvitation, error) {
+// GetInvitationCodeListByUserID 获取用户近期的邀请码信息
+func GetInvitationCodeListByUserID(userID int32) ([]UserInvitation, error) {
 	c := cache.Clients[cache.InvitationCode]
 
 	// 从 Redis 中获取用户的邀请码信息
@@ -102,4 +102,43 @@ func GetValidInvitationCodeCountByUserID(userID int32) (int, error) {
 	}
 
 	return count, nil
+}
+
+// ConsumeInvitationCode 注册成功后消费邀请码
+func ConsumeInvitationCode(code string, userID int32) error {
+	c := cache.Clients[cache.InvitationCode]
+
+	inviterID, err := c.Get(code).Int()
+	if err != nil {
+		return err
+	}
+
+	// 从 Redis 中获取邀请码信息，修改邀请码状态
+	invitation, err := c.HGet(fmt.Sprintf("user:%d:invitations", inviterID), code).Result()
+	if err != nil {
+		return err
+	}
+	var uim UserInvitationMapValue
+	err = util.StringToStruct(invitation, &uim)
+	if err != nil {
+		return err
+	}
+	uim.UsedBy = userID
+
+	// 更新邀请码状态
+	err = c.HSet(fmt.Sprintf("user:%d:invitations", inviterID), code, util.StructToString(uim)).Err()
+
+	return nil
+}
+
+// GetInviterIDByInvitationCode 根据邀请码获取邀请者的 userID
+func GetInviterIDByInvitationCode(code string) (int32, error) {
+	c := cache.Clients[cache.InvitationCode]
+
+	userID, err := c.Get(code).Int()
+	if err != nil {
+		return 0, err
+	}
+
+	return int32(userID), nil
 }

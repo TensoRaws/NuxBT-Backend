@@ -2,6 +2,7 @@ package user
 
 import (
 	"fmt"
+
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
@@ -44,7 +45,7 @@ func InvitationGen(c *gin.Context) {
 func InvitationMe(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
-	codeList, err := cache.GetInvitationCodeByUserID(userID)
+	codeList, err := cache.GetInvitationCodeListByUserID(userID)
 	if err != nil {
 		return
 	}

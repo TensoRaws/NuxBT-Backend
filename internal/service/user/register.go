@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
@@ -49,6 +50,8 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	var inviterID int32 = 0
+
 	// 无邀请码注册，检查是否允许无邀请码注册
 	if req.InvitationCode == nil || *req.InvitationCode == "" {
 		if config.RegisterConfig.UseInvitationCode {
@@ -56,10 +59,17 @@ func Register(c *gin.Context) {
 			return
 		}
 	} else {
-		// TODO: 邀请码功能, 有邀请码注册，检查邀请码是否有效
-
+		// 邀请码功能, 有邀请码注册，检查邀请码是否有效
+		inviterID, err = cache.GetInviterIDByInvitationCode(*req.InvitationCode)
+		if err != nil {
+			resp.AbortWithMsg(c, code.UserErrorInvalidInvitationCode, "invalid invitation code")
+			log.Logger.Error("invalid invitation code: " + err.Error())
+			return
+		}
 		log.Logger.Info("invitation code: " + *req.InvitationCode)
 	}
+
+	// 生成密码哈希
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UnknownError, "failed to hash password")
@@ -72,6 +82,7 @@ func Register(c *gin.Context) {
 		Email:      req.Email,
 		Password:   string(password),
 		LastActive: time.Now(),
+		Inviter:    inviterID,
 	})
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, "failed to register "+err.Error())
@@ -79,11 +90,21 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// 获取用户注册的 userID
 	user, err := db.GetUserByEmail(req.Email)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "failed to get user by email")
 		log.Logger.Error("failed to get user by email: " + err.Error())
 		return
+	}
+
+	// 消费邀请码
+	if config.RegisterConfig.UseInvitationCode {
+		err = cache.ConsumeInvitationCode(*req.InvitationCode, user.UserID)
+		if err != nil {
+			resp.AbortWithMsg(c, code.UnknownError, "failed to consume invitation code")
+			return
+		}
 	}
 
 	resp.OKWithData(c, RegisterDataResponse{

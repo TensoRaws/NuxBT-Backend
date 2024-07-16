@@ -121,6 +121,18 @@ func (c Client) HMSet(key string, fields map[string]interface{}) *redis.BoolCmd 
 	return c.C.HMSet(c.Ctx, key, fields)
 }
 
+func (c Client) HMGet(key string, fields ...string) *redis.SliceCmd {
+	return c.C.HMGet(c.Ctx, key, fields...)
+}
+
+func (c Client) HSet(key, field string, value interface{}) *redis.IntCmd {
+	return c.C.HSet(c.Ctx, key, field, value)
+}
+
+func (c Client) HGet(key, field string) *redis.StringCmd {
+	return c.C.HGet(c.Ctx, key, field)
+}
+
 func (c Client) HGetAll(key string) *redis.MapStringStringCmd {
 	return c.C.HGetAll(c.Ctx, key)
 }
