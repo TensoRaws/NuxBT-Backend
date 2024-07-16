@@ -15,6 +15,8 @@ type InvitationGenResponse struct {
 	InvitationCode string `json:"invitation_code"`
 }
 
+type InvitationMeResponse []cache.UserInvitation
+
 // InvitationGen 生成邀请码 (POST /invitation/gen)
 func InvitationGen(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
@@ -50,6 +52,10 @@ func InvitationMe(c *gin.Context) {
 		return
 	}
 
-	resp.OKWithData(c, codeList)
+	if len(codeList) == 0 {
+		resp.OKWithData(c, InvitationMeResponse{})
+	} else {
+		resp.OKWithData(c, InvitationMeResponse(codeList))
+	}
 	log.Logger.Infof("User %d got invitation code list successfully!", userID)
 }
