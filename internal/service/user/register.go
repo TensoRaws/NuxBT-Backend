@@ -38,7 +38,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 检查是否允许注册
-	if !config.ServerConfig.AllowRegister {
+	if !config.RegisterConfig.AllowRegister {
 		resp.Abort(c, code.UserErrorRegisterNotAllowed)
 		return
 	}
@@ -51,7 +51,7 @@ func Register(c *gin.Context) {
 
 	// 无邀请码注册，检查是否允许无邀请码注册
 	if req.InvitationCode == nil || *req.InvitationCode == "" {
-		if config.ServerConfig.UseInvitationCode {
+		if config.RegisterConfig.UseInvitationCode {
 			resp.AbortWithMsg(c, code.UserErrorInvalidInvitationCode, "invitation code is required")
 			return
 		}

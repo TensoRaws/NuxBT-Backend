@@ -2,13 +2,16 @@ package config
 
 func configSetDefault() {
 	config.SetDefault("server", map[string]interface{}{
-		"port":                      8080,
-		"mode":                      "prod",
+		"port":         8080,
+		"mode":         "prod",
+		"requestLimit": 50,
+		"cros":         []string{},
+	})
+
+	config.SetDefault("register", map[string]interface{}{
 		"allowRegister":             true,
-		"useInvitationCode":         false,
+		"useInvitationCode":         true,
 		"inviteCodeEligibilityTime": 30,
-		"requestLimit":              50,
-		"cros":                      []string{},
 	})
 
 	config.SetDefault("jwt", map[string]interface{}{
