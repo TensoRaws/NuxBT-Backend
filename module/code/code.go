@@ -19,6 +19,7 @@ const (
 	DatabaseErrorRecordNotFound
 	DatabaseErrorRecordUpdateFailed
 	// UserError 用户侧错误
+	UserErrorRegisterNotAllowed
 	UserErrorInvalidUsername
 	UserErrorInvalidPassword
 	UserErrorInvalidEmail

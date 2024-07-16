@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/jwt"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
@@ -28,7 +28,7 @@ func Login(c *gin.Context) {
 	}
 
 	// GORM 查询
-	user, err := dao.GetUserByEmail(req.Email)
+	user, err := db.GetUserByEmail(req.Email)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
 		return

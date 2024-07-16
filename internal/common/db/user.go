@@ -1,4 +1,4 @@
-package dao
+package db
 
 import (
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -14,8 +14,8 @@ func CreateUser(user *model.User) (err error) {
 
 // UpdateUserDataByUserID 根据 map 更新用户信息，map 中的 key 为字段名
 func UpdateUserDataByUserID(userID int32, maps map[string]interface{}) (err error) {
-	u := query.User
-	_, err = u.Where(u.UserID.Eq(userID)).Updates(maps)
+	q := query.User
+	_, err = q.Where(q.UserID.Eq(userID)).Updates(maps)
 	if err != nil {
 		return err
 	}

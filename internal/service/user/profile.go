@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
@@ -31,13 +31,13 @@ type ProfileOthersRequest struct {
 func ProfileMe(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
-	user, err := dao.GetUserByID(userID)
+	user, err := db.GetUserByID(userID)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
 		return
 	}
 
-	roles, err := dao.GetUserRolesByID(userID)
+	roles, err := db.GetUserRolesByID(userID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}
@@ -73,13 +73,13 @@ func ProfileOthers(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
 	// 获取信息
-	user, err := dao.GetUserByID(req.UserID)
+	user, err := db.GetUserByID(req.UserID)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
 		return
 	}
 
-	roles, err := dao.GetUserRolesByID(req.UserID)
+	roles, err := db.GetUserRolesByID(req.UserID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -37,6 +37,12 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// 检查是否允许注册
+	if !config.ServerConfig.AllowResgister {
+		resp.Abort(c, code.UserErrorRegisterNotAllowed)
+		return
+	}
+
 	err := util.CheckUsername(req.Username)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
@@ -61,7 +67,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	// 注册
-	err = dao.CreateUser(&model.User{
+	err = db.CreateUser(&model.User{
 		Username:   req.Username,
 		Email:      req.Email,
 		Password:   string(password),
@@ -73,7 +79,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user, err := dao.GetUserByEmail(req.Email)
+	user, err := db.GetUserByEmail(req.Email)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "failed to get user by email")
 		log.Logger.Error("failed to get user by email: " + err.Error())
