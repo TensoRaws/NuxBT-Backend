@@ -15,7 +15,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Token string `json:"token"`
+	Expiration int64  `json:"expiration"`
+	Token      string `json:"token"`
 }
 
 // Login 用户登录 (POST /login)
@@ -37,13 +38,38 @@ func Login(c *gin.Context) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err == nil {
 		// 注册之后的下次登录成功，才会为其生成 token
-		token := jwt.GenerateToken(user)
-		// 打印相应信息和用户信息以及生成的 token 值
+		token := jwt.GenerateToken(user.UserID)
+
+		claims, err := jwt.ParseToken(token)
+		if err != nil {
+			resp.AbortWithMsg(c, code.UnknownError, err.Error())
+			return
+		}
+
 		resp.OKWithData(c, LoginResponse{
-			Token: token,
+			Expiration: claims.ExpiresAt.Unix(),
+			Token:      token,
 		})
 	} else {
 		resp.Abort(c, code.UserErrorInvalidPassword)
 		return
 	}
+}
+
+// TokenRefresh 用户刷新 token (POST /token/refresh)
+func TokenRefresh(c *gin.Context) {
+	userID, _ := resp.GetUserIDFromGinContext(c)
+
+	token := jwt.GenerateToken(userID)
+
+	claims, err := jwt.ParseToken(token)
+	if err != nil {
+		resp.AbortWithMsg(c, code.UnknownError, err.Error())
+		return
+	}
+
+	resp.OKWithData(c, LoginResponse{
+		Expiration: claims.ExpiresAt.Unix(),
+		Token:      token,
+	})
 }

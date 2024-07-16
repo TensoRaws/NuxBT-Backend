@@ -35,6 +35,10 @@ func NewAPI() *gin.Engine {
 			user.POST("register", user_service.Register)
 			// 用户登录
 			user.POST("login", user_service.Login)
+			// 用户刷新 token
+			user.POST("token/refresh",
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
+				user_service.TokenRefresh)
 			// 用户登出
 			user.POST("logout",
 				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], true), // 把 token 拉黑
