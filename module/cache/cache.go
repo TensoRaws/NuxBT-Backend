@@ -17,12 +17,14 @@ const (
 	IPLimit RDB = iota
 	JWTBlacklist
 	RespCache
+	InvitationCode
 )
 
 var Clients = map[RDB]*Client{
-	IPLimit:      {},
-	JWTBlacklist: {},
-	RespCache:    {},
+	IPLimit:        {},
+	JWTBlacklist:   {},
+	RespCache:      {},
+	InvitationCode: {},
 }
 
 type Client struct {

@@ -63,6 +63,15 @@ func NewAPI() *gin.Engine {
 			user.POST("profile/update",
 				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
 				user_service.ProfileUpdate)
+			// 用户邀请码生成
+			user.POST("invitation/gen",
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
+				user_service.InvitationGen)
+			// 用户邀请码列表
+			user.GET("invitation/me",
+				jwt.RequireAuth(cache.Clients[cache.JWTBlacklist], false),
+				middleware_cache.Response(cache.Clients[cache.RespCache], 5*time.Second),
+				user_service.InvitationMe)
 		}
 	}
 

@@ -9,9 +9,11 @@ func configSetDefault() {
 	})
 
 	config.SetDefault("register", map[string]interface{}{
-		"allowRegister":             true,
-		"useInvitationCode":         true,
-		"inviteCodeEligibilityTime": 30,
+		"allowRegister":                 true,
+		"useInvitationCode":             true,
+		"invitationCodeEligibilityTime": 30,
+		"invitationCodeExpirationTime":  7,
+		"invitationCodeLimit":           5,
 	})
 
 	config.SetDefault("jwt", map[string]interface{}{

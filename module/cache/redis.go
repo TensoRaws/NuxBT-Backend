@@ -116,3 +116,11 @@ func (c Client) Set(key string, value interface{}, expiration time.Duration) *re
 func (c Client) Get(key string) *redis.StringCmd {
 	return c.C.Get(c.Ctx, key)
 }
+
+func (c Client) HMSet(key string, fields map[string]interface{}) *redis.BoolCmd {
+	return c.C.HMSet(c.Ctx, key, fields)
+}
+
+func (c Client) HGetAll(key string) *redis.MapStringStringCmd {
+	return c.C.HGetAll(c.Ctx, key)
+}

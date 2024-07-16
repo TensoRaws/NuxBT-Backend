@@ -8,9 +8,11 @@ type Server struct {
 }
 
 type Register struct {
-	AllowRegister             bool `yaml:"allowRegister"`
-	UseInvitationCode         bool `yaml:"useInvitationCode"`
-	InviteCodeEligibilityTime int  `yaml:"inviteCodeEligibilityTime"`
+	AllowRegister                 bool `yaml:"allowRegister"`
+	UseInvitationCode             bool `yaml:"useInvitationCode"`
+	InvitationCodeEligibilityTime int  `yaml:"invitationCodeEligibilityTime"`
+	InvitationCodeExpirationTime  int  `yaml:"invitationCodeExpirationTime"`
+	InvitationCodeLimit           int  `yaml:"invitationCodeLimit"`
 }
 
 type Jwt struct {
