@@ -25,7 +25,7 @@ func InvitationGen(c *gin.Context) {
 	log.Logger.Infof("User %d has %d valid invitation codes!", userID, count)
 
 	if count >= config.RegisterConfig.InvitationCodeLimit {
-		resp.AbortWithMsg(c, code.UnknownError,
+		resp.AbortWithMsg(c, code.UserErrorInvitationCodeHasReachedLimit,
 			fmt.Sprintf("You have generated %d invitation codes!", count))
 		return
 	}

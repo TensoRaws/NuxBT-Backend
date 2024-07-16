@@ -30,7 +30,7 @@ func GenerateInvitationCode(userID int32) (string, error) {
 	toMapString := util.StructToString(UserInvitationMapValue{
 		CreatedAt: time.Now().Unix(),              // 存储邀请码的创建时间
 		UsedBy:    0,                              // 初始状态为未使用
-		ExpiresAt: time.Now().Add(expTime).Unix(), //过期时间
+		ExpiresAt: time.Now().Add(expTime).Unix(), // 过期时间
 	})
 
 	// 将邀请码信息存储到用户的哈希表中，方便查询

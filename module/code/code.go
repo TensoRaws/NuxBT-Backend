@@ -24,6 +24,7 @@ const (
 	UserErrorInvalidPassword
 	UserErrorInvalidEmail
 	UserErrorInvalidInvitationCode
+	UserErrorInvitationCodeHasReachedLimit
 	// gen code end
 	// DO NOT EDIT
 )
