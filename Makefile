@@ -18,7 +18,7 @@ gen: ## generate CURD code
 
 .PHONY: gen_error_code
 gen_error_code: ## generate error code
-	${GO} generate github.com/TensoRaws/NuxBT-Backend/module/error/gen
+	${GO} generate github.com/TensoRaws/NuxBT-Backend/module/code/gen
 
 .PHONY: test
 test: tidy ## go test

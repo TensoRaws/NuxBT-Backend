@@ -11,8 +11,10 @@ export const enum ErrorCode {
   DatabaseErrorRecordCreateFailed,
   DatabaseErrorRecordNotFound,
   DatabaseErrorRecordUpdateFailed,
+  UserErrorRegisterNotAllowed,
   UserErrorInvalidUsername,
   UserErrorInvalidPassword,
   UserErrorInvalidEmail,
-  UserErrorInvalidInvitationCode
+  UserErrorInvalidInvitationCode,
+  UserErrorInvitationCodeHasReachedLimit
 }

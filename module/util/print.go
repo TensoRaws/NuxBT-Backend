@@ -1,7 +1,5 @@
 package util
 
-import "github.com/bytedance/sonic"
-
 type Color string
 
 // 高亮颜色map
@@ -34,17 +32,4 @@ func HighlightString(color Color, str string) string {
 		return colorMap["green"] + str + colorMap["reset"]
 	}
 	return colorMap[color] + str + colorMap["reset"]
-}
-
-// StructToString 结构体转字符串
-func StructToString(s interface{}) string {
-	// v, _ := json.Marshal(s)
-	v, _ := sonic.Marshal(s)
-	return string(v)
-}
-
-// StringToStruct 字符串转结构体
-func StringToStruct(str string, s interface{}) error {
-	// return json.Unmarshal([]byte(str), s)
-	return sonic.Unmarshal([]byte(str), s)
 }

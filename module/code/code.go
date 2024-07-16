@@ -19,10 +19,12 @@ const (
 	DatabaseErrorRecordNotFound
 	DatabaseErrorRecordUpdateFailed
 	// UserError 用户侧错误
+	UserErrorRegisterNotAllowed
 	UserErrorInvalidUsername
 	UserErrorInvalidPassword
 	UserErrorInvalidEmail
 	UserErrorInvalidInvitationCode
+	UserErrorInvitationCodeHasReachedLimit
 	// gen code end
 	// DO NOT EDIT
 )

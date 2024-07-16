@@ -4,7 +4,8 @@ import (
 	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -37,23 +38,38 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// 检查是否允许注册
+	if !config.RegisterConfig.AllowRegister {
+		resp.Abort(c, code.UserErrorRegisterNotAllowed)
+		return
+	}
+
 	err := util.CheckUsername(req.Username)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
 		return
 	}
 
+	var inviterID int32 = 0
+
 	// 无邀请码注册，检查是否允许无邀请码注册
 	if req.InvitationCode == nil || *req.InvitationCode == "" {
-		if config.ServerConfig.UseInvitationCode {
+		if config.RegisterConfig.UseInvitationCode {
 			resp.AbortWithMsg(c, code.UserErrorInvalidInvitationCode, "invitation code is required")
 			return
 		}
 	} else {
-		// TODO: 邀请码功能, 有邀请码注册，检查邀请码是否有效
-
+		// 邀请码功能, 有邀请码注册，检查邀请码是否有效
+		inviterID, err = cache.GetInviterIDByInvitationCode(*req.InvitationCode)
+		if err != nil {
+			resp.AbortWithMsg(c, code.UserErrorInvalidInvitationCode, "invalid invitation code")
+			log.Logger.Error("invalid invitation code: " + err.Error())
+			return
+		}
 		log.Logger.Info("invitation code: " + *req.InvitationCode)
 	}
+
+	// 生成密码哈希
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UnknownError, "failed to hash password")
@@ -61,11 +77,12 @@ func Register(c *gin.Context) {
 		return
 	}
 	// 注册
-	err = dao.CreateUser(&model.User{
+	err = db.CreateUser(&model.User{
 		Username:   req.Username,
 		Email:      req.Email,
 		Password:   string(password),
 		LastActive: time.Now(),
+		Inviter:    inviterID,
 	})
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, "failed to register "+err.Error())
@@ -73,11 +90,21 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user, err := dao.GetUserByEmail(req.Email)
+	// 获取用户注册的 userID
+	user, err := db.GetUserByEmail(req.Email)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "failed to get user by email")
 		log.Logger.Error("failed to get user by email: " + err.Error())
 		return
+	}
+
+	// 消费邀请码
+	if req.InvitationCode != nil && *req.InvitationCode != "" {
+		err = cache.ConsumeInvitationCode(*req.InvitationCode, user.UserID)
+		if err != nil {
+			resp.AbortWithMsg(c, code.UnknownError, "failed to consume invitation code")
+			return
+		}
 	}
 
 	resp.OKWithData(c, RegisterDataResponse{

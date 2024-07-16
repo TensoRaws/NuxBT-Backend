@@ -1,11 +1,16 @@
 server:
   port: 8080
   mode: prod
-  allowRegister: true
-  useInvitationCode: false
   requestLimit: 50 # 50 times per minute
   cros:
     - https://114514.com
+
+register:
+  allowRegister: true
+  useInvitationCode: true
+  invitationCodeEligibilityTime: 30 # day, only that users who have registered over xx days can gen invitation code
+  invitationCodeExpirationTime: 7 # day, invitation code expiration time
+  invitationCodeLimit: 5 # invitation code limit, one user can gen xx invitation code
 
 jwt:
   timeout: 600 # minute

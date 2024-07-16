@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
@@ -31,7 +31,7 @@ func ResetPassword(c *gin.Context) {
 		return
 	}
 	// 修改密码
-	err = dao.UpdateUserDataByUserID(userID, map[string]interface{}{
+	err = db.UpdateUserDataByUserID(userID, map[string]interface{}{
 		"password": password,
 	})
 	if err != nil {

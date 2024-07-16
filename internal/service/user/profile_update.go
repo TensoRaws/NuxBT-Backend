@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/internal/common/dao"
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/TensoRaws/NuxBT-Backend/module/resp"
@@ -61,7 +61,7 @@ func ProfileUpdate(c *gin.Context) {
 		updates["background"] = *req.Background
 	}
 	// 执行更新
-	err := dao.UpdateUserDataByUserID(userID, updates)
+	err := db.UpdateUserDataByUserID(userID, updates)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, err.Error())
 		return
