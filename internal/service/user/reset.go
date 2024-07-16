@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -30,10 +31,12 @@ func ResetPassword(c *gin.Context) {
 		log.Logger.Error("failed to hash password: " + err.Error())
 		return
 	}
+
 	// 修改密码
-	err = db.UpdateUserDataByUserID(userID, map[string]interface{}{
-		"password": password,
+	err = db.PatchUser(userID, &model.User{
+		Password: string(password),
 	})
+
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, "reset password fail")
 	}
