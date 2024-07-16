@@ -38,7 +38,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 检查是否允许注册
-	if !config.ServerConfig.AllowResgister {
+	if !config.ServerConfig.AllowRegister {
 		resp.Abort(c, code.UserErrorRegisterNotAllowed)
 		return
 	}
