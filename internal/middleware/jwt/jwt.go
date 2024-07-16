@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
 	"github.com/golang-jwt/jwt/v5"
@@ -23,15 +22,14 @@ func GetJWTSigningKey() []byte {
 }
 
 // GenerateToken 生成 jwt(json web token)
-func GenerateToken(u *model.User) string {
-	userID := strconv.FormatInt(int64(u.UserID), 10)
+func GenerateToken(userID int32) string {
 	claims := jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(GetJWTTokenExpiredDuration())),
 		NotBefore: jwt.NewNumericDate(time.Now()),
 		Issuer:    "TensoRaws",
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 		Subject:   "token",
-		ID:        userID, // jwt 中保存合法用户的 ID
+		ID:        strconv.FormatInt(int64(userID), 10), // jwt 中保存合法用户的 ID
 	}
 
 	// 使用指定的签名算法创建用于签名的字符串对象，使用 json 序列化和 base64Url 编码生成 jwt 的 1、2 部分
