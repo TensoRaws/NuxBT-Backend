@@ -12,7 +12,7 @@ var codeToString = map[Code]string{
 	RequestErrorInvalidParams:              "Request error invalid params",
 	DatabaseErrorRecordCreateFailed:        "Database error record create failed",
 	DatabaseErrorRecordNotFound:            "Database error record not found",
-	DatabaseErrorRecordUpdateFailed:        "Database error record update failed",
+	DatabaseErrorRecordPatchFailed:         "Database error record patch failed",
 	UserErrorRegisterNotAllowed:            "User error register not allowed",
 	UserErrorInvalidUsername:               "User error invalid username",
 	UserErrorInvalidPassword:               "User error invalid password",

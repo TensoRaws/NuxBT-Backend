@@ -47,7 +47,7 @@ func ProfileUpdate(c *gin.Context) {
 	})
 
 	if err != nil {
-		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, err.Error())
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordPatchFailed, err.Error())
 		return
 	}
 

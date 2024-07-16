@@ -38,7 +38,7 @@ func ResetPassword(c *gin.Context) {
 	})
 
 	if err != nil {
-		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, "reset password fail")
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordPatchFailed, "reset password fail")
 	}
 	// 返回
 	resp.OK(c)
