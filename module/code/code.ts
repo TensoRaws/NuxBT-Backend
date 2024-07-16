@@ -10,7 +10,7 @@ export const enum ErrorCode {
   RequestErrorInvalidParams,
   DatabaseErrorRecordCreateFailed,
   DatabaseErrorRecordNotFound,
-  DatabaseErrorRecordUpdateFailed,
+  DatabaseErrorRecordPatchFailed,
   UserErrorRegisterNotAllowed,
   UserErrorInvalidUsername,
   UserErrorInvalidPassword,

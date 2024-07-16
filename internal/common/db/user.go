@@ -1,6 +1,8 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
 )
@@ -12,14 +14,17 @@ func CreateUser(user *model.User) (err error) {
 	return err
 }
 
-// UpdateUserDataByUserID 根据 map 更新用户信息，map 中的 key 为字段名
-func UpdateUserDataByUserID(userID int32, maps map[string]interface{}) (err error) {
+// PatchUser 更新用户信息，根据 userID 和 details 更新用户信息
+func PatchUser(userID int32, details *model.User) (err error) {
 	q := query.User
-	_, err = q.Where(q.UserID.Eq(userID)).Updates(maps)
+	ResultInfo, err := q.Where(q.UserID.Eq(userID)).Updates(details)
 	if err != nil {
 		return err
 	}
-	return err
+	if ResultInfo.RowsAffected == 0 {
+		return fmt.Errorf("no rows affected, nothing will be updated, userID: %v", userID)
+	}
+	return nil
 }
 
 // GetUserByEmail 根据 email 获取用户

@@ -17,7 +17,7 @@ const (
 	// DatabaseError 数据库错误
 	DatabaseErrorRecordCreateFailed
 	DatabaseErrorRecordNotFound
-	DatabaseErrorRecordUpdateFailed
+	DatabaseErrorRecordPatchFailed
 	// UserError 用户侧错误
 	UserErrorRegisterNotAllowed
 	UserErrorInvalidUsername

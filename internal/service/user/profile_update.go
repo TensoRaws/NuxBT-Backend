@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -27,43 +28,26 @@ func ProfileUpdate(c *gin.Context) {
 		return
 	}
 
+	err := util.CheckUsername(*req.Username)
+	if err != nil {
+		resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
+		return
+	}
+
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
-	// 准备更新数据
-	updates := make(map[string]interface{})
-
-	if req.Private != nil {
-		updates["private"] = req.Private
-	}
-
-	if req.Username != nil && *req.Username != "" {
-		err := util.CheckUsername(*req.Username)
-		if err != nil {
-			resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
-			return
-		}
-		updates["username"] = *req.Username
-	}
-
-	if req.Email != nil {
-		updates["email"] = *req.Email
-	}
-
-	if req.Avatar != nil {
-		updates["avatar"] = *req.Avatar
-	}
-
-	if req.Signature != nil {
-		updates["signature"] = *req.Signature
-	}
-
-	if req.Background != nil {
-		updates["background"] = *req.Background
-	}
 	// 执行更新
-	err := db.UpdateUserDataByUserID(userID, updates)
+	err = db.PatchUser(userID, &model.User{
+		Avatar:     *req.Avatar,
+		Background: *req.Background,
+		Email:      *req.Email,
+		Private:    *req.Private,
+		Signature:  *req.Signature,
+		Username:   *req.Username,
+	})
+
 	if err != nil {
-		resp.AbortWithMsg(c, code.DatabaseErrorRecordUpdateFailed, err.Error())
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordPatchFailed, err.Error())
 		return
 	}
 

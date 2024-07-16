@@ -16,15 +16,21 @@ func buildConstBlock(filename string) ([]string, uint32) {
 
 	file, err := os.ReadFile(filename)
 	if err != nil {
-		_ = fmt.Errorf("read file error: %v", err)
+		println("Error reading file: " + err.Error())
 		os.Exit(1)
 		return nil, 0
 	}
 
 	content := string(file)
 
-	// 按 \n\t 分割内容
-	lines := strings.Split(content, "\n\t")
+	var lines []string
+	if strings.Contains(content, "\r\n\t") {
+		// 按 \r\n\t 分割内容
+		lines = strings.Split(content, "\r\n\t")
+	} else {
+		// 按 \n\t 分割内容
+		lines = strings.Split(content, "\n\t")
+	}
 
 	// 构建 const 块
 	constBlock := make([]string, 0)
