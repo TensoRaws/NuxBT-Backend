@@ -1,11 +1,11 @@
 package torrent
 
 type BitTorrentFile struct {
-	Announce     string   `bencode:"announce"`
-	AnnounceList []string `bencode:"announce-list,omitempty"`
-	CreationDate int64    `bencode:"creation date,omitempty"`
-	Comment      string   `bencode:"comment,omitempty"`
-	CreatedBy    string   `bencode:"created by,omitempty"`
+	Announce     string     `bencode:"announce"`
+	AnnounceList [][]string `bencode:"announce-list,omitempty"`
+	CreationDate int64      `bencode:"creation date,omitempty"`
+	Comment      string     `bencode:"comment,omitempty"`
+	CreatedBy    string     `bencode:"created by,omitempty"`
 	Info         struct {
 		Files []struct {
 			Path   []string `bencode:"path"`

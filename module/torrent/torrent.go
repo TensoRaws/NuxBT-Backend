@@ -64,7 +64,11 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 		bencodeTorrent.Announce = editStrategy.Announce
 	}
 	if editStrategy.AnnounceList != nil {
-		bencodeTorrent.AnnounceList = editStrategy.AnnounceList
+		var announceList [][]string
+		for _, announce := range editStrategy.AnnounceList {
+			announceList = append(announceList, []string{announce})
+		}
+		bencodeTorrent.AnnounceList = announceList
 	}
 	if editStrategy.Comment != "" {
 		bencodeTorrent.Comment = editStrategy.Comment
