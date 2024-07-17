@@ -11,15 +11,12 @@ func TestRepackTorrent(t *testing.T) {
 
 	// io.Reader
 	fileHeader, err := os.Open(torrentFilePath)
-	torrent, sha1, err := RepackTorrent(fileHeader)
+	torrent, s, err := RepackTorrent(fileHeader)
 	if err != nil {
+		t.Error(err)
 		return
 	}
-	t.Log(sha1)
-
-	// 测试数据：种子文件的 SHA1 值
-	//expectedSHA1 := "611b8701b68790a3f22a9e27bd1e9a047f78691b"
-	//assert.Equal(t, expectedSHA1, sha1)
-	s := util.StructToString(torrent)
+	t.Log(s)
+	s = util.StructToString(torrent)
 	t.Log(s)
 }

@@ -7,29 +7,33 @@ import (
 	"io"
 )
 
-type BencodeTorrent struct {
-	Announce  string `bencode:"announce"`
-	CreatedBy string `bencode:"created by,omitempty"`
-	CreatedAt int    `bencode:"creation date,omitempty"`
-	Info      struct {
+type TorrentFile struct {
+	Announce     string   `bencode:"announce"`
+	AnnounceList []string `bencode:"announce-list,omitempty"`
+	CreationDate int64    `bencode:"creation date,omitempty"`
+	Comment      string   `bencode:"comment,omitempty"`
+	CreatedBy    string   `bencode:"created by,omitempty"`
+	Info         struct {
 		Files []struct {
-			Length uint64   `bencode:"length"`
 			Path   []string `bencode:"path"`
-		} `bencode:"files"`
+			Length uint64   `bencode:"length"`
+		} `bencode:"files,omitempty"`
 		Name        string `bencode:"name"`
-		Pieces      string `bencode:"pieces"`
-		PieceLength uint64 `bencode:"piece length"`
-		Private     int    `bencode:"private"`
-		Source      string `bencode:"source"`
+		Pieces      []byte `bencode:"pieces"`
+		PieceLength int64  `bencode:"piece length"`
+		Length      uint64 `bencode:"length,omitempty"`
+		Private     bool   `bencode:"private,omitempty"`
+		Source      string `bencode:"source,omitempty"`
 	} `bencode:"info"`
 }
 
 // RepackTorrent 重新打包 torrent 文件
-func RepackTorrent(fileReader io.Reader) (*BencodeTorrent, string, error) {
+func RepackTorrent(fileReader io.Reader) (*TorrentFile, string, error) {
 	// Decode
 	// See https://godoc.org/github.com/anacrolix/torrent/bencode
 	decoder := bencode.NewDecoder(fileReader)
-	bencodeTorrent := &BencodeTorrent{}
+
+	bencodeTorrent := &TorrentFile{}
 	decodeErr := decoder.Decode(bencodeTorrent)
 	if decodeErr != nil {
 		return nil, "", decodeErr
@@ -37,7 +41,7 @@ func RepackTorrent(fileReader io.Reader) (*BencodeTorrent, string, error) {
 
 	//// Re-pack torrent
 	//// TODO: 根据配置修改
-	bencodeTorrent.Announce = ""
+	//bencodeTorrent.Announce = ""
 	//bencodeTorrent.Info.Source = "[Alpha] SpiderX"
 	//// 0: 公开种子 1: 私有种子
 	//bencodeTorrent.Info.Private = 0
@@ -48,8 +52,5 @@ func RepackTorrent(fileReader io.Reader) (*BencodeTorrent, string, error) {
 		return nil, "", marshalErr
 	}
 
-	//metainfo.Hash
-	bytesArray := sha1.Sum(marshaledInfo)
-	hashString := fmt.Sprintf("%x", bytesArray[:])
-	return bencodeTorrent, hashString, nil
+	return bencodeTorrent, fmt.Sprintf("%x", sha1.Sum(marshaledInfo)), nil
 }
