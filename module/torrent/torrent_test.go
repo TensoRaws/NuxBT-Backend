@@ -87,6 +87,18 @@ func TestTorrentFileList(t *testing.T) {
 	t.Log(fileList)
 	assert.Equal(t, len(fileList), 2)
 	assert.Equal(t, fileList[0].Path, []string{"cxk", "cxk.jpg"})
+
+	torrentFilePath = testTorrent
+	torrent, err = NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fileList = torrent.GetFileList()
+	t.Log(fileList)
+	assert.Equal(t, len(fileList), 1)
+	assert.Equal(t, fileList[0].Path, []string{"lenna.jpg"})
 }
 
 func TestSaveTorrent(t *testing.T) {

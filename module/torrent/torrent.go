@@ -81,6 +81,18 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 // GetFileList 获取 torrent 的文件列表和大小
 func (bencodeTorrent *BitTorrentFile) GetFileList() []BitTorrentFileList {
 	var fileList []BitTorrentFileList
+
+	// 当 torrent 文件只有一个文件时，Info.Files 为空
+	if len(bencodeTorrent.Info.Files) == 0 {
+		fileList = append(fileList, BitTorrentFileList{
+			Path: []string{bencodeTorrent.Info.Name},
+			Size: util.ByteCountBinary(bencodeTorrent.Info.Length),
+		})
+
+		return fileList
+	}
+
+	// 当 torrent 文件有多个文件时，Info.Files 不为空，从中获取文件列表
 	for _, file := range bencodeTorrent.Info.Files {
 		fileList = append(fileList, BitTorrentFileList{
 			Path: file.Path,
