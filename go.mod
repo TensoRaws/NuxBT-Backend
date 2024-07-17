@@ -8,6 +8,7 @@ require (
 	github.com/anacrolix/torrent v1.56.1
 	github.com/bytedance/sonic v1.11.9
 	github.com/charmbracelet/log v0.4.0
+	github.com/dustin/go-humanize v1.0.1
 	github.com/eleven26/goss/v4 v4.0.1
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gin-gonic/gin v1.10.0

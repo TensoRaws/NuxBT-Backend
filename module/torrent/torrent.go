@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"os"
 
+	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/anacrolix/torrent/bencode"
 )
 
@@ -59,6 +60,12 @@ func (bencodeTorrent *BitTorrentFile) GetHash() string {
 // Repack 重新打包 torrent 文件
 func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStrategy) error {
 	// Re-pack torrent
+	if editStrategy.Announce != "" {
+		bencodeTorrent.Announce = editStrategy.Announce
+	}
+	if editStrategy.AnnounceList != nil {
+		bencodeTorrent.AnnounceList = editStrategy.AnnounceList
+	}
 	if editStrategy.Comment != "" {
 		bencodeTorrent.Comment = editStrategy.Comment
 	}
@@ -66,9 +73,33 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 		bencodeTorrent.Info.Source = editStrategy.InfoSource
 	}
 
-	bencodeTorrent.Info.Private = false
+	bencodeTorrent.Info.Private = editStrategy.Private
 
 	return nil
+}
+
+// GetFileList 获取 torrent 的文件列表和大小
+func (bencodeTorrent *BitTorrentFile) GetFileList() []BitTorrentFileList {
+	var fileList []BitTorrentFileList
+
+	// 当 torrent 文件只有一个文件时，Info.Files 为空
+	if len(bencodeTorrent.Info.Files) == 0 {
+		fileList = append(fileList, BitTorrentFileList{
+			Path: []string{bencodeTorrent.Info.Name},
+			Size: util.ByteCountBinary(bencodeTorrent.Info.Length),
+		})
+
+		return fileList
+	}
+
+	// 当 torrent 文件有多个文件时，Info.Files 不为空，从中获取文件列表
+	for _, file := range bencodeTorrent.Info.Files {
+		fileList = append(fileList, BitTorrentFileList{
+			Path: file.Path,
+			Size: util.ByteCountBinary(file.Length),
+		})
+	}
+	return fileList
 }
 
 // ConvertToBytes 将 torrent 文件转换为字节
