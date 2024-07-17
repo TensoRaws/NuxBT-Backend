@@ -71,6 +71,21 @@ func TestRepackTorrent(t *testing.T) {
 	assert.Equal(t, torrent.Info.Source, infoSource)
 }
 
+func TestTorrentFileList(t *testing.T) {
+	torrentFilePath := testTorrentFolder
+
+	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fileList := torrent.GetFileList()
+	t.Log(fileList)
+	assert.Equal(t, len(fileList), 2)
+	assert.Equal(t, fileList[0].Path, []string{"cxk", "cxk.jpg"})
+}
+
 func TestSaveTorrent(t *testing.T) {
 	torrentFilePath := testTorrent
 	saveFilePath := testTorrentSave

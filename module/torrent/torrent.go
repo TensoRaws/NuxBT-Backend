@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"os"
 
+	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/anacrolix/torrent/bencode"
 )
 
@@ -69,6 +70,18 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 	bencodeTorrent.Info.Private = false
 
 	return nil
+}
+
+// GetFileList 获取 torrent 的文件列表和大小
+func (bencodeTorrent *BitTorrentFile) GetFileList() []BitTorrentFileList {
+	var fileList []BitTorrentFileList
+	for _, file := range bencodeTorrent.Info.Files {
+		fileList = append(fileList, BitTorrentFileList{
+			Path: file.Path,
+			Size: util.ByteCountBinary(file.Length),
+		})
+	}
+	return fileList
 }
 
 // ConvertToBytes 将 torrent 文件转换为字节

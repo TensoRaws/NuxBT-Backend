@@ -20,7 +20,14 @@ type BitTorrentFile struct {
 	} `bencode:"info"`
 }
 
+type BitTorrentFileList struct {
+	Path []string `json:"path"`
+	Size string   `json:"size"`
+}
+
 type BitTorrentFileEditStrategy struct {
-	Comment    string
-	InfoSource string
+	Announce     string
+	AnnounceList []string
+	Comment      string
+	InfoSource   string
 }
