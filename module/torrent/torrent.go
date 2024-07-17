@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-type TorrentFile struct {
+type BitTorrentFile struct {
 	Announce     string   `bencode:"announce"`
 	AnnounceList []string `bencode:"announce-list,omitempty"`
 	CreationDate int64    `bencode:"creation date,omitempty"`
@@ -28,23 +28,24 @@ type TorrentFile struct {
 }
 
 // RepackTorrent 重新打包 torrent 文件
-func RepackTorrent(fileReader io.Reader) (*TorrentFile, string, error) {
+func RepackTorrent(fileReader io.Reader) (*BitTorrentFile, string, error) {
 	// Decode
 	// See https://godoc.org/github.com/anacrolix/torrent/bencode
 	decoder := bencode.NewDecoder(fileReader)
 
-	bencodeTorrent := &TorrentFile{}
+	bencodeTorrent := &BitTorrentFile{}
 	decodeErr := decoder.Decode(bencodeTorrent)
 	if decodeErr != nil {
 		return nil, "", decodeErr
 	}
 
-	//// Re-pack torrent
-	//// TODO: 根据配置修改
-	//bencodeTorrent.Announce = ""
-	//bencodeTorrent.Info.Source = "[Alpha] SpiderX"
-	//// 0: 公开种子 1: 私有种子
-	//bencodeTorrent.Info.Private = 0
+	// Re-pack torrent
+	bencodeTorrent.Announce = ""
+	bencodeTorrent.AnnounceList = nil
+	bencodeTorrent.Comment = ""
+
+	// 0: 公开种子 1: 私有种子
+	bencodeTorrent.Info.Private = false
 
 	// marshal info part and calculate SHA1
 	marshaledInfo, marshalErr := bencode.Marshal(bencodeTorrent.Info)

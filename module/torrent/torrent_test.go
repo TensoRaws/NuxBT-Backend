@@ -12,6 +12,10 @@ func TestRepackTorrent(t *testing.T) {
 
 	// io.Reader
 	fileHeader, err := os.Open(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	torrent, s, err := RepackTorrent(fileHeader)
 	if err != nil {
 		t.Error(err)
