@@ -3,10 +3,26 @@ package torrent
 import (
 	"crypto/sha1"
 	"fmt"
+	"mime/multipart"
 	"os"
 
 	"github.com/anacrolix/torrent/bencode"
 )
+
+func NewBitTorrentFileFromMultipart(fh *multipart.FileHeader) (*BitTorrentFile, error) {
+	fileReader, err := fh.Open()
+	if err != nil {
+		return nil, err
+	}
+	decoder := bencode.NewDecoder(fileReader)
+	bencodeTorrent := &BitTorrentFile{}
+	decodeErr := decoder.Decode(bencodeTorrent)
+	if decodeErr != nil {
+		return nil, decodeErr
+	}
+
+	return bencodeTorrent, nil
+}
 
 // NewBitTorrentFilePath 通过文件路径创建 BitTorrentFile
 func NewBitTorrentFilePath(torrentFilePath string) (*BitTorrentFile, error) {
