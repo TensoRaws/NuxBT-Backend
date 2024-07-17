@@ -15,7 +15,7 @@ func TestTorrentHash(t *testing.T) {
 		return
 	}
 
-	err = torrent.RepackTorrent(&BitTorrentFileEditStrategy{})
+	err = torrent.Repack(&BitTorrentFileEditStrategy{})
 	if err != nil {
 		t.Error(err)
 		return
@@ -33,7 +33,7 @@ func TestFolderTorrentHash(t *testing.T) {
 		return
 	}
 
-	err = torrent.RepackTorrent(&BitTorrentFileEditStrategy{})
+	err = torrent.Repack(&BitTorrentFileEditStrategy{})
 	if err != nil {
 		t.Error(err)
 		return
@@ -53,7 +53,7 @@ func TestRepackTorrent(t *testing.T) {
 	comment := "TensoRaws"
 	infoSource := "https://github.com/TensoRaws"
 
-	err = torrent.RepackTorrent(&BitTorrentFileEditStrategy{
+	err = torrent.Repack(&BitTorrentFileEditStrategy{
 		Comment:    comment,
 		InfoSource: infoSource,
 	})
@@ -65,4 +65,30 @@ func TestRepackTorrent(t *testing.T) {
 
 	assert.Equal(t, torrent.Comment, comment)
 	assert.Equal(t, torrent.Info.Source, infoSource)
+}
+
+func TestSaveTorrent(t *testing.T) {
+	torrentFilePath := "test.torrent"
+	saveFilePath := "test_save.torrent"
+
+	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	err = torrent.SaveTo(saveFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	torrent, err = NewBitTorrentFilePath(saveFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	assert.Equal(t, torrent.GetHash(), "7f3956e5a15b34b62159727c08f944c7e433ad1e")
+	assert.Equal(t, torrent.Info.Name, "lenna.jpg")
 }

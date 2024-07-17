@@ -40,8 +40,8 @@ func (bencodeTorrent *BitTorrentFile) GetHash() string {
 	return fmt.Sprintf("%x", sha1.Sum(marshaledInfo))
 }
 
-// RepackTorrent 重新打包 torrent 文件
-func (bencodeTorrent *BitTorrentFile) RepackTorrent(editStrategy *BitTorrentFileEditStrategy) error {
+// Repack 重新打包 torrent 文件
+func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStrategy) error {
 	// Re-pack torrent
 	if editStrategy.Comment != "" {
 		bencodeTorrent.Comment = editStrategy.Comment
@@ -51,6 +51,34 @@ func (bencodeTorrent *BitTorrentFile) RepackTorrent(editStrategy *BitTorrentFile
 	}
 
 	bencodeTorrent.Info.Private = false
+
+	return nil
+}
+
+// SaveTo 将 torrent 文件保存到指定路径
+func (bencodeTorrent *BitTorrentFile) SaveTo(filePath string) error {
+	// Marshal the entire torrent file
+	marshaledTorrent, marshalErr := bencode.Marshal(bencodeTorrent)
+	if marshalErr != nil {
+		return marshalErr
+	}
+
+	// Write to file
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			fmt.Println("Failed to close file", file.Name())
+		}
+	}(file)
+
+	_, err = file.Write(marshaledTorrent)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
