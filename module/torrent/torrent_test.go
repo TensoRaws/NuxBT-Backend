@@ -58,8 +58,9 @@ func TestRepackTorrent(t *testing.T) {
 	infoSource := "https://github.com/TensoRaws"
 
 	err = torrent.Repack(&BitTorrentFileEditStrategy{
-		Comment:    comment,
-		InfoSource: infoSource,
+		AnnounceList: TRACKER_LIST,
+		Comment:      comment,
+		InfoSource:   infoSource,
 	})
 
 	if err != nil {
@@ -67,8 +68,10 @@ func TestRepackTorrent(t *testing.T) {
 		return
 	}
 
+	t.Log(torrent)
 	assert.Equal(t, torrent.Comment, comment)
 	assert.Equal(t, torrent.Info.Source, infoSource)
+	assert.Equal(t, torrent.AnnounceList, TRACKER_LIST)
 }
 
 func TestTorrentFileList(t *testing.T) {

@@ -29,5 +29,6 @@ type BitTorrentFileEditStrategy struct {
 	Announce     string
 	AnnounceList []string
 	Comment      string
+	Private      bool
 	InfoSource   string
 }
