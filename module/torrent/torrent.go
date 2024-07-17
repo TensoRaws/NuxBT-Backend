@@ -3,8 +3,9 @@ package torrent
 import (
 	"crypto/sha1"
 	"fmt"
-	"github.com/anacrolix/torrent/bencode"
 	"io"
+
+	"github.com/anacrolix/torrent/bencode"
 )
 
 type BitTorrentFile struct {
@@ -27,10 +28,13 @@ type BitTorrentFile struct {
 	} `bencode:"info"`
 }
 
+type BitTorrentFileEditStrategy struct {
+	Comment    string
+	InfoSource string
+}
+
 // RepackTorrent 重新打包 torrent 文件
-func RepackTorrent(fileReader io.Reader) (*BitTorrentFile, string, error) {
-	// Decode
-	// See https://godoc.org/github.com/anacrolix/torrent/bencode
+func RepackTorrent(fileReader io.Reader, editStrategy *BitTorrentFileEditStrategy) (*BitTorrentFile, string, error) {
 	decoder := bencode.NewDecoder(fileReader)
 
 	bencodeTorrent := &BitTorrentFile{}
@@ -40,11 +44,13 @@ func RepackTorrent(fileReader io.Reader) (*BitTorrentFile, string, error) {
 	}
 
 	// Re-pack torrent
-	bencodeTorrent.Announce = ""
-	bencodeTorrent.AnnounceList = nil
-	bencodeTorrent.Comment = ""
+	if editStrategy.Comment != "" {
+		bencodeTorrent.Comment = editStrategy.Comment
+	}
+	if editStrategy.InfoSource != "" {
+		bencodeTorrent.Info.Source = editStrategy.InfoSource
+	}
 
-	// 0: 公开种子 1: 私有种子
 	bencodeTorrent.Info.Private = false
 
 	// marshal info part and calculate SHA1
