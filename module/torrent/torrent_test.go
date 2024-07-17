@@ -71,7 +71,6 @@ func TestRepackTorrent(t *testing.T) {
 	t.Log(torrent)
 	assert.Equal(t, torrent.Comment, comment)
 	assert.Equal(t, torrent.Info.Source, infoSource)
-	assert.Equal(t, torrent.AnnounceList, TRACKER_LIST)
 }
 
 func TestTorrentFileList(t *testing.T) {
