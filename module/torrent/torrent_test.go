@@ -1,9 +1,10 @@
 package torrent
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRepackTorrent(t *testing.T) {
@@ -16,7 +17,6 @@ func TestRepackTorrent(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	t.Log(s)
-	s = util.StructToString(torrent)
-	t.Log(s)
+	assert.Equal(t, s, "7f3956e5a15b34b62159727c08f944c7e433ad1e")
+	assert.Equal(t, torrent.Info.Name, "lenna.jpg")
 }
