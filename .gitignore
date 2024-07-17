@@ -122,3 +122,4 @@ tmp
 # build files
 /nuxbt
 /module/torrent/test_save.torrent
+/module/torrent/test_torrents/test_save.torrent

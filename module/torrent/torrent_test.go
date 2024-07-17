@@ -6,8 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const testTorrent = "test_torrents/test.torrent"
+const testTorrentFolder = "test_torrents/test_folder.torrent"
+const testTorrentSave = "test_torrents/test_save.torrent"
+
 func TestTorrentHash(t *testing.T) {
-	torrentFilePath := "test.torrent"
+	torrentFilePath := testTorrent
 
 	torrent, err := NewBitTorrentFilePath(torrentFilePath)
 	if err != nil {
@@ -25,7 +29,7 @@ func TestTorrentHash(t *testing.T) {
 }
 
 func TestFolderTorrentHash(t *testing.T) {
-	torrentFilePath := "test_folder.torrent"
+	torrentFilePath := testTorrentFolder
 
 	torrent, err := NewBitTorrentFilePath(torrentFilePath)
 	if err != nil {
@@ -43,7 +47,7 @@ func TestFolderTorrentHash(t *testing.T) {
 }
 
 func TestRepackTorrent(t *testing.T) {
-	torrentFilePath := "test.torrent"
+	torrentFilePath := testTorrent
 
 	torrent, err := NewBitTorrentFilePath(torrentFilePath)
 	if err != nil {
@@ -68,8 +72,8 @@ func TestRepackTorrent(t *testing.T) {
 }
 
 func TestSaveTorrent(t *testing.T) {
-	torrentFilePath := "test.torrent"
-	saveFilePath := "test_save.torrent"
+	torrentFilePath := testTorrent
+	saveFilePath := testTorrentSave
 
 	torrent, err := NewBitTorrentFilePath(torrentFilePath)
 	if err != nil {

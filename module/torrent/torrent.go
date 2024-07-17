@@ -71,6 +71,17 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 	return nil
 }
 
+// ConvertToBytes 将 torrent 文件转换为字节
+func (bencodeTorrent *BitTorrentFile) ConvertToBytes() ([]byte, error) {
+	// Marshal the entire torrent file
+	marshaledTorrent, marshalErr := bencode.Marshal(bencodeTorrent)
+	if marshalErr != nil {
+		return nil, marshalErr
+	}
+
+	return marshaledTorrent, nil
+}
+
 // SaveTo 将 torrent 文件保存到指定路径
 func (bencodeTorrent *BitTorrentFile) SaveTo(filePath string) error {
 	// Marshal the entire torrent file
