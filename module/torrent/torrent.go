@@ -15,6 +15,13 @@ func NewBitTorrentFileFromMultipart(fh *multipart.FileHeader) (*BitTorrentFile, 
 	if err != nil {
 		return nil, err
 	}
+	defer func(fileReader multipart.File) {
+		err := fileReader.Close()
+		if err != nil {
+			fmt.Println("Failed to close multipart file")
+		}
+	}(fileReader)
+
 	decoder := bencode.NewDecoder(fileReader)
 	bencodeTorrent := &BitTorrentFile{}
 	decodeErr := decoder.Decode(bencodeTorrent)
@@ -29,6 +36,13 @@ func NewBitTorrentFileFromMultipart(fh *multipart.FileHeader) (*BitTorrentFile, 
 func NewBitTorrentFilePath(torrentFilePath string) (*BitTorrentFile, error) {
 	// io.Reader
 	fileHeader, err := os.Open(torrentFilePath)
+	defer func(fileHeader *os.File) {
+		err := fileHeader.Close()
+		if err != nil {
+			fmt.Println("Failed to close file", fileHeader.Name())
+		}
+	}(fileHeader)
+
 	if err != nil {
 		return nil, err
 	}
