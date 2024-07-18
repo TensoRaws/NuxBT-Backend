@@ -15,6 +15,7 @@ export const enum ErrorCode {
   UserErrorInvalidUsername,
   UserErrorInvalidPassword,
   UserErrorInvalidEmail,
+  UserErrorInvitationCodeEligibilityTimeNotReached,
   UserErrorInvalidInvitationCode,
   UserErrorInvitationCodeHasReachedLimit
 }

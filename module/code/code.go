@@ -23,6 +23,7 @@ const (
 	UserErrorInvalidUsername
 	UserErrorInvalidPassword
 	UserErrorInvalidEmail
+	UserErrorInvitationCodeEligibilityTimeNotReached
 	UserErrorInvalidInvitationCode
 	UserErrorInvitationCodeHasReachedLimit
 	// gen code end
