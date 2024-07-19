@@ -8,17 +8,17 @@ TAGS ?=
 tidy: ## go mod tidy
 	${GO} mod tidy
 
-.PHONY: build
-build: ## build binary file
-	${GO} build -o nuxbt .
-
 .PNONY: gen
 gen: ## generate CURD code
 	${GO} run ./cmd/gen/main.go
 
 .PHONY: gen_error_code
 gen_error_code: ## generate error code
-	${GO} generate github.com/TensoRaws/NuxBT-Backend/module/code/gen
+	${GO} generate ./...
+
+.PHONY: build
+build: ## build binary file
+	${GO} build -o nuxbt .
 
 .PHONY: test
 test: tidy ## go test
