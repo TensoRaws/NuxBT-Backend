@@ -9,16 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RABC 获取用户角色，存入上下文，进行权限控制
+// RABC 获取用户角色，存入上下文，进行权限控制，allowRoles 为允许的角色
 func RABC(allowRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 假设从JWT或其他方式获取用户ID
 		userID, _ := resp.GetUserIDFromGinContext(c)
 
-		// 从Redis获取用户角色
+		// 从 Redis 获取用户角色
 		roles, err := cache_logic.GetUserRolesByID(userID)
 		if err != nil {
-			// 处理Redis查询错误
+			// 处理 Redis 查询错误
 			log.Logger.Error("RABC GetUserRolesByID Error: " + err.Error())
 			resp.AbortWithMsg(c, code.UnknownError, err.Error())
 			return
@@ -40,7 +39,7 @@ func RABC(allowRoles ...string) gin.HandlerFunc {
 			return
 		}
 
-		// 将角色信息存储在Gin上下文中
+		// 将角色信息存储在 Gin 上下文中
 		c.Set("roles", roles)
 
 		// 继续处理请求
