@@ -113,6 +113,10 @@ func (c Client) SAdd(key string, members ...interface{}) *redis.IntCmd {
 	return c.C.SAdd(c.Ctx, key, members...)
 }
 
+func (c Client) SRem(key string, members ...interface{}) *redis.IntCmd {
+	return c.C.SRem(c.Ctx, key, members...)
+}
+
 func (c Client) Set(key string, value interface{}, expiration time.Duration) *redis.StatusCmd {
 	return c.C.Set(c.Ctx, key, value, expiration)
 }

@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/internal/middleware/rbac"
 	"net/http"
 	"time"
 
@@ -64,6 +65,7 @@ func NewAPI() *gin.Engine {
 			// 用户邀请码生成
 			user.POST("invitation/gen",
 				jwt.RequireAuth(false),
+				rbac.RABC("role.VIP, role.ADMIN"),
 				user_service.InvitationGen)
 			// 用户邀请码列表
 			user.GET("invitation/me",

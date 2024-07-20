@@ -9,6 +9,7 @@ var codeToString = map[Code]string{
 	UnknownError:                                     "Unknown error",
 	AuthErrorTokenHasBeenBlacklisted:                 "Auth error token has been blacklisted",
 	AuthErrorTokenIsInvalid:                          "Auth error token is invalid",
+	AuthErrorNoPermission:                            "Auth error no permission",
 	RequestErrorInvalidParams:                        "Request error invalid params",
 	DatabaseErrorRecordCreateFailed:                  "Database error record create failed",
 	DatabaseErrorRecordNotFound:                      "Database error record not found",

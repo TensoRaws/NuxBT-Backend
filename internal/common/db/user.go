@@ -44,11 +44,11 @@ func GetUserByID(userID int32) (user *model.User, err error) {
 // GetUserRolesByID 根据 userID 获取用户角色列表
 func GetUserRolesByID(userID int32) (roles []string, err error) {
 	q := query.UserRole
-	user, err := q.Where(q.UserID.Eq(userID)).Find()
+	r, err := q.Where(q.UserID.Eq(userID)).Find()
 	if err != nil {
 		return nil, err
 	}
-	for _, v := range user {
+	for _, v := range r {
 		roles = append(roles, v.Role)
 	}
 	return roles, nil
