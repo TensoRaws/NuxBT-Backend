@@ -30,12 +30,10 @@ var CmdWeb = &cli.Command{
 
 func runWeb(ctx *cli.Context) error {
 	defer func() {
-		for k := range cache.Clients {
-			err := cache.Clients[k].C.Close()
-			if err != nil {
-				fmt.Printf("close redis: %v", err)
-				return
-			}
+		err := cache.Cache.C.Close()
+		if err != nil {
+			fmt.Printf("close redis: %v", err)
+			return
 		}
 	}()
 	config.Init()

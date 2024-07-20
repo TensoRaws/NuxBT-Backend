@@ -17,12 +17,12 @@ type UserInvitationMapValue struct {
 
 // GenerateInvitationCode 生成邀请码
 func GenerateInvitationCode(userID int32) (string, error) {
-	c := cache.Clients[cache.InvitationCode]
+	c := cache.Cache
 
 	expTime := time.Duration(config.RegisterConfig.InvitationCodeExpirationTime) * time.Hour * 24
 	code := util.GetRandomString(24)
 	// 将生成的邀请码存储到 Redis
-	err := c.Set(code, userID, expTime).Err()
+	err := c.Set("user:invitation"+code, userID, expTime).Err()
 	if err != nil {
 		return "", err
 	}
@@ -55,7 +55,7 @@ type UserInvitation struct {
 
 // GetInvitationCodeListByUserID 获取用户近期的邀请码信息
 func GetInvitationCodeListByUserID(userID int32) ([]UserInvitation, error) {
-	c := cache.Clients[cache.InvitationCode]
+	c := cache.Cache
 
 	// 从 Redis 中获取用户的邀请码信息
 	invitations, err := c.HGetAll(fmt.Sprintf("user:%d:invitations", userID)).Result()
@@ -81,7 +81,7 @@ func GetInvitationCodeListByUserID(userID int32) ([]UserInvitation, error) {
 
 // GetValidInvitationCodeCountByUserID 获取用户有效的邀请码数量
 func GetValidInvitationCodeCountByUserID(userID int32) (int, error) {
-	c := cache.Clients[cache.InvitationCode]
+	c := cache.Cache
 
 	invitations, err := c.HGetAll(fmt.Sprintf("user:%d:invitations", userID)).Result()
 	if err != nil {
@@ -106,9 +106,9 @@ func GetValidInvitationCodeCountByUserID(userID int32) (int, error) {
 
 // ConsumeInvitationCode 注册成功后消费邀请码
 func ConsumeInvitationCode(code string, userID int32) error {
-	c := cache.Clients[cache.InvitationCode]
+	c := cache.Cache
 
-	inviterID, err := c.Get(code).Int()
+	inviterID, err := c.Get("user:invitation" + code).Int()
 	if err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func ConsumeInvitationCode(code string, userID int32) error {
 	}
 
 	// 删除邀请码
-	err = c.Del(code).Err()
+	err = c.Del("user:invitation" + code).Err()
 	if err != nil {
 		return err
 	}
@@ -142,9 +142,9 @@ func ConsumeInvitationCode(code string, userID int32) error {
 
 // GetInviterIDByInvitationCode 根据邀请码获取邀请者的 userID
 func GetInviterIDByInvitationCode(code string) (int32, error) {
-	c := cache.Clients[cache.InvitationCode]
+	c := cache.Cache
 
-	userID, err := c.Get(code).Int()
+	userID, err := c.Get("user:invitation" + code).Int()
 	if err != nil {
 		return 0, err
 	}

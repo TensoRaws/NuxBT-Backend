@@ -18,7 +18,7 @@ func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 		log.Logger.Info("Get token successfully")
 
 		// 检查 Token 是否存在于 Redis 黑名单中
-		exists := redisClient.Exists(token).Val()
+		exists := redisClient.Exists("JWT" + token).Val()
 		if exists > 0 {
 			log.Logger.Info("Token has been blacklisted")
 			resp.Abort(c, code.AuthErrorTokenHasBeenBlacklisted)
@@ -39,7 +39,7 @@ func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 
 		// 如果启用拉黑模式，处理请求拉黑 Token
 		if addBlacklist {
-			err := redisClient.Set(token, "", GetJWTTokenExpiredDuration()).Err()
+			err := redisClient.Set("JWT"+token, "", GetJWTTokenExpiredDuration()).Err()
 			if err != nil {
 				log.Logger.Error("Error adding token to blacklist: " + err.Error())
 			}
