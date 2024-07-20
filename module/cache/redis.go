@@ -101,12 +101,20 @@ func (c Client) ZAddNX(key string, members ...redis.Z) *redis.IntCmd {
 	return c.C.ZAddNX(c.Ctx, key, members...)
 }
 
+func (c Client) SMembers(key string) *redis.StringSliceCmd {
+	return c.C.SMembers(c.Ctx, key)
+}
+
 func (c Client) SIsMember(key string, member interface{}) *redis.BoolCmd {
 	return c.C.SIsMember(c.Ctx, key, member)
 }
 
 func (c Client) SAdd(key string, members ...interface{}) *redis.IntCmd {
 	return c.C.SAdd(c.Ctx, key, members...)
+}
+
+func (c Client) SRem(key string, members ...interface{}) *redis.IntCmd {
+	return c.C.SRem(c.Ctx, key, members...)
 }
 
 func (c Client) Set(key string, value interface{}, expiration time.Duration) *redis.StatusCmd {

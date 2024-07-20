@@ -8,9 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const JWT_PREFIX = "jwt:"
+
 // RequireAuth 鉴权中间件
 // 如果用户携带的 token 验证通过，将 user_id 存入上下文中然后执行下一个 Handler
-func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
+func RequireAuth(addBlacklist bool) gin.HandlerFunc {
+	redisClient := cache.Cache
+
 	return func(c *gin.Context) {
 		// 从请求头中获取 token
 		token := c.Request.Header.Get("Authorization")
@@ -18,7 +22,7 @@ func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 		log.Logger.Info("Get token successfully")
 
 		// 检查 Token 是否存在于 Redis 黑名单中
-		exists := redisClient.Exists(token).Val()
+		exists := redisClient.Exists(JWT_PREFIX + token).Val()
 		if exists > 0 {
 			log.Logger.Info("Token has been blacklisted")
 			resp.Abort(c, code.AuthErrorTokenHasBeenBlacklisted)
@@ -39,7 +43,7 @@ func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
 
 		// 如果启用拉黑模式，处理请求拉黑 Token
 		if addBlacklist {
-			err := redisClient.Set(token, "", GetJWTTokenExpiredDuration()).Err()
+			err := redisClient.Set(JWT_PREFIX+token, "", GetJWTTokenExpiredDuration()).Err()
 			if err != nil {
 				log.Logger.Error("Error adding token to blacklist: " + err.Error())
 			}

@@ -12,7 +12,8 @@ import (
 )
 
 // Response 缓存接口响应的中间件，queryFilter 为需要去除的 query 参数，使用其他的来构建缓存 key
-func Response(redisClient *cache.Client, ttl time.Duration, queryFilter ...string) gin.HandlerFunc {
+func Response(ttl time.Duration, queryFilter ...string) gin.HandlerFunc {
+	redisClient := cache.Cache
 	redisStore := persist.NewRedisStore(redisClient.C)
 
 	strategy := gin_cache.WithCacheStrategyByRequest(

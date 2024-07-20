@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -37,7 +38,7 @@ func ProfileMe(c *gin.Context) {
 		return
 	}
 
-	roles, err := db.GetUserRolesByID(userID)
+	roles, err := cache.GetUserRolesByID(userID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}
@@ -79,7 +80,7 @@ func ProfileOthers(c *gin.Context) {
 		return
 	}
 
-	roles, err := db.GetUserRolesByID(req.UserID)
+	roles, err := cache.GetUserRolesByID(req.UserID)
 	if err != nil {
 		log.Logger.Info("Failed to get user roles: " + err.Error())
 		roles = []string{}

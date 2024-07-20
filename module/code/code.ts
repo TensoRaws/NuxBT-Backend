@@ -7,6 +7,7 @@ export const enum ErrorCode {
   UnknownError,
   AuthErrorTokenHasBeenBlacklisted,
   AuthErrorTokenIsInvalid,
+  AuthErrorNoPermission,
   RequestErrorInvalidParams,
   DatabaseErrorRecordCreateFailed,
   DatabaseErrorRecordNotFound,

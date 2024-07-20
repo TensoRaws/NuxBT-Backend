@@ -13,19 +13,7 @@ var once sync.Once
 
 type RDB uint8
 
-const (
-	IPLimit RDB = iota
-	JWTBlacklist
-	RespCache
-	InvitationCode
-)
-
-var Clients = map[RDB]*Client{
-	IPLimit:        {},
-	JWTBlacklist:   {},
-	RespCache:      {},
-	InvitationCode: {},
-}
+var Cache *Client
 
 type Client struct {
 	C   *redis.Client
@@ -46,6 +34,6 @@ func (w responseWriter) Write(b []byte) (int, error) {
 
 func Init() {
 	once.Do(func() {
-		NewRedisClients(Clients)
+		Cache = NewRedisClient(0)
 	})
 }
