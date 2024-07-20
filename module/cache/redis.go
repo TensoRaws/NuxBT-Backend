@@ -101,6 +101,10 @@ func (c Client) ZAddNX(key string, members ...redis.Z) *redis.IntCmd {
 	return c.C.ZAddNX(c.Ctx, key, members...)
 }
 
+func (c Client) SMembers(key string) *redis.StringSliceCmd {
+	return c.C.SMembers(c.Ctx, key)
+}
+
 func (c Client) SIsMember(key string, member interface{}) *redis.BoolCmd {
 	return c.C.SIsMember(c.Ctx, key, member)
 }

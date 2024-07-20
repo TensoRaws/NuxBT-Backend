@@ -12,7 +12,9 @@ import (
 )
 
 // NewRateLimiter returns a new instance of a rate limiter middleware.
-func NewRateLimiter(redisClient *cache.Client, limit int, t time.Duration) gin.HandlerFunc {
+func NewRateLimiter(limit int, t time.Duration) gin.HandlerFunc {
+	redisClient := cache.Cache
+
 	rate := limiter.Rate{
 		Period: t,
 		Limit:  int64(limit),

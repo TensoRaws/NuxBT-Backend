@@ -10,7 +10,9 @@ import (
 
 // RequireAuth 鉴权中间件
 // 如果用户携带的 token 验证通过，将 user_id 存入上下文中然后执行下一个 Handler
-func RequireAuth(redisClient *cache.Client, addBlacklist bool) gin.HandlerFunc {
+func RequireAuth(addBlacklist bool) gin.HandlerFunc {
+	redisClient := cache.Cache
+
 	return func(c *gin.Context) {
 		// 从请求头中获取 token
 		token := c.Request.Header.Get("Authorization")

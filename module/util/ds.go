@@ -32,3 +32,13 @@ func StructToMap(s interface{}) (map[string]interface{}, error) {
 
 	return result, nil
 }
+
+// CheckStringInSlice 检查字符串是否在切片中
+func CheckStringInSlice(item string, slice []string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}

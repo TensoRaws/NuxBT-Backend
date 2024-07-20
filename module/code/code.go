@@ -12,6 +12,7 @@ const (
 	// AuthError 鉴权错误
 	AuthErrorTokenHasBeenBlacklisted
 	AuthErrorTokenIsInvalid
+	AuthErrorNoPermission
 	// RequestError 请求错误
 	RequestErrorInvalidParams
 	// DatabaseError 数据库错误
