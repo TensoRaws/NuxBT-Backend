@@ -11,8 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UserRoutes 用户路由组
-func UserRoutes(api *gin.RouterGroup) {
+// UserRouterGroup 用户路由组
+func UserRouterGroup(api *gin.RouterGroup) {
 	user := api.Group("user/")
 
 	// 用户注册

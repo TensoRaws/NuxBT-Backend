@@ -25,7 +25,7 @@ func NewAPI() *gin.Engine {
 
 	api := r.Group("/api/v1/")
 	{
-		UserRoutes(api)
+		UserRouterGroup(api)
 	}
 
 	return r
