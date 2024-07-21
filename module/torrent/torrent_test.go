@@ -100,6 +100,31 @@ func TestTorrentFileList(t *testing.T) {
 	assert.Equal(t, fileList[0].Path, []string{"lenna.jpg"})
 }
 
+func TestTorrentFileTotalSize(t *testing.T) {
+	torrentFilePath := testTorrentFolder
+
+	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fileSize := torrent.GetTotalSize()
+	t.Log(fileSize)
+	assert.Equal(t, fileSize, int64(39113))
+
+	torrentFilePath = testTorrent
+	torrent, err = NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fileSize = torrent.GetTotalSize()
+	t.Log(fileSize)
+	assert.Equal(t, fileSize, int64(8211))
+}
+
 func TestSaveTorrent(t *testing.T) {
 	torrentFilePath := testTorrent
 	saveFilePath := testTorrentSave

@@ -120,6 +120,22 @@ func (bencodeTorrent *BitTorrentFile) GetFileList() []BitTorrentFileList {
 	return fileList
 }
 
+// GetTotalSize 获取 torrent 文件的总大小，单位为字节
+func (bencodeTorrent *BitTorrentFile) GetTotalSize() int64 {
+	var totalSize uint64
+	// 当 torrent 文件只有一个文件时，Info.Files 为空
+	if len(bencodeTorrent.Info.Files) == 0 {
+		totalSize = bencodeTorrent.Info.Length
+		return int64(totalSize)
+	}
+
+	// 当 torrent 文件有多个文件时，Info.Files 不为空，从中获取文件列表
+	for _, file := range bencodeTorrent.Info.Files {
+		totalSize += file.Length
+	}
+	return int64(totalSize)
+}
+
 // ConvertToBytes 将 torrent 文件转换为字节
 func (bencodeTorrent *BitTorrentFile) ConvertToBytes() ([]byte, error) {
 	// Marshal the entire torrent file
