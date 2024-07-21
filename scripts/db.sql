@@ -7,12 +7,12 @@ CREATE TABLE `user` (
   `private` BOOLEAN NOT NULL DEFAULT false, -- 是否私密，默认为 false
   `experience` INT DEFAULT 0, -- 用户经验值，默认为 0
   `inviter` INT NOT NULL DEFAULT 0, -- 邀请人ID
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 账户创建时间
-  `last_active` DATETIME, -- 最后活跃时间
   `avatar` VARCHAR(255), -- 用户头像链接
   `signature` TEXT, -- 用户签名
   `background` VARCHAR(255), -- 用户背景图片链接
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 账户创建时间
   `deleted_at` DATETIME, -- 账户删除时间
+  `last_active` DATETIME, -- 最后活跃时间
   PRIMARY KEY (`user_id`)
 );
 
@@ -27,6 +27,7 @@ CREATE TABLE `user_role` (
   UNIQUE KEY `uk_user_role` (`user_id`, `role`)
 );
 
+-- 创建种子表
 CREATE TABLE `torrent` (
   `torrent_id` INT NOT NULL AUTO_INCREMENT,
   `hash` VARCHAR(255) NOT NULL UNIQUE,
@@ -34,8 +35,6 @@ CREATE TABLE `torrent` (
   `official` BOOLEAN NOT NULL DEFAULT FALSE,
   `size` BIGINT NOT NULL,
   `status` VARCHAR(255) NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `deleted_at` DATETIME, -- 软删除时间戳
   `title` VARCHAR(255) NOT NULL,
   `subtitle` VARCHAR(255) NOT NULL,
   `description` TEXT NOT NULL,
@@ -48,5 +47,8 @@ CREATE TABLE `torrent` (
   `language` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
   `file_list` TEXT NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` DATETIME, -- 软删除时间戳
   PRIMARY KEY (`torrent_id`)
 );

@@ -33,8 +33,6 @@ func newTorrent(db *gorm.DB, opts ...gen.DOOption) torrent {
 	_torrent.Official = field.NewBool(tableName, "official")
 	_torrent.Size = field.NewInt64(tableName, "size")
 	_torrent.Status = field.NewString(tableName, "status")
-	_torrent.CreatedAt = field.NewTime(tableName, "created_at")
-	_torrent.DeletedAt = field.NewField(tableName, "deleted_at")
 	_torrent.Title = field.NewString(tableName, "title")
 	_torrent.Subtitle = field.NewString(tableName, "subtitle")
 	_torrent.Description = field.NewString(tableName, "description")
@@ -47,6 +45,9 @@ func newTorrent(db *gorm.DB, opts ...gen.DOOption) torrent {
 	_torrent.Language = field.NewString(tableName, "language")
 	_torrent.URL = field.NewString(tableName, "url")
 	_torrent.FileList = field.NewString(tableName, "file_list")
+	_torrent.CreatedAt = field.NewTime(tableName, "created_at")
+	_torrent.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_torrent.DeletedAt = field.NewField(tableName, "deleted_at")
 
 	_torrent.fillFieldMap()
 
@@ -63,8 +64,6 @@ type torrent struct {
 	Official    field.Bool
 	Size        field.Int64
 	Status      field.String
-	CreatedAt   field.Time
-	DeletedAt   field.Field
 	Title       field.String
 	Subtitle    field.String
 	Description field.String
@@ -77,6 +76,9 @@ type torrent struct {
 	Language    field.String
 	URL         field.String
 	FileList    field.String
+	CreatedAt   field.Time
+	UpdatedAt   field.Time
+	DeletedAt   field.Field
 
 	fieldMap map[string]field.Expr
 }
@@ -99,8 +101,6 @@ func (t *torrent) updateTableName(table string) *torrent {
 	t.Official = field.NewBool(table, "official")
 	t.Size = field.NewInt64(table, "size")
 	t.Status = field.NewString(table, "status")
-	t.CreatedAt = field.NewTime(table, "created_at")
-	t.DeletedAt = field.NewField(table, "deleted_at")
 	t.Title = field.NewString(table, "title")
 	t.Subtitle = field.NewString(table, "subtitle")
 	t.Description = field.NewString(table, "description")
@@ -113,6 +113,9 @@ func (t *torrent) updateTableName(table string) *torrent {
 	t.Language = field.NewString(table, "language")
 	t.URL = field.NewString(table, "url")
 	t.FileList = field.NewString(table, "file_list")
+	t.CreatedAt = field.NewTime(table, "created_at")
+	t.UpdatedAt = field.NewTime(table, "updated_at")
+	t.DeletedAt = field.NewField(table, "deleted_at")
 
 	t.fillFieldMap()
 
@@ -129,15 +132,13 @@ func (t *torrent) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (t *torrent) fillFieldMap() {
-	t.fieldMap = make(map[string]field.Expr, 20)
+	t.fieldMap = make(map[string]field.Expr, 21)
 	t.fieldMap["torrent_id"] = t.TorrentID
 	t.fieldMap["hash"] = t.Hash
 	t.fieldMap["uploader_id"] = t.UploaderID
 	t.fieldMap["official"] = t.Official
 	t.fieldMap["size"] = t.Size
 	t.fieldMap["status"] = t.Status
-	t.fieldMap["created_at"] = t.CreatedAt
-	t.fieldMap["deleted_at"] = t.DeletedAt
 	t.fieldMap["title"] = t.Title
 	t.fieldMap["subtitle"] = t.Subtitle
 	t.fieldMap["description"] = t.Description
@@ -150,6 +151,9 @@ func (t *torrent) fillFieldMap() {
 	t.fieldMap["language"] = t.Language
 	t.fieldMap["url"] = t.URL
 	t.fieldMap["file_list"] = t.FileList
+	t.fieldMap["created_at"] = t.CreatedAt
+	t.fieldMap["updated_at"] = t.UpdatedAt
+	t.fieldMap["deleted_at"] = t.DeletedAt
 }
 
 func (t torrent) clone(db *gorm.DB) torrent {

@@ -20,8 +20,6 @@ type Torrent struct {
 	Official    bool           `gorm:"column:official;type:tinyint(1);not null" json:"official"`
 	Size        int64          `gorm:"column:size;type:bigint;not null" json:"size"`
 	Status      string         `gorm:"column:status;type:varchar(255);not null" json:"status"`
-	CreatedAt   *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
-	DeletedAt   gorm.DeletedAt `gorm:"column:deleted_at;type:datetime" json:"deleted_at"`
 	Title       string         `gorm:"column:title;type:varchar(255);not null" json:"title"`
 	Subtitle    string         `gorm:"column:subtitle;type:varchar(255);not null" json:"subtitle"`
 	Description string         `gorm:"column:description;type:text;not null" json:"description"`
@@ -34,6 +32,9 @@ type Torrent struct {
 	Language    string         `gorm:"column:language;type:varchar(255);not null" json:"language"`
 	URL         string         `gorm:"column:url;type:varchar(255);not null" json:"url"`
 	FileList    string         `gorm:"column:file_list;type:text;not null" json:"file_list"`
+	CreatedAt   *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt   *time.Time     `gorm:"column:updated_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"column:deleted_at;type:datetime" json:"deleted_at"`
 }
 
 // TableName Torrent's table name
