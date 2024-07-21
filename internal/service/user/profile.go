@@ -18,7 +18,7 @@ type ProfileResponse struct {
 	Inviter    *int32   `json:"inviter,omitempty"`
 	LastActive string   `json:"last_active"`
 	Private    bool     `json:"private"`
-	Roles      []string `json:"roles,omitempty"`
+	Roles      []string `json:"roles"`
 	Signature  string   `json:"signature"`
 	UserID     int32    `json:"user_id"`
 	Username   string   `json:"username"`
@@ -97,7 +97,7 @@ func ProfileOthers(c *gin.Context) {
 			Inviter:    nil,
 			LastActive: user.LastActive.Format("2006-01-02 15:04:05"),
 			Private:    true,
-			Roles:      nil,
+			Roles:      roles,
 			Signature:  user.Signature,
 			UserID:     user.UserID,
 			Username:   user.Username,

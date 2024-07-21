@@ -48,6 +48,11 @@ func NewAPI() *gin.Engine {
 			user.POST("password/reset",
 				jwt.RequireAuth(false),
 				user_service.ResetPassword)
+			// 用户角色
+			user.GET("role/me",
+				jwt.RequireAuth(false),
+				user_service.RoleMe,
+			)
 			// 用户信息
 			user.GET("profile/me",
 				jwt.RequireAuth(false),
@@ -66,7 +71,7 @@ func NewAPI() *gin.Engine {
 			// 用户邀请码生成
 			user.POST("invitation/gen",
 				jwt.RequireAuth(false),
-				rbac.RABC(role.ADVANCED_USER),
+				rbac.RABC(role.ADVANCED_USER, role.VIP), // 高级用户权限
 				user_service.InvitationGen)
 			// 用户邀请码列表
 			user.GET("invitation/me",
