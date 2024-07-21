@@ -43,6 +43,7 @@ func initialize() {
 	err = DB.AutoMigrate(
 		model.User{},
 		model.UserRole{},
+		model.Torrent{},
 	)
 	if err != nil {
 		log.Logger.Error(err)

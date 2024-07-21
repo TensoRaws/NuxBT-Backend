@@ -1,5 +1,4 @@
 -- 创建用户表
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_id` INT NOT NULL AUTO_INCREMENT, -- 使用 AUTO_INCREMENT 作为自增主键
   `username` VARCHAR(255) NOT NULL UNIQUE, -- 用户名
@@ -26,4 +25,28 @@ CREATE TABLE `user_role` (
   `deleted_at` DATETIME, -- 软删除时间戳
   PRIMARY KEY (`role_id`),
   UNIQUE KEY `uk_user_role` (`user_id`, `role`)
+);
+
+CREATE TABLE `torrent` (
+  `torrent_id` INT NOT NULL AUTO_INCREMENT,
+  `hash` VARCHAR(255) NOT NULL UNIQUE,
+  `uploader_id` INT NOT NULL,
+  `official` BOOLEAN NOT NULL DEFAULT FALSE,
+  `size` BIGINT NOT NULL,
+  `status` VARCHAR(255) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` DATETIME, -- 软删除时间戳
+  `title` VARCHAR(255) NOT NULL,
+  `subtitle` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `genre` VARCHAR(255) NOT NULL,
+  `anidb_id` INT NOT NULL,
+  `img` VARCHAR(255) NOT NULL,
+  `resolution` VARCHAR(255) NOT NULL,
+  `video_codec` VARCHAR(255) NOT NULL,
+  `audio_codec` VARCHAR(255) NOT NULL,
+  `language` VARCHAR(255) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `file_list` TEXT NOT NULL,
+  PRIMARY KEY (`torrent_id`)
 );
