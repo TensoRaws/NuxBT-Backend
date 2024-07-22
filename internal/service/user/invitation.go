@@ -60,7 +60,7 @@ func InvitationGen(c *gin.Context) {
 		return
 	}
 
-	resp.OKWithData(c, InvitationGenResponse{InvitationCode: codeGen})
+	resp.OKWithData(c, &InvitationGenResponse{InvitationCode: codeGen})
 	log.Logger.Infof("User %d generated invitation code_gen %s successfully!", userID, codeGen)
 }
 

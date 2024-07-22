@@ -107,7 +107,7 @@ func Register(c *gin.Context) {
 		}
 	}
 
-	resp.OKWithData(c, RegisterDataResponse{
+	resp.OKWithData(c, &RegisterDataResponse{
 		Email:    user.Email,
 		UserID:   user.UserID,
 		Username: user.Username,
