@@ -26,9 +26,9 @@ type BitTorrentFileList struct {
 }
 
 type BitTorrentFileEditStrategy struct {
-	Announce     string
+	Announce     *string
 	AnnounceList []string
-	Comment      string
+	Comment      *string
 	Private      bool
-	InfoSource   string
+	InfoSource   *string
 }

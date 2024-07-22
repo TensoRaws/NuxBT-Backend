@@ -74,8 +74,8 @@ func (bencodeTorrent *BitTorrentFile) GetHash() string {
 // Repack 重新打包 torrent 文件
 func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStrategy) error {
 	// Re-pack torrent
-	if editStrategy.Announce != "" {
-		bencodeTorrent.Announce = editStrategy.Announce
+	if editStrategy.Announce != nil {
+		bencodeTorrent.Announce = *editStrategy.Announce
 	}
 	if editStrategy.AnnounceList != nil {
 		var announceList [][]string
@@ -84,11 +84,11 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 		}
 		bencodeTorrent.AnnounceList = announceList
 	}
-	if editStrategy.Comment != "" {
-		bencodeTorrent.Comment = editStrategy.Comment
+	if editStrategy.Comment != nil {
+		bencodeTorrent.Comment = *editStrategy.Comment
 	}
-	if editStrategy.InfoSource != "" {
-		bencodeTorrent.Info.Source = editStrategy.InfoSource
+	if editStrategy.InfoSource != nil {
+		bencodeTorrent.Info.Source = *editStrategy.InfoSource
 	}
 
 	bencodeTorrent.Info.Private = editStrategy.Private
