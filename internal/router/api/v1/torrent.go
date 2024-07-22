@@ -24,6 +24,6 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 	// 获取种子文件列表
 	torrent.GET("filelist",
 		jwt.RequireAuth(false),
-		middleware_cache.Response(1*time.Hour),
+		middleware_cache.Response(24*time.Hour),
 		torrent_service.FileList)
 }

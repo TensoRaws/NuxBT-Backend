@@ -1,6 +1,7 @@
 package torrent
 
 import (
+	"bytes"
 	"crypto/sha1"
 	"fmt"
 	"mime/multipart"
@@ -23,6 +24,20 @@ func NewBitTorrentFileFromMultipart(fh *multipart.FileHeader) (*BitTorrentFile, 
 	}(fileReader)
 
 	decoder := bencode.NewDecoder(fileReader)
+	bencodeTorrent := &BitTorrentFile{}
+	decodeErr := decoder.Decode(bencodeTorrent)
+	if decodeErr != nil {
+		return nil, decodeErr
+	}
+
+	return bencodeTorrent, nil
+}
+
+// NewBitTorrentFileFromBytes 通过字节创建 BitTorrentFile
+func NewBitTorrentFileFromBytes(torrentBytes []byte) (*BitTorrentFile, error) {
+	torrentBytesReader := bytes.NewReader(torrentBytes)
+
+	decoder := bencode.NewDecoder(torrentBytesReader)
 	bencodeTorrent := &BitTorrentFile{}
 	decodeErr := decoder.Decode(bencodeTorrent)
 	if decodeErr != nil {
