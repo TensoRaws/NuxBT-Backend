@@ -37,6 +37,7 @@ CREATE TABLE `torrent` (
   `status` VARCHAR(255) NOT NULL,
   `title` VARCHAR(255) NOT NULL,
   `subtitle` VARCHAR(255) NOT NULL,
+  `essay` TEXT,
   `description` TEXT NOT NULL,
   `genre` VARCHAR(255) NOT NULL,
   `anidb_id` INT NOT NULL,

@@ -35,6 +35,7 @@ func newTorrent(db *gorm.DB, opts ...gen.DOOption) torrent {
 	_torrent.Status = field.NewString(tableName, "status")
 	_torrent.Title = field.NewString(tableName, "title")
 	_torrent.Subtitle = field.NewString(tableName, "subtitle")
+	_torrent.Essay = field.NewString(tableName, "essay")
 	_torrent.Description = field.NewString(tableName, "description")
 	_torrent.Genre = field.NewString(tableName, "genre")
 	_torrent.AnidbID = field.NewInt32(tableName, "anidb_id")
@@ -66,6 +67,7 @@ type torrent struct {
 	Status      field.String
 	Title       field.String
 	Subtitle    field.String
+	Essay       field.String
 	Description field.String
 	Genre       field.String
 	AnidbID     field.Int32
@@ -103,6 +105,7 @@ func (t *torrent) updateTableName(table string) *torrent {
 	t.Status = field.NewString(table, "status")
 	t.Title = field.NewString(table, "title")
 	t.Subtitle = field.NewString(table, "subtitle")
+	t.Essay = field.NewString(table, "essay")
 	t.Description = field.NewString(table, "description")
 	t.Genre = field.NewString(table, "genre")
 	t.AnidbID = field.NewInt32(table, "anidb_id")
@@ -132,7 +135,7 @@ func (t *torrent) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (t *torrent) fillFieldMap() {
-	t.fieldMap = make(map[string]field.Expr, 21)
+	t.fieldMap = make(map[string]field.Expr, 22)
 	t.fieldMap["torrent_id"] = t.TorrentID
 	t.fieldMap["hash"] = t.Hash
 	t.fieldMap["uploader_id"] = t.UploaderID
@@ -141,6 +144,7 @@ func (t *torrent) fillFieldMap() {
 	t.fieldMap["status"] = t.Status
 	t.fieldMap["title"] = t.Title
 	t.fieldMap["subtitle"] = t.Subtitle
+	t.fieldMap["essay"] = t.Essay
 	t.fieldMap["description"] = t.Description
 	t.fieldMap["genre"] = t.Genre
 	t.fieldMap["anidb_id"] = t.AnidbID

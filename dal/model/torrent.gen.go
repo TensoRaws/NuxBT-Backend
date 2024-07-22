@@ -22,6 +22,7 @@ type Torrent struct {
 	Status      string         `gorm:"column:status;type:varchar(255);not null" json:"status"`
 	Title       string         `gorm:"column:title;type:varchar(255);not null" json:"title"`
 	Subtitle    string         `gorm:"column:subtitle;type:varchar(255);not null" json:"subtitle"`
+	Essay       string         `gorm:"column:essay;type:text" json:"essay"`
 	Description string         `gorm:"column:description;type:text;not null" json:"description"`
 	Genre       string         `gorm:"column:genre;type:varchar(255);not null" json:"genre"`
 	AnidbID     int32          `gorm:"column:anidb_id;type:int;not null" json:"anidb_id"`
