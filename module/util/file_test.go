@@ -22,22 +22,22 @@ func TestByteCountBinary(t *testing.T) {
 		{
 			name: "KB",
 			args: args{b: 1024},
-			want: "1.0 kB",
+			want: "1.0 KiB",
 		},
 		{
 			name: "MB",
 			args: args{b: 1024 * 1024 * 3},
-			want: "3.1 MB",
+			want: "3.0 MiB",
 		},
 		{
 			name: "GB",
 			args: args{b: 1024 * 1024 * 1024 * 3},
-			want: "3.2 GB",
+			want: "3.0 GiB",
 		},
 		{
 			name: "TB",
 			args: args{b: 1024 * 1024 * 1024 * 1024 * 3},
-			want: "3.3 TB",
+			want: "3.0 TiB",
 		},
 	}
 	for _, tt := range tests {
