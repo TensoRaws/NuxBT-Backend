@@ -12,6 +12,8 @@ export const enum ErrorCode {
   DatabaseErrorRecordCreateFailed,
   DatabaseErrorRecordNotFound,
   DatabaseErrorRecordPatchFailed,
+  OssErrorPutFailed,
+  OssErrorGetFailed,
   UserErrorRegisterNotAllowed,
   UserErrorInvalidUsername,
   UserErrorInvalidPassword,

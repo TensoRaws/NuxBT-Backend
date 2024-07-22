@@ -22,7 +22,7 @@ type UploadRequest struct {
 	AudioCodec  string               `form:"audio_codec" binding:"required,oneof=FLAC AAC AC3 DTS DDP LPCM other"`
 	Description string               `form:"description" binding:"required"`
 	Essay       *string              `form:"essay" binding:"omitempty"`
-	Genre       string               `form:"genre" binding:"required,oneof=BDrip WEBrip DVDrip Remux Blu-ray WEB-DL DVD HDTV other"`
+	Genre       string               `form:"genre" binding:"required,oneof=BDrip WEBrip DVDrip Remux Blu-ray WEB-DL DVD HDTV other"` //nolint:lll
 	Img         string               `form:"img" binding:"required"`
 	Language    string               `form:"language" binding:"required,oneof=Chinese English Japanese other"`
 	Official    string               `form:"official" binding:"required,oneof=true false"`
@@ -43,6 +43,8 @@ func Upload(c *gin.Context) {
 
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
+	isOfficial := req.Official == "true"
+
 	roles, err := resp.GetRolesFromGinContext(c)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UnknownError, err.Error())
@@ -51,7 +53,7 @@ func Upload(c *gin.Context) {
 	}
 
 	// 判断是否有官方权限，没有的话不能发官种
-	if !util.CheckStringInSlice(role.ADMIN, roles) && req.Official == "true" {
+	if !util.CheckStringInSlice(role.ADMIN, roles) && isOfficial {
 		resp.AbortWithMsg(c, code.RequestErrorInvalidParams, "official permission required")
 		log.Logger.Errorf("official permission required, user ID: %v", userID)
 		return
@@ -75,7 +77,7 @@ func Upload(c *gin.Context) {
 
 	// 开始清洗种子，官种和非官种的清洗策略不同，官种可能会变更 hash
 	var strategy torrent.BitTorrentFileEditStrategy
-	if req.Official == "true" {
+	if isOfficial {
 		strategy = torrent.BitTorrentFileEditStrategy{
 			AnnounceList: torrent.TRACKER_LIST,
 			Comment:      &config.ServerConfig.Name,
@@ -110,7 +112,7 @@ func Upload(c *gin.Context) {
 	torrentKey := torrentFile.Info.Name + "--" + hash + ".torrent"
 	err = oss.Put(torrentKey, torrentBytesReader)
 	if err != nil {
-		resp.AbortWithMsg(c, code.OSSErrorPutFailed, err.Error())
+		resp.AbortWithMsg(c, code.OssErrorPutFailed, err.Error())
 		log.Logger.Error("failed to put torrent file to oss: " + err.Error())
 		return
 	}
@@ -119,7 +121,7 @@ func Upload(c *gin.Context) {
 	err = db.CreateTorrent(&model.Torrent{
 		Hash:        hash,
 		UploaderID:  userID,
-		Official:    req.Official == "true",
+		Official:    isOfficial,
 		Size:        size,
 		Status:      status,
 		Title:       req.Title,
