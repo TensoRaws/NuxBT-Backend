@@ -12,7 +12,7 @@ func OK(c *gin.Context) {
 	resp := map[string]interface{}{
 		"success": true,
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, &resp)
 }
 
 // OKWithData 返回成功信息，携带自定义数据（结构体）
@@ -22,7 +22,7 @@ func OKWithData(c *gin.Context, data interface{}) {
 		"data":    data,
 	}
 
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, &resp)
 }
 
 // Abort 返回错误码
@@ -33,9 +33,9 @@ func Abort(c *gin.Context, code code.Code) {
 	}
 	resp := map[string]interface{}{
 		"success": false,
-		"error":   errorResp,
+		"error":   &errorResp,
 	}
-	c.AbortWithStatusJSON(http.StatusOK, resp)
+	c.AbortWithStatusJSON(http.StatusOK, &resp)
 }
 
 // AbortWithMsg 返回错误码，自定义错误信息
@@ -46,7 +46,7 @@ func AbortWithMsg(c *gin.Context, code code.Code, msg string) {
 	}
 	resp := map[string]interface{}{
 		"success": false,
-		"error":   errorResp,
+		"error":   &errorResp,
 	}
-	c.AbortWithStatusJSON(http.StatusOK, resp)
+	c.AbortWithStatusJSON(http.StatusOK, &resp)
 }

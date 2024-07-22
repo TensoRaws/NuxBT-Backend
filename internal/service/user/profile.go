@@ -55,7 +55,7 @@ func ProfileMe(c *gin.Context) {
 		roles = []string{}
 	}
 
-	resp.OKWithData(c, ProfileResponse{
+	resp.OKWithData(c, &ProfileResponse{
 		Avatar:     user.Avatar,
 		Background: user.Background,
 		CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
@@ -99,7 +99,7 @@ func ProfileOthers(c *gin.Context) {
 	// 判断是否为隐私账号
 	if user.Private {
 		// 只显示最基础信息
-		resp.OKWithData(c, ProfileResponse{
+		resp.OKWithData(c, &ProfileResponse{
 			Avatar:     user.Avatar,
 			Background: user.Background,
 			CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),
@@ -115,7 +115,7 @@ func ProfileOthers(c *gin.Context) {
 		})
 	} else {
 		// 显示全部信息
-		resp.OKWithData(c, ProfileResponse{
+		resp.OKWithData(c, &ProfileResponse{
 			Avatar:     user.Avatar,
 			Background: user.Background,
 			CreatedAt:  user.CreatedAt.Format("2006-01-02 15:04:05"),

@@ -46,7 +46,7 @@ func Login(c *gin.Context) {
 			return
 		}
 
-		resp.OKWithData(c, LoginResponse{
+		resp.OKWithData(c, &LoginResponse{
 			Expiration: claims.ExpiresAt.Unix(),
 			Token:      token,
 		})
@@ -68,7 +68,7 @@ func TokenRefresh(c *gin.Context) {
 		return
 	}
 
-	resp.OKWithData(c, LoginResponse{
+	resp.OKWithData(c, &LoginResponse{
 		Expiration: claims.ExpiresAt.Unix(),
 		Token:      token,
 	})

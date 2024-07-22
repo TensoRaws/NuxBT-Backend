@@ -23,7 +23,7 @@ func RoleMe(c *gin.Context) {
 		return
 	}
 
-	resp.OKWithData(c, RoleResponse{
+	resp.OKWithData(c, &RoleResponse{
 		Roles: roles,
 	})
 
