@@ -75,12 +75,3 @@ func GetTorrentInfo(t *model.Torrent) (*Info, error) {
 		VideoCodec:  t.VideoCodec,
 	}, nil
 }
-
-func GetTorrentFileList(t *model.Torrent) ([]torrent.BitTorrentFileList, error) {
-	var fileList []torrent.BitTorrentFileList
-	err := util.StringToStruct(t.FileList, &fileList)
-	if err != nil {
-		return nil, err
-	}
-	return fileList, nil
-}

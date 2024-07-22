@@ -18,3 +18,10 @@ func GetTorrentByHash(hash string) (*model.Torrent, error) {
 	torrent, err := q.Where(q.Hash.Eq(hash)).First()
 	return torrent, err
 }
+
+// GetTorrentByID 根据 ID 获取种子
+func GetTorrentByID(torrentID int32) (*model.Torrent, error) {
+	q := query.Torrent
+	torrent, err := q.Where(q.TorrentID.Eq(torrentID)).First()
+	return torrent, err
+}

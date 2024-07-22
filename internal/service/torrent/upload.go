@@ -146,14 +146,14 @@ func Upload(c *gin.Context) {
 	}
 
 	// 从数据库获取上传的种子
-	newTorrent, err := db.GetTorrentByHash(hash)
+	bt, err := db.GetTorrentByHash(hash)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, err.Error())
 		log.Logger.Error("failed to get torrent record: " + err.Error())
 		return
 	}
 
-	torrentInfo, err := GetTorrentInfo(newTorrent)
+	torrentInfo, err := GetTorrentInfo(bt)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UnknownError, err.Error())
 		log.Logger.Error("failed to get torrent info: " + err.Error())
