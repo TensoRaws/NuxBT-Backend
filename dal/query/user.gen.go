@@ -34,12 +34,12 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	_user.Private = field.NewBool(tableName, "private")
 	_user.Experience = field.NewInt32(tableName, "experience")
 	_user.Inviter = field.NewInt32(tableName, "inviter")
-	_user.CreatedAt = field.NewTime(tableName, "created_at")
-	_user.LastActive = field.NewTime(tableName, "last_active")
 	_user.Avatar = field.NewString(tableName, "avatar")
 	_user.Signature = field.NewString(tableName, "signature")
 	_user.Background = field.NewString(tableName, "background")
+	_user.CreatedAt = field.NewTime(tableName, "created_at")
 	_user.DeletedAt = field.NewField(tableName, "deleted_at")
+	_user.LastActive = field.NewTime(tableName, "last_active")
 
 	_user.fillFieldMap()
 
@@ -57,12 +57,12 @@ type user struct {
 	Private    field.Bool
 	Experience field.Int32
 	Inviter    field.Int32
-	CreatedAt  field.Time
-	LastActive field.Time
 	Avatar     field.String
 	Signature  field.String
 	Background field.String
+	CreatedAt  field.Time
 	DeletedAt  field.Field
+	LastActive field.Time
 
 	fieldMap map[string]field.Expr
 }
@@ -86,12 +86,12 @@ func (u *user) updateTableName(table string) *user {
 	u.Private = field.NewBool(table, "private")
 	u.Experience = field.NewInt32(table, "experience")
 	u.Inviter = field.NewInt32(table, "inviter")
-	u.CreatedAt = field.NewTime(table, "created_at")
-	u.LastActive = field.NewTime(table, "last_active")
 	u.Avatar = field.NewString(table, "avatar")
 	u.Signature = field.NewString(table, "signature")
 	u.Background = field.NewString(table, "background")
+	u.CreatedAt = field.NewTime(table, "created_at")
 	u.DeletedAt = field.NewField(table, "deleted_at")
+	u.LastActive = field.NewTime(table, "last_active")
 
 	u.fillFieldMap()
 
@@ -116,12 +116,12 @@ func (u *user) fillFieldMap() {
 	u.fieldMap["private"] = u.Private
 	u.fieldMap["experience"] = u.Experience
 	u.fieldMap["inviter"] = u.Inviter
-	u.fieldMap["created_at"] = u.CreatedAt
-	u.fieldMap["last_active"] = u.LastActive
 	u.fieldMap["avatar"] = u.Avatar
 	u.fieldMap["signature"] = u.Signature
 	u.fieldMap["background"] = u.Background
+	u.fieldMap["created_at"] = u.CreatedAt
 	u.fieldMap["deleted_at"] = u.DeletedAt
+	u.fieldMap["last_active"] = u.LastActive
 }
 
 func (u user) clone(db *gorm.DB) user {

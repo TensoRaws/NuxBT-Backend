@@ -1,4 +1,5 @@
 server:
+  name: TensoRaws
   port: 8080
   mode: prod
   requestLimit: 50 # 50 times per minute

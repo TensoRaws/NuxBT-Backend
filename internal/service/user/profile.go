@@ -1,6 +1,9 @@
 package user
 
 import (
+	"time"
+
+	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
@@ -32,9 +35,17 @@ type ProfileOthersRequest struct {
 func ProfileMe(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
+	err := db.PatchUser(userID, &model.User{LastActive: time.Now()})
+	if err != nil {
+		resp.AbortWithMsg(c, code.UnknownError, err.Error())
+		log.Logger.Error("Failed to update user last active time: " + err.Error())
+		return
+	}
+
 	user, err := db.GetUserByID(userID)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, "User not found")
+		log.Logger.Error("Failed to get user by ID: " + err.Error())
 		return
 	}
 

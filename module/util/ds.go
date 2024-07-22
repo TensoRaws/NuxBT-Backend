@@ -1,6 +1,8 @@
 package util
 
-import "github.com/bytedance/sonic"
+import (
+	"github.com/bytedance/sonic"
+)
 
 // StructToString 结构体转字符串
 func StructToString(s interface{}) string {

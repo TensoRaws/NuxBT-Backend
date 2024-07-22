@@ -26,6 +26,7 @@ func NewAPI() *gin.Engine {
 	api := r.Group("/api/v1/")
 	{
 		UserRouterGroup(api)
+		TorrentRouterGroup(api)
 	}
 
 	return r

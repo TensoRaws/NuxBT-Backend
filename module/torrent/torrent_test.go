@@ -59,8 +59,8 @@ func TestRepackTorrent(t *testing.T) {
 
 	err = torrent.Repack(&BitTorrentFileEditStrategy{
 		AnnounceList: TRACKER_LIST,
-		Comment:      comment,
-		InfoSource:   infoSource,
+		Comment:      &comment,
+		InfoSource:   &infoSource,
 	})
 
 	if err != nil {
@@ -71,6 +71,19 @@ func TestRepackTorrent(t *testing.T) {
 	t.Log(torrent)
 	assert.Equal(t, torrent.Comment, comment)
 	assert.Equal(t, torrent.Info.Source, infoSource)
+
+	ept := ""
+
+	err = torrent.Repack(&BitTorrentFileEditStrategy{Announce: &ept, Comment: &ept})
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	t.Log(torrent)
+	assert.Equal(t, torrent.Comment, "")
+	assert.Equal(t, torrent.Announce, "")
 }
 
 func TestTorrentFileList(t *testing.T) {
@@ -98,6 +111,31 @@ func TestTorrentFileList(t *testing.T) {
 	t.Log(fileList)
 	assert.Equal(t, len(fileList), 1)
 	assert.Equal(t, fileList[0].Path, []string{"lenna.jpg"})
+}
+
+func TestTorrentFileTotalSize(t *testing.T) {
+	torrentFilePath := testTorrentFolder
+
+	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fileSize := torrent.GetTotalSize()
+	t.Log(fileSize)
+	assert.Equal(t, fileSize, int64(39113))
+
+	torrentFilePath = testTorrent
+	torrent, err = NewBitTorrentFilePath(torrentFilePath)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fileSize = torrent.GetTotalSize()
+	t.Log(fileSize)
+	assert.Equal(t, fileSize, int64(8211))
 }
 
 func TestSaveTorrent(t *testing.T) {

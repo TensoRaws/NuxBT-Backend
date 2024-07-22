@@ -74,8 +74,8 @@ func (bencodeTorrent *BitTorrentFile) GetHash() string {
 // Repack 重新打包 torrent 文件
 func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStrategy) error {
 	// Re-pack torrent
-	if editStrategy.Announce != "" {
-		bencodeTorrent.Announce = editStrategy.Announce
+	if editStrategy.Announce != nil {
+		bencodeTorrent.Announce = *editStrategy.Announce
 	}
 	if editStrategy.AnnounceList != nil {
 		var announceList [][]string
@@ -84,11 +84,11 @@ func (bencodeTorrent *BitTorrentFile) Repack(editStrategy *BitTorrentFileEditStr
 		}
 		bencodeTorrent.AnnounceList = announceList
 	}
-	if editStrategy.Comment != "" {
-		bencodeTorrent.Comment = editStrategy.Comment
+	if editStrategy.Comment != nil {
+		bencodeTorrent.Comment = *editStrategy.Comment
 	}
-	if editStrategy.InfoSource != "" {
-		bencodeTorrent.Info.Source = editStrategy.InfoSource
+	if editStrategy.InfoSource != nil {
+		bencodeTorrent.Info.Source = *editStrategy.InfoSource
 	}
 
 	bencodeTorrent.Info.Private = editStrategy.Private
@@ -118,6 +118,22 @@ func (bencodeTorrent *BitTorrentFile) GetFileList() []BitTorrentFileList {
 		})
 	}
 	return fileList
+}
+
+// GetTotalSize 获取 torrent 文件的总大小，单位为字节
+func (bencodeTorrent *BitTorrentFile) GetTotalSize() int64 {
+	var totalSize uint64
+	// 当 torrent 文件只有一个文件时，Info.Files 为空
+	if len(bencodeTorrent.Info.Files) == 0 {
+		totalSize = bencodeTorrent.Info.Length
+		return int64(totalSize)
+	}
+
+	// 当 torrent 文件有多个文件时，Info.Files 不为空，从中获取文件列表
+	for _, file := range bencodeTorrent.Info.Files {
+		totalSize += file.Length
+	}
+	return int64(totalSize)
 }
 
 // ConvertToBytes 将 torrent 文件转换为字节

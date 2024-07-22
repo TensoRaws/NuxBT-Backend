@@ -17,12 +17,14 @@ import (
 
 var (
 	Q        = new(Query)
+	Torrent  *torrent
 	User     *user
 	UserRole *userRole
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	Torrent = &Q.Torrent
 	User = &Q.User
 	UserRole = &Q.UserRole
 }
@@ -30,6 +32,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:       db,
+		Torrent:  newTorrent(db, opts...),
 		User:     newUser(db, opts...),
 		UserRole: newUserRole(db, opts...),
 	}
@@ -38,6 +41,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 type Query struct {
 	db *gorm.DB
 
+	Torrent  torrent
 	User     user
 	UserRole userRole
 }
@@ -47,6 +51,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:       db,
+		Torrent:  q.Torrent.clone(db),
 		User:     q.User.clone(db),
 		UserRole: q.UserRole.clone(db),
 	}
@@ -63,18 +68,21 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:       db,
+		Torrent:  q.Torrent.replaceDB(db),
 		User:     q.User.replaceDB(db),
 		UserRole: q.UserRole.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
+	Torrent  ITorrentDo
 	User     IUserDo
 	UserRole IUserRoleDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		Torrent:  q.Torrent.WithContext(ctx),
 		User:     q.User.WithContext(ctx),
 		UserRole: q.UserRole.WithContext(ctx),
 	}

@@ -21,12 +21,12 @@ type User struct {
 	Private    bool           `gorm:"column:private;type:tinyint(1);not null" json:"private"`
 	Experience int32          `gorm:"column:experience;type:int" json:"experience"`
 	Inviter    int32          `gorm:"column:inviter;type:int;not null" json:"inviter"`
-	CreatedAt  *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
-	LastActive time.Time      `gorm:"column:last_active;type:datetime" json:"last_active"`
 	Avatar     string         `gorm:"column:avatar;type:varchar(255)" json:"avatar"`
 	Signature  string         `gorm:"column:signature;type:text" json:"signature"`
 	Background string         `gorm:"column:background;type:varchar(255)" json:"background"`
+	CreatedAt  *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	DeletedAt  gorm.DeletedAt `gorm:"column:deleted_at;type:datetime" json:"deleted_at"`
+	LastActive time.Time      `gorm:"column:last_active;type:datetime" json:"last_active"`
 }
 
 // TableName User's table name
