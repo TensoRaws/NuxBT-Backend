@@ -19,6 +19,9 @@ const (
 	DatabaseErrorRecordCreateFailed
 	DatabaseErrorRecordNotFound
 	DatabaseErrorRecordPatchFailed
+	// OSSError OSS错误
+	OSSErrorPutFailed
+	OSSErrorGetFailed
 	// UserError 用户侧错误
 	UserErrorRegisterNotAllowed
 	UserErrorInvalidUsername

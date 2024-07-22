@@ -2,6 +2,7 @@ package config
 
 func configSetDefault() {
 	config.SetDefault("server", map[string]interface{}{
+		"name":         "TensoRaws",
 		"port":         8080,
 		"mode":         "prod",
 		"requestLimit": 50,
