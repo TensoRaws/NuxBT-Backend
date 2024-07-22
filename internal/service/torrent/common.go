@@ -38,15 +38,20 @@ type Info struct {
 	VideoCodec  string  `json:"video_codec"`
 }
 
+// GetTorrentOSSKey 获取种子 OSS Key，参数为 hash
+func GetTorrentOSSKey(hash string) string {
+	return hash + ".torrent"
+}
+
 // GetTorrentOSSUrl 获取种子 OSS 地址
-func GetTorrentOSSUrl(torrentUrl string) (string, error) {
+func GetTorrentOSSUrl(hash string) (string, error) {
 	// base url
 	baseUrl, err := url.Parse(config.OSS_PREFIX)
 	if err != nil {
 		return "", err
 	}
 
-	baseUrl.Path += torrentUrl
+	baseUrl.Path += GetTorrentOSSKey(hash)
 	return baseUrl.String(), nil
 }
 
@@ -56,7 +61,7 @@ func GetTorrentInfo(t *model.Torrent) (*Info, error) {
 
 	size := util.ByteCountBinary(uint64(t.Size))
 
-	urlString, err := GetTorrentOSSUrl(t.URL)
+	urlString, err := GetTorrentOSSUrl(t.Hash)
 	if err != nil {
 		return nil, err
 	}

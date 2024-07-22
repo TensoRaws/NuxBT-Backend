@@ -31,7 +31,7 @@ func FileList(c *gin.Context) {
 		return
 	}
 
-	torrentBytes, err := oss.GetBytes(bt.URL)
+	torrentBytes, err := oss.GetBytes(GetTorrentOSSKey(bt.Hash))
 	if err != nil {
 		resp.AbortWithMsg(c, code.OssErrorGetFailed, err.Error())
 		return

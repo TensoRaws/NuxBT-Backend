@@ -97,10 +97,9 @@ func Upload(c *gin.Context) {
 		return
 	}
 
-	// 计算种子文件的哈希值，大小，结构
+	// 计算种子文件的哈希值，大小
 	hash := torrentFile.GetHash()
 	size := torrentFile.GetTotalSize()
-	filelist := torrentFile.GetFileList()
 
 	// 上传到 OSS
 	torrentBytes, err := torrentFile.ConvertToBytes()
@@ -110,8 +109,8 @@ func Upload(c *gin.Context) {
 		return
 	}
 	torrentBytesReader := bytes.NewReader(torrentBytes)
-	torrentKey := torrentFile.Info.Name + "--" + hash + ".torrent"
-	err = oss.Put(torrentKey, torrentBytesReader)
+
+	err = oss.Put(GetTorrentOSSKey(hash), torrentBytesReader)
 	if err != nil {
 		resp.AbortWithMsg(c, code.OssErrorPutFailed, err.Error())
 		log.Logger.Error("failed to put torrent file to oss: " + err.Error())
@@ -136,8 +135,6 @@ func Upload(c *gin.Context) {
 		VideoCodec:  req.VideoCodec,
 		AudioCodec:  req.AudioCodec,
 		Language:    req.Language,
-		URL:         torrentKey,
-		FileList:    util.StructToString(filelist),
 	})
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, err.Error())

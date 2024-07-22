@@ -44,8 +44,6 @@ func newTorrent(db *gorm.DB, opts ...gen.DOOption) torrent {
 	_torrent.VideoCodec = field.NewString(tableName, "video_codec")
 	_torrent.AudioCodec = field.NewString(tableName, "audio_codec")
 	_torrent.Language = field.NewString(tableName, "language")
-	_torrent.URL = field.NewString(tableName, "url")
-	_torrent.FileList = field.NewString(tableName, "file_list")
 	_torrent.CreatedAt = field.NewTime(tableName, "created_at")
 	_torrent.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_torrent.DeletedAt = field.NewField(tableName, "deleted_at")
@@ -76,8 +74,6 @@ type torrent struct {
 	VideoCodec  field.String
 	AudioCodec  field.String
 	Language    field.String
-	URL         field.String
-	FileList    field.String
 	CreatedAt   field.Time
 	UpdatedAt   field.Time
 	DeletedAt   field.Field
@@ -114,8 +110,6 @@ func (t *torrent) updateTableName(table string) *torrent {
 	t.VideoCodec = field.NewString(table, "video_codec")
 	t.AudioCodec = field.NewString(table, "audio_codec")
 	t.Language = field.NewString(table, "language")
-	t.URL = field.NewString(table, "url")
-	t.FileList = field.NewString(table, "file_list")
 	t.CreatedAt = field.NewTime(table, "created_at")
 	t.UpdatedAt = field.NewTime(table, "updated_at")
 	t.DeletedAt = field.NewField(table, "deleted_at")
@@ -135,7 +129,7 @@ func (t *torrent) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (t *torrent) fillFieldMap() {
-	t.fieldMap = make(map[string]field.Expr, 22)
+	t.fieldMap = make(map[string]field.Expr, 20)
 	t.fieldMap["torrent_id"] = t.TorrentID
 	t.fieldMap["hash"] = t.Hash
 	t.fieldMap["uploader_id"] = t.UploaderID
@@ -153,8 +147,6 @@ func (t *torrent) fillFieldMap() {
 	t.fieldMap["video_codec"] = t.VideoCodec
 	t.fieldMap["audio_codec"] = t.AudioCodec
 	t.fieldMap["language"] = t.Language
-	t.fieldMap["url"] = t.URL
-	t.fieldMap["file_list"] = t.FileList
 	t.fieldMap["created_at"] = t.CreatedAt
 	t.fieldMap["updated_at"] = t.UpdatedAt
 	t.fieldMap["deleted_at"] = t.DeletedAt
