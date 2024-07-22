@@ -2,6 +2,8 @@ package torrent
 
 import (
 	"bytes"
+	"mime/multipart"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
@@ -13,7 +15,6 @@ import (
 	"github.com/TensoRaws/NuxBT-Backend/module/torrent"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 	"github.com/gin-gonic/gin"
-	"mime/multipart"
 )
 
 type UploadRequest struct {

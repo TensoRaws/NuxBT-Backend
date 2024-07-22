@@ -1,11 +1,12 @@
 package torrent
 
 import (
+	"net/url"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/torrent"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
-	"net/url"
 )
 
 const (
