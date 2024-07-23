@@ -25,6 +25,11 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 		jwt.RequireAuth(false),
 		rbac.RABC(),
 		torrent_service.Edit)
+	// 种子删除
+	torrent.POST("delete",
+		jwt.RequireAuth(false),
+		rbac.RABC(role.ADMIN),
+		torrent_service.Delete)
 	// 获取种子文件列表
 	torrent.GET("filelist",
 		jwt.RequireAuth(false),

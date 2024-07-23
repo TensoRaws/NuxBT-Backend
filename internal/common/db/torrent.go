@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
@@ -19,6 +20,19 @@ func CheckTorrentExist(hash string) bool {
 func CreateTorrent(torrent *model.Torrent) (err error) {
 	q := query.Torrent
 	err = q.Create(torrent)
+	return err
+}
+
+// DeleteTorrent 删除种子
+func DeleteTorrent(torrentID int32) (err error) {
+	q := query.Torrent
+	info, err := q.Where(q.TorrentID.Eq(torrentID)).Delete()
+	if err != nil {
+		return err
+	}
+	if info.RowsAffected == 0 {
+		return fmt.Errorf("no rows affected, nothing will be updated, torrent ID: %v", torrentID)
+	}
 	return err
 }
 
