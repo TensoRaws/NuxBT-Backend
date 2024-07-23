@@ -20,7 +20,11 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 		jwt.RequireAuth(false),
 		rbac.RABC(role.ADMIN, role.UPLOADER, role.ADVANCED_USER),
 		torrent_service.Upload)
-
+	// 种子编辑
+	torrent.POST("edit",
+		jwt.RequireAuth(false),
+		rbac.RABC(),
+		torrent_service.Edit)
 	// 获取种子文件列表
 	torrent.GET("filelist",
 		jwt.RequireAuth(false),

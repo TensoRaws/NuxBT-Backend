@@ -16,7 +16,7 @@ type FileListRequest struct {
 
 type FileListResponse []torrent.BitTorrentFileListItem
 
-// FileList 获取种子文件列表
+// FileList 获取种子文件列表 (GET /filelist)
 func FileList(c *gin.Context) {
 	// 绑定参数
 	var req FileListRequest

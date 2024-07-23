@@ -35,6 +35,7 @@ type ProfileOthersRequest struct {
 func ProfileMe(c *gin.Context) {
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
+	// 更新活跃时间
 	err := db.PatchUser(userID, &model.User{LastActive: time.Now()})
 	if err != nil {
 		resp.AbortWithMsg(c, code.UnknownError, err.Error())

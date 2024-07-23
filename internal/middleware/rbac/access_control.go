@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RABC 获取用户角色，存入上下文，进行权限控制，allowRoles 为允许的角色
+// RABC 获取用户角色，存入上下文，进行权限控制，allowRoles 为允许的角色，为空则不限制
 func RABC(allowRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID, _ := resp.GetUserIDFromGinContext(c)
@@ -23,20 +23,22 @@ func RABC(allowRoles ...string) gin.HandlerFunc {
 			return
 		}
 
-		// 检查用户是否有合适的角色
-		hasAllowedRole := false
-		for _, role := range roles {
-			if util.CheckStringInSlice(role, allowRoles) {
-				hasAllowedRole = true
-				break
+		if len(allowRoles) > 0 {
+			// 检查用户是否有合适的角色
+			hasAllowedRole := false
+			for _, role := range roles {
+				if util.CheckStringInSlice(role, allowRoles) {
+					hasAllowedRole = true
+					break
+				}
 			}
-		}
 
-		// 用户没有合适的角色，拦截请求
-		if !hasAllowedRole {
-			resp.AbortWithMsg(c, code.AuthErrorNoPermission, "Role has no permission")
-			log.Logger.Errorf("RABC Role has no permission, userID: %d, roles: %v", userID, roles)
-			return
+			// 用户没有合适的角色，拦截请求
+			if !hasAllowedRole {
+				resp.AbortWithMsg(c, code.AuthErrorNoPermission, "Role has no permission")
+				log.Logger.Errorf("RABC Role has no permission, userID: %d, roles: %v", userID, roles)
+				return
+			}
 		}
 
 		// 将角色信息存储在 Gin 上下文中

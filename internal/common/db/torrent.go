@@ -22,6 +22,16 @@ func CreateTorrent(torrent *model.Torrent) (err error) {
 	return err
 }
 
+// PatchTorrent 更新种子信息，根据 torrentID 和 details 更新种子信息
+func PatchTorrent[T *model.Torrent | map[string]any | any](torrentID int32, details T) (err error) {
+	q := query.Torrent
+	_, err = q.Where(q.TorrentID.Eq(torrentID)).Updates(details)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetTorrentByHash 根据 Hash 获取种子
 func GetTorrentByHash(hash string) (*model.Torrent, error) {
 	q := query.Torrent

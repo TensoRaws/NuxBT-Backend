@@ -33,9 +33,7 @@ func ResetPassword(c *gin.Context) {
 	}
 
 	// 修改密码
-	err = db.PatchUser(userID, &model.User{
-		Password: string(password),
-	})
+	err = db.PatchUser(userID, &model.User{Password: string(password)})
 
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordPatchFailed, "reset password fail")

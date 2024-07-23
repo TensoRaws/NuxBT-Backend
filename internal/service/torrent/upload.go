@@ -21,7 +21,7 @@ type UploadRequest struct {
 	AnidbID     int32                `form:"anidb_id" binding:"required"`
 	AudioCodec  string               `form:"audio_codec" binding:"required,oneof=FLAC AAC AC3 DTS DDP LPCM other"`
 	Description string               `form:"description" binding:"required"`
-	Essay       *string              `form:"essay" binding:"omitempty"`
+	Essay       string               `form:"essay" binding:"required"`
 	Genre       string               `form:"genre" binding:"required,oneof=BDrip WEBrip DVDrip Remux Blu-ray WEB-DL DVD HDTV other"` //nolint:lll
 	Img         string               `form:"img" binding:"required"`
 	Language    string               `form:"language" binding:"required,oneof=Chinese English Japanese other"`
@@ -131,7 +131,7 @@ func Upload(c *gin.Context) {
 		Status:      status,
 		Title:       req.Title,
 		Subtitle:    req.Subtitle,
-		Essay:       *req.Essay,
+		Essay:       req.Essay,
 		Description: req.Description,
 		Genre:       req.Genre,
 		AnidbID:     req.AnidbID,

@@ -17,7 +17,7 @@ func StringToStruct(str string, s interface{}) error {
 	return sonic.Unmarshal([]byte(str), s)
 }
 
-// StructToMap 结构体转 map[string]interface{}
+// StructToMap 结构体转 map[string]interface{}，请勿在有数字情况下使用，请使用反射
 func StructToMap(s interface{}) (map[string]interface{}, error) {
 	// 使用 sonic 将结构体序列化为 JSON
 	jsonBytes, err := sonic.Marshal(s)
