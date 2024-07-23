@@ -1,7 +1,6 @@
 package torrent
 
 import (
-	"bytes"
 	"mime/multipart"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -101,6 +100,13 @@ func Upload(c *gin.Context) {
 	hash := torrentFile.GetHash()
 	size := torrentFile.GetTotalSize()
 
+	// 检查种子是否已经存在
+	if db.CheckTorrentExist(hash) {
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, "torrent already exists")
+		log.Logger.Errorf("torrent already exists, upload user ID: %v", userID)
+		return
+	}
+
 	// 上传到 OSS
 	torrentBytes, err := torrentFile.ConvertToBytes()
 	if err != nil {
@@ -108,9 +114,8 @@ func Upload(c *gin.Context) {
 		log.Logger.Error("failed to convert torrent file to bytes: " + err.Error())
 		return
 	}
-	torrentBytesReader := bytes.NewReader(torrentBytes)
 
-	err = oss.Put(GetTorrentOSSKey(hash), torrentBytesReader)
+	err = oss.PutBytes(GetTorrentOSSKey(hash), torrentBytes)
 	if err != nil {
 		resp.AbortWithMsg(c, code.OssErrorPutFailed, err.Error())
 		log.Logger.Error("failed to put torrent file to oss: " + err.Error())

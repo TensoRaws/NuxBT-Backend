@@ -1,8 +1,6 @@
 package torrent
 
 import (
-	"net/url"
-
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/torrent"
@@ -45,14 +43,12 @@ func GetTorrentOSSKey(hash string) string {
 
 // GetTorrentOSSUrl 获取种子 OSS 地址
 func GetTorrentOSSUrl(hash string) (string, error) {
-	// base url
-	baseUrl, err := url.Parse(config.OSS_PREFIX)
-	if err != nil {
-		return "", err
-	}
+	ossUrl := config.OSS_PREFIX + GetTorrentOSSKey(hash)
+	//if err != nil {
+	//	return "", err
+	//}
 
-	baseUrl.Path += GetTorrentOSSKey(hash)
-	return baseUrl.String(), nil
+	return ossUrl, nil
 }
 
 // GetTorrentInfo 获取种子信息

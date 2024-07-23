@@ -1,9 +1,22 @@
 package db
 
 import (
+	"errors"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
+	"gorm.io/gorm"
 )
+
+// CheckTorrentExist 检查种子是否存在，确保 unique
+func CheckTorrentExist(hash string) bool {
+	q := query.Torrent
+	_, err := q.Where(q.Hash.Eq(hash)).First()
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false
+	}
+	return true
+}
 
 // CreateTorrent 创建种子
 func CreateTorrent(torrent *model.Torrent) (err error) {

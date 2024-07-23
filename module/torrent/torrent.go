@@ -47,8 +47,8 @@ func NewBitTorrentFileFromBytes(torrentBytes []byte) (*BitTorrentFile, error) {
 	return bencodeTorrent, nil
 }
 
-// NewBitTorrentFilePath 通过文件路径创建 BitTorrentFile
-func NewBitTorrentFilePath(torrentFilePath string) (*BitTorrentFile, error) {
+// NewBitTorrentFileByPath 通过文件路径创建 BitTorrentFile
+func NewBitTorrentFileByPath(torrentFilePath string) (*BitTorrentFile, error) {
 	// io.Reader
 	fileHeader, err := os.Open(torrentFilePath)
 	defer func(fileHeader *os.File) {

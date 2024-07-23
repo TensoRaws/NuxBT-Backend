@@ -13,7 +13,7 @@ const testTorrentSave = "test_torrents/test_save.torrent"
 func TestTorrentHash(t *testing.T) {
 	torrentFilePath := testTorrent
 
-	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	torrent, err := NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -31,7 +31,7 @@ func TestTorrentHash(t *testing.T) {
 func TestFolderTorrentHash(t *testing.T) {
 	torrentFilePath := testTorrentFolder
 
-	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	torrent, err := NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -49,7 +49,7 @@ func TestFolderTorrentHash(t *testing.T) {
 func TestRepackTorrent(t *testing.T) {
 	torrentFilePath := testTorrent
 
-	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	torrent, err := NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -89,7 +89,7 @@ func TestRepackTorrent(t *testing.T) {
 func TestTorrentFileList(t *testing.T) {
 	torrentFilePath := testTorrentFolder
 
-	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	torrent, err := NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -101,7 +101,7 @@ func TestTorrentFileList(t *testing.T) {
 	assert.Equal(t, fileList[0].Path, []string{"cxk", "cxk.jpg"})
 
 	torrentFilePath = testTorrent
-	torrent, err = NewBitTorrentFilePath(torrentFilePath)
+	torrent, err = NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -116,7 +116,7 @@ func TestTorrentFileList(t *testing.T) {
 func TestTorrentFileTotalSize(t *testing.T) {
 	torrentFilePath := testTorrentFolder
 
-	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	torrent, err := NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -127,7 +127,7 @@ func TestTorrentFileTotalSize(t *testing.T) {
 	assert.Equal(t, fileSize, int64(39113))
 
 	torrentFilePath = testTorrent
-	torrent, err = NewBitTorrentFilePath(torrentFilePath)
+	torrent, err = NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -142,7 +142,7 @@ func TestSaveTorrent(t *testing.T) {
 	torrentFilePath := testTorrent
 	saveFilePath := testTorrentSave
 
-	torrent, err := NewBitTorrentFilePath(torrentFilePath)
+	torrent, err := NewBitTorrentFileByPath(torrentFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -154,7 +154,7 @@ func TestSaveTorrent(t *testing.T) {
 		return
 	}
 
-	torrent, err = NewBitTorrentFilePath(saveFilePath)
+	torrent, err = NewBitTorrentFileByPath(saveFilePath)
 	if err != nil {
 		t.Error(err)
 		return

@@ -69,6 +69,13 @@ func Register(c *gin.Context) {
 		log.Logger.Info("invitation code: " + *req.InvitationCode)
 	}
 
+	// 检查用户是否已存在
+	if db.CheckUserExist(req.Username, req.Email) {
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, "user already exists")
+		log.Logger.Error("failed to register: user already exists")
+		return
+	}
+
 	// 生成密码哈希
 	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -76,6 +83,7 @@ func Register(c *gin.Context) {
 		log.Logger.Error("failed to hash password: " + err.Error())
 		return
 	}
+
 	// 注册
 	err = db.CreateUser(&model.User{
 		Username:   req.Username,

@@ -1,11 +1,23 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
+	"gorm.io/gorm"
 )
+
+// CheckUserExist 检查用户是否存在，确保 unique
+func CheckUserExist(username string, email string) bool {
+	q := query.User
+	_, err := q.Where(q.Email.Eq(email)).Or(q.Username.Eq(username)).First()
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false
+	}
+	return true
+}
 
 // CreateUser 新建用户
 func CreateUser(user *model.User) (err error) {
