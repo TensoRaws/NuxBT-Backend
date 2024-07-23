@@ -1,10 +1,10 @@
 package torrent
 
 import (
-	"net/url"
+	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/module/config"
+	"github.com/TensoRaws/NuxBT-Backend/module/oss"
 	"github.com/TensoRaws/NuxBT-Backend/module/torrent"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 )
@@ -38,19 +38,31 @@ type Info struct {
 	VideoCodec  string  `json:"video_codec"`
 }
 
+// GetTorrentOSSKey 获取种子 OSS Key，参数为 hash
+func GetTorrentOSSKey(hash string) string {
+	return hash + ".torrent"
+}
+
+// GetTorrentOSSUrl 获取种子 OSS 地址
+func GetTorrentOSSUrl(hash string, title string) (string, error) {
+	ossUrl, err := oss.GetPresignedURL(GetTorrentOSSKey(hash), title+".torrent", 12*time.Hour)
+	if err != nil {
+		return "", err
+	}
+
+	return ossUrl, nil
+}
+
 // GetTorrentInfo 获取种子信息
 func GetTorrentInfo(t *model.Torrent) (*Info, error) {
 	magnet := torrent.GetMagnet(t.Hash, torrent.TRACKER_LIST)
 
 	size := util.ByteCountBinary(uint64(t.Size))
 
-	// base url
-	baseUrl, err := url.Parse(config.OSS_PREFIX)
+	urlString, err := GetTorrentOSSUrl(t.Hash, t.Title)
 	if err != nil {
 		return nil, err
 	}
-	baseUrl.Path += t.URL
-	urlString := baseUrl.String()
 
 	return &Info{
 		AnidbID:     t.AnidbID,
@@ -74,13 +86,4 @@ func GetTorrentInfo(t *model.Torrent) (*Info, error) {
 		URL:         &urlString,
 		VideoCodec:  t.VideoCodec,
 	}, nil
-}
-
-func GetTorrentFileList(t *model.Torrent) ([]torrent.BitTorrentFileList, error) {
-	var fileList []torrent.BitTorrentFileList
-	err := util.StringToStruct(t.FileList, &fileList)
-	if err != nil {
-		return nil, err
-	}
-	return fileList, nil
 }

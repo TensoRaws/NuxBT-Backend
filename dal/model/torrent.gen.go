@@ -31,8 +31,6 @@ type Torrent struct {
 	VideoCodec  string         `gorm:"column:video_codec;type:varchar(255);not null" json:"video_codec"`
 	AudioCodec  string         `gorm:"column:audio_codec;type:varchar(255);not null" json:"audio_codec"`
 	Language    string         `gorm:"column:language;type:varchar(255);not null" json:"language"`
-	URL         string         `gorm:"column:url;type:varchar(255);not null" json:"url"`
-	FileList    string         `gorm:"column:file_list;type:text;not null" json:"file_list"`
 	CreatedAt   *time.Time     `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt   *time.Time     `gorm:"column:updated_at;type:datetime;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"column:deleted_at;type:datetime" json:"deleted_at"`

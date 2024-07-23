@@ -1,17 +1,21 @@
 package oss
 
 import (
+	"bytes"
 	"context"
 	"io"
+	"net/url"
 	"sync"
+	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
-	"github.com/eleven26/goss/v4"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
 var (
-	oss  *goss.Goss
+	oss  *minio.Client
 	err  error
 	once sync.Once
 )
@@ -23,62 +27,72 @@ func Init() {
 }
 
 func initialize() {
-	cfg := &goss.Config{
-		Endpoint:          config.OSSConfig.Endpoint,
-		AccessKey:         config.OSSConfig.AccessKey,
-		SecretKey:         config.OSSConfig.SecretKey,
-		Region:            config.OSSConfig.Region,
-		Bucket:            config.OSSConfig.Bucket,
-		UseSsl:            &config.OSSConfig.UseSSL,
-		HostnameImmutable: &config.OSSConfig.HostnameImmutable,
-	}
-	oss, err = goss.New(goss.WithConfig(cfg))
+	// Initialize minio client object.
+	oss, err = minio.New(config.OSSConfig.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.OSSConfig.AccessKey, config.OSSConfig.SecretKey, ""),
+		Secure: config.OSSConfig.UseSSL,
+	})
+	err = oss.MakeBucket(context.TODO(), config.OSSConfig.Bucket,
+		minio.MakeBucketOptions{Region: config.OSSConfig.Region, ObjectLocking: false})
 	if err != nil {
-		log.Logger.Errorf("init goss faild: %v", err)
+		exists, _ := oss.BucketExists(context.TODO(), config.OSSConfig.Bucket)
+		if !exists {
+			log.Logger.Error("Failed to create bucket: " + err.Error())
+		}
 	}
 }
 
-// Put saves the content read from r to the key of oss.
-func Put(key string, r io.Reader) error {
-	return oss.Put(context.TODO(), key, r)
+// Put saves the content read from r to the oss key.
+func Put(key string, reader io.Reader, objectSize int64) error {
+	info, err := oss.PutObject(context.Background(), config.OSSConfig.Bucket, key, reader, objectSize,
+		minio.PutObjectOptions{ContentType: "application/octet-stream"})
+
+	log.Logger.Infof("Uploaded %s of size: %v Successfully.", key, info.Size)
+	return err
 }
 
-// PutFromFile saves the file pointed to by the `localPath` to the oss key.
-func PutFromFile(key string, localPath string) error {
-	return oss.PutFromFile(context.TODO(), key, localPath)
+// PutBytes saves the byte array to the oss key.
+func PutBytes(key string, data []byte) error {
+	return Put(key, bytes.NewReader(data), int64(len(data)))
 }
 
 // Get gets the file pointed to by key.
-func Get(key string) (io.ReadCloser, error) {
-	return oss.Get(context.TODO(), key)
-}
-
-// GetString gets the file pointed to by key and returns a string.
-func GetString(key string) (string, error) {
-	return oss.GetString(context.TODO(), key)
+func Get(key string) (*minio.Object, error) {
+	return oss.GetObject(context.Background(), config.OSSConfig.Bucket, key, minio.GetObjectOptions{})
 }
 
 // GetBytes gets the file pointed to by key and returns a byte array.
 func GetBytes(key string) ([]byte, error) {
-	return oss.GetBytes(context.TODO(), key)
+	obj, err := Get(key)
+	if err != nil {
+		return nil, err
+	}
+	defer func(obj *minio.Object) {
+		err := obj.Close()
+		if err != nil {
+			log.Logger.Error("Failed to close object: " + err.Error())
+		}
+	}(obj)
+
+	buf := new(bytes.Buffer)
+	_, err = buf.ReadFrom(obj)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
-// GetToFile saves the file pointed to by key to the localPath.
-func GetToFile(key string, localPath string) error {
-	return oss.GetToFile(context.TODO(), key, localPath)
-}
+// GetPresignedURL gets the presigned URL for the file pointed to by key.
+func GetPresignedURL(key string, fileName string, expiration time.Duration) (string, error) {
+	// Set request parameters
+	reqParams := make(url.Values)
+	reqParams.Set("response-content-disposition", "attachment; filename="+fileName)
 
-// Delete the file pointed to by key.
-func Delete(key string) error {
-	return oss.Delete(context.TODO(), key)
-}
-
-// Exists determines whether the file exists.
-func Exists(key string) (bool, error) {
-	return oss.Exists(context.TODO(), key)
-}
-
-// Size fet the file size.
-func Size(key string) (int64, error) {
-	return oss.Size(context.TODO(), key)
+	// Generate presigned get object url
+	presignedURL, err := oss.PresignedGetObject(context.Background(), config.OSSConfig.Bucket, key, expiration, reqParams)
+	if err != nil {
+		log.Logger.Error("Failed to generate presigned URL: " + key + err.Error())
+		return "", err
+	}
+	return presignedURL.String(), nil
 }

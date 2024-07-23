@@ -46,8 +46,6 @@ CREATE TABLE `torrent` (
   `video_codec` VARCHAR(255) NOT NULL,
   `audio_codec` VARCHAR(255) NOT NULL,
   `language` VARCHAR(255) NOT NULL,
-  `url` VARCHAR(255) NOT NULL,
-  `file_list` TEXT NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME, -- 软删除时间戳

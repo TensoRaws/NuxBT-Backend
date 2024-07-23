@@ -1,7 +1,6 @@
 package torrent
 
 import (
-	"bytes"
 	"mime/multipart"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
@@ -97,10 +96,16 @@ func Upload(c *gin.Context) {
 		return
 	}
 
-	// 计算种子文件的哈希值，大小，结构
+	// 计算种子文件的哈希值，大小
 	hash := torrentFile.GetHash()
 	size := torrentFile.GetTotalSize()
-	filelist := torrentFile.GetFileList()
+
+	// 检查种子是否已经存在
+	if db.CheckTorrentExist(hash) {
+		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, "torrent already exists")
+		log.Logger.Errorf("torrent already exists, upload user ID: %v", userID)
+		return
+	}
 
 	// 上传到 OSS
 	torrentBytes, err := torrentFile.ConvertToBytes()
@@ -109,9 +114,8 @@ func Upload(c *gin.Context) {
 		log.Logger.Error("failed to convert torrent file to bytes: " + err.Error())
 		return
 	}
-	torrentBytesReader := bytes.NewReader(torrentBytes)
-	torrentKey := torrentFile.Info.Name + "--" + hash + ".torrent"
-	err = oss.Put(torrentKey, torrentBytesReader)
+
+	err = oss.PutBytes(GetTorrentOSSKey(hash), torrentBytes)
 	if err != nil {
 		resp.AbortWithMsg(c, code.OssErrorPutFailed, err.Error())
 		log.Logger.Error("failed to put torrent file to oss: " + err.Error())
@@ -136,8 +140,6 @@ func Upload(c *gin.Context) {
 		VideoCodec:  req.VideoCodec,
 		AudioCodec:  req.AudioCodec,
 		Language:    req.Language,
-		URL:         torrentKey,
-		FileList:    util.StructToString(filelist),
 	})
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordCreateFailed, err.Error())
@@ -146,14 +148,14 @@ func Upload(c *gin.Context) {
 	}
 
 	// 从数据库获取上传的种子
-	newTorrent, err := db.GetTorrentByHash(hash)
+	bt, err := db.GetTorrentByHash(hash)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, err.Error())
 		log.Logger.Error("failed to get torrent record: " + err.Error())
 		return
 	}
 
-	torrentInfo, err := GetTorrentInfo(newTorrent)
+	torrentInfo, err := GetTorrentInfo(bt)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UnknownError, err.Error())
 		log.Logger.Error("failed to get torrent info: " + err.Error())
