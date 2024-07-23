@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/url"
 	"sync"
+	"time"
 
 	"github.com/TensoRaws/NuxBT-Backend/module/config"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -80,13 +82,17 @@ func GetBytes(key string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-//// GetPresignedURL gets the presigned URL for the file pointed to by key.
-//func GetPresignedURL(key string, expiration time.Duration) (string, error) {
-//	urlString, err := oss.GetPresignedURL(context.TODO(), key, func(options *s3.PresignOptions) {
-//		options.Expires = expiration
-//	})
-//	if err != nil {
-//		return "", err
-//	}
-//	return urlString, nil
-//}
+// GetPresignedURL gets the presigned URL for the file pointed to by key.
+func GetPresignedURL(key string, fileName string, expiration time.Duration) (string, error) {
+	// Set request parameters
+	reqParams := make(url.Values)
+	reqParams.Set("response-content-disposition", "attachment; filename="+fileName)
+
+	// Generate presigned get object url
+	presignedURL, err := oss.PresignedGetObject(context.Background(), config.OSSConfig.Bucket, key, expiration, reqParams)
+	if err != nil {
+		log.Logger.Error("Failed to generate presigned URL: " + key + err.Error())
+		return "", err
+	}
+	return presignedURL.String(), nil
+}

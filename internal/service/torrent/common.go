@@ -1,8 +1,10 @@
 package torrent
 
 import (
+	"time"
+
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
-	"github.com/TensoRaws/NuxBT-Backend/module/config"
+	"github.com/TensoRaws/NuxBT-Backend/module/oss"
 	"github.com/TensoRaws/NuxBT-Backend/module/torrent"
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 )
@@ -42,11 +44,11 @@ func GetTorrentOSSKey(hash string) string {
 }
 
 // GetTorrentOSSUrl 获取种子 OSS 地址
-func GetTorrentOSSUrl(hash string) (string, error) {
-	ossUrl := config.OSS_PREFIX + GetTorrentOSSKey(hash)
-	//if err != nil {
-	//	return "", err
-	//}
+func GetTorrentOSSUrl(hash string, title string) (string, error) {
+	ossUrl, err := oss.GetPresignedURL(GetTorrentOSSKey(hash), title+".torrent", 12*time.Hour)
+	if err != nil {
+		return "", err
+	}
 
 	return ossUrl, nil
 }
@@ -57,7 +59,7 @@ func GetTorrentInfo(t *model.Torrent) (*Info, error) {
 
 	size := util.ByteCountBinary(uint64(t.Size))
 
-	urlString, err := GetTorrentOSSUrl(t.Hash)
+	urlString, err := GetTorrentOSSUrl(t.Hash, t.Title)
 	if err != nil {
 		return nil, err
 	}
