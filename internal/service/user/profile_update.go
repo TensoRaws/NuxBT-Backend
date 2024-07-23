@@ -11,12 +11,12 @@ import (
 )
 
 type ProfileUpdateRequest struct {
-	Avatar     *string `json:"avatar" binding:"omitempty"`
-	Background *string `json:"background" binding:"omitempty"`
-	Email      *string `json:"email" binding:"omitempty,email"`
-	Private    *bool   `json:"private" binding:"omitempty"`
-	Signature  *string `json:"signature" binding:"omitempty"`
-	Username   *string `json:"username" binding:"omitempty"`
+	Avatar     string `json:"avatar" binding:"required"`
+	Background string `json:"background" binding:"required"`
+	Email      string `json:"email" binding:"required,email"`
+	Private    bool   `json:"private" binding:"required"`
+	Signature  string `json:"signature" binding:"required"`
+	Username   string `json:"username" binding:"required"`
 }
 
 // ProfileUpdate 用户信息更新 (POST /profile/update)
@@ -28,7 +28,7 @@ func ProfileUpdate(c *gin.Context) {
 		return
 	}
 
-	err := util.CheckUsername(*req.Username)
+	err := util.CheckUsername(req.Username)
 	if err != nil {
 		resp.AbortWithMsg(c, code.UserErrorInvalidUsername, err.Error())
 		return
@@ -38,12 +38,12 @@ func ProfileUpdate(c *gin.Context) {
 
 	// 执行更新
 	err = db.PatchUser(userID, &model.User{
-		Avatar:     *req.Avatar,
-		Background: *req.Background,
-		Email:      *req.Email,
-		Private:    *req.Private,
-		Signature:  *req.Signature,
-		Username:   *req.Username,
+		Avatar:     req.Avatar,
+		Background: req.Background,
+		Email:      req.Email,
+		Private:    req.Private,
+		Signature:  req.Signature,
+		Username:   req.Username,
 	})
 
 	if err != nil {
