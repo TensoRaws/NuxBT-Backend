@@ -1,7 +1,6 @@
 package torrent
 
 import (
-	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -57,19 +56,7 @@ func Edit(c *gin.Context) {
 		return
 	}
 
-	err = db.PatchTorrent(req.TorrentID, &model.Torrent{
-		AnidbID:     req.AnidbID,
-		AudioCodec:  req.AudioCodec,
-		Description: req.Description,
-		Essay:       req.Essay,
-		Genre:       req.Genre,
-		Img:         req.Img,
-		Language:    req.Language,
-		Resolution:  req.Resolution,
-		Subtitle:    req.Subtitle,
-		Title:       req.Title,
-		VideoCodec:  req.VideoCodec,
-	})
+	err = db.PatchTorrent(req.TorrentID, &req)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordPatchFailed, err.Error())
 		return

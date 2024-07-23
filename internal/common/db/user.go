@@ -24,7 +24,7 @@ func CreateUser(user *model.User) (err error) {
 }
 
 // PatchUser 更新用户信息，根据 userID 和 details 更新用户信息
-func PatchUser[T *model.User | map[string]any](userID int32, details T) (err error) {
+func PatchUser[T *model.User | map[string]any | any](userID int32, details T) (err error) {
 	q := query.User
 	ResultInfo, err := q.Where(q.UserID.Eq(userID)).Updates(details)
 	if err != nil {
