@@ -22,6 +22,13 @@ func CreateTorrent(torrent *model.Torrent) (err error) {
 	return err
 }
 
+// DeleteTorrent 删除种子
+func DeleteTorrent(torrentID int32) (err error) {
+	q := query.Torrent
+	_, err = q.Where(q.TorrentID.Eq(torrentID)).Delete()
+	return err
+}
+
 // PatchTorrent 更新种子信息，根据 torrentID 和 details 更新种子信息
 func PatchTorrent[T *model.Torrent | map[string]any | any](torrentID int32, details T) (err error) {
 	q := query.Torrent

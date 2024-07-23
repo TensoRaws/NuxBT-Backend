@@ -17,8 +17,9 @@ const (
 	RequestErrorInvalidParams
 	// DatabaseError 数据库错误
 	DatabaseErrorRecordCreateFailed
-	DatabaseErrorRecordNotFound
+	DatabaseErrorRecordDeleteFailed
 	DatabaseErrorRecordPatchFailed
+	DatabaseErrorRecordNotFound
 	// OssError OSS错误
 	OssErrorPutFailed
 	OssErrorGetFailed
