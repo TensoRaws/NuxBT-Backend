@@ -13,10 +13,7 @@ import (
 func CheckUserExist(username string, email string) bool {
 	q := query.User
 	_, err := q.Where(q.Email.Eq(email)).Or(q.Username.Eq(username)).First()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return false
-	}
-	return true
+	return !errors.Is(err, gorm.ErrRecordNotFound)
 }
 
 // CreateUser 新建用户

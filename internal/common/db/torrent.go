@@ -12,10 +12,7 @@ import (
 func CheckTorrentExist(hash string) bool {
 	q := query.Torrent
 	_, err := q.Where(q.Hash.Eq(hash)).First()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return false
-	}
-	return true
+	return !errors.Is(err, gorm.ErrRecordNotFound)
 }
 
 // CreateTorrent 创建种子
