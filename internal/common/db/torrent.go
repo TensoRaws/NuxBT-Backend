@@ -3,6 +3,7 @@ package db
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/TensoRaws/NuxBT-Backend/dal/model"
 	"github.com/TensoRaws/NuxBT-Backend/dal/query"
@@ -58,4 +59,72 @@ func GetTorrentByID(torrentID int32) (*model.Torrent, error) {
 	q := query.Torrent
 	torrent, err := q.Where(q.TorrentID.Eq(torrentID)).First()
 	return torrent, err
+}
+
+// GetTorrentList 获取种子列表，返回种子列表和分页数量
+func GetTorrentList(zone TorrentZone, orderBy OrderByType, order OrderType,
+	page int, perPage int, search string) ([]*model.Torrent, int, error) {
+	if !order.Validate() || !orderBy.Validate() || !zone.Validate() {
+		return nil, 0, fmt.Errorf("invalid order: %v, %v", order, orderBy)
+	}
+
+	q := query.Torrent
+	var torrents []*model.Torrent
+	var totalPages int
+
+	// 分区
+	var Query query.ITorrentDo
+	switch zone {
+	case TORRENT_ZONE_OFFICIAL:
+		Query = q.Where(q.Official)
+	case TORRENT_ZONE_GENERAL:
+		Query = q.Where(q.Status.Eq(STATUS_APPROVED))
+	case TORRENT_ZONE_PENDING:
+		Query = q.Where(q.Status.Eq(STATUS_PENDING)).Or(q.Status.Eq(STATUS_REJECTED))
+	default:
+		return nil, 0, fmt.Errorf("invalid zone: %v", zone)
+	}
+
+	// 搜索
+	var searchAnidbID int
+	searchAnidbID, err := strconv.Atoi(search)
+	if err != nil {
+		searchAnidbID = 0
+	}
+
+	if search != "" {
+		Query = Query.Where(q.Title.Like(search)).Or(q.Subtitle.Like(search)).
+			Or(q.Hash.Eq(search)).Or(q.AnidbID.Eq(int32(searchAnidbID)))
+	}
+
+	// 获取总记录数
+	count, err := Query.Count()
+	if err != nil {
+		return nil, 0, err
+	}
+	// 计算总页数
+	totalPages = (int(count) + perPage - 1) / perPage
+	offset := (page - 1) * perPage
+
+	// 排序
+	if orderBy == ORDER_BY_TYPE_DATE {
+		if order == ORDER_TYPE_ASC {
+			Query = Query.Order(q.CreatedAt.Asc())
+		} else if order == ORDER_TYPE_DESC {
+			Query = Query.Order(q.CreatedAt.Desc())
+		}
+	} else if orderBy == ORDER_BY_TYPE_SIZE {
+		if order == ORDER_TYPE_ASC {
+			Query = Query.Order(q.Size.Asc())
+		} else if order == ORDER_TYPE_DESC {
+			Query = Query.Order(q.Size.Desc())
+		}
+	}
+
+	torrents, err = Query.Limit(perPage).Offset(offset).Find()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return torrents, totalPages, nil
 }

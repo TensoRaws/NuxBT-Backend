@@ -73,10 +73,7 @@ func InvitationMe(c *gin.Context) {
 		return
 	}
 
-	if len(codeList) == 0 {
-		resp.OKWithData(c, InvitationMeResponse{})
-	} else {
-		resp.OKWithData(c, InvitationMeResponse(codeList))
-	}
+	resp.OKWithData(c, InvitationMeResponse(codeList))
+
 	log.Logger.Infof("User %d got invitation code list successfully!", userID)
 }

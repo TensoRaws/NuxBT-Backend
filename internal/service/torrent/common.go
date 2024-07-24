@@ -9,11 +9,16 @@ import (
 	"github.com/TensoRaws/NuxBT-Backend/module/util"
 )
 
-const (
-	STATUS_PENDING  = "pending"
-	STATUS_APPROVED = "approved"
-	STATUS_REJECTED = "rejected"
-)
+type OfficialInfo struct {
+	CreatedAt string `json:"created_at"`
+	Essay     string `json:"essay"`
+	Img       string `json:"img"`
+	Size      string `json:"size"`
+	Subtitle  string `json:"subtitle"`
+	Title     string `json:"title"`
+	TorrentID int32  `json:"torrent_id"`
+	UpdateAt  string `json:"update_at"`
+}
 
 type Info struct {
 	AnidbID     int32   `json:"anidb_id"`

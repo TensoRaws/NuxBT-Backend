@@ -62,9 +62,9 @@ func Upload(c *gin.Context) {
 	// 判断发布权限，是否可以直接发种
 	var status string
 	if util.CheckStringInSlice(role.UPLOADER, roles) || util.CheckStringInSlice(role.ADMIN, roles) {
-		status = STATUS_APPROVED
+		status = db.STATUS_APPROVED
 	} else {
-		status = STATUS_PENDING
+		status = db.STATUS_PENDING
 	}
 
 	// 开始解析种子文件
@@ -162,6 +162,6 @@ func Upload(c *gin.Context) {
 		return
 	}
 
-	resp.OKWithData(c, torrentInfo)
+	resp.OKWithData(c, &torrentInfo)
 	log.Logger.Infof("upload torrent success, user ID: %v", userID)
 }

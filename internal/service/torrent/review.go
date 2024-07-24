@@ -30,7 +30,7 @@ func Review(c *gin.Context) {
 		return
 	}
 
-	if bt.Status == STATUS_APPROVED {
+	if bt.Status == db.STATUS_APPROVED {
 		resp.AbortWithMsg(c, code.AuthErrorNoPermission, "torrent already approved")
 		log.Logger.Errorf("torrent already approved, torrent_id: %d", req.TorrentID)
 		return
