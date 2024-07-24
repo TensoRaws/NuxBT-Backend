@@ -59,36 +59,36 @@ func GetTorrentOSSUrl(hash string, title string) (string, error) {
 }
 
 // GetTorrentInfo 获取种子信息
-func GetTorrentInfo(t *model.Torrent) (*Info, error) {
-	magnet := torrent.GetMagnet(t.Hash, torrent.TRACKER_LIST)
+func GetTorrentInfo(bt *model.Torrent) (*Info, error) {
+	magnet := torrent.GetMagnet(bt.Hash, torrent.TRACKER_LIST)
 
-	size := util.ByteCountBinary(uint64(t.Size))
+	size := util.ByteCountBinary(uint64(bt.Size))
 
-	urlString, err := GetTorrentOSSUrl(t.Hash, t.Title)
+	urlString, err := GetTorrentOSSUrl(bt.Hash, bt.Title)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Info{
-		AnidbID:     t.AnidbID,
-		AudioCodec:  t.AudioCodec,
-		CreatedAt:   t.CreatedAt.Format("2006-01-02 15:04:05"),
-		UpdateAt:    t.UpdatedAt.Format("2006-01-02 15:04:05"),
-		Description: &t.Description,
-		Essay:       &t.Essay,
-		Genre:       t.Genre,
-		Img:         t.Img,
-		Language:    t.Language,
+		AnidbID:     bt.AnidbID,
+		AudioCodec:  bt.AudioCodec,
+		CreatedAt:   bt.CreatedAt.Format("2006-01-02 15:04:05"),
+		UpdateAt:    bt.UpdatedAt.Format("2006-01-02 15:04:05"),
+		Description: &bt.Description,
+		Essay:       &bt.Essay,
+		Genre:       bt.Genre,
+		Img:         bt.Img,
+		Language:    bt.Language,
 		Magnet:      magnet,
-		Official:    t.Official,
-		Resolution:  t.Resolution,
+		Official:    bt.Official,
+		Resolution:  bt.Resolution,
 		Size:        size,
-		Status:      t.Status,
-		Subtitle:    t.Subtitle,
-		Title:       t.Title,
-		TorrentID:   t.TorrentID,
-		UploaderID:  t.UploaderID,
+		Status:      bt.Status,
+		Subtitle:    bt.Subtitle,
+		Title:       bt.Title,
+		TorrentID:   bt.TorrentID,
+		UploaderID:  bt.UploaderID,
 		URL:         &urlString,
-		VideoCodec:  t.VideoCodec,
+		VideoCodec:  bt.VideoCodec,
 	}, nil
 }

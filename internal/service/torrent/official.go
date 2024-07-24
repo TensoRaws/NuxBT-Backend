@@ -22,7 +22,7 @@ type OfficialResponse struct {
 	TotalPage int            `json:"total_page"`
 }
 
-// Official 获取种子文件列表 (GET /official)
+// Official 获取官方种子文件列表 (GET /official)
 func Official(c *gin.Context) {
 	// 绑定参数
 	var req OfficialRequest
@@ -64,4 +64,5 @@ func Official(c *gin.Context) {
 		Torrents:  torrentsInfo,
 		TotalPage: totalPage,
 	})
+	log.Logger.Info("get official torrent list successfully")
 }

@@ -15,7 +15,7 @@ import (
 func TorrentRouterGroup(api *gin.RouterGroup) {
 	torrent := api.Group("torrent/")
 
-	// 上传种子
+	// 种子上传
 	torrent.POST("upload",
 		jwt.RequireAuth(false),
 		rbac.RABC(role.ADMIN, role.UPLOADER, role.ADVANCED_USER),
@@ -38,8 +38,13 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 	// 种子首页官种
 	torrent.GET("official",
 		jwt.RequireAuth(false),
-		middleware_cache.Response(6*time.Hour),
+		middleware_cache.Response(1*time.Hour),
 		torrent_service.Official)
+	// 种子列表
+	torrent.GET("list",
+		jwt.RequireAuth(false),
+		middleware_cache.Response(10*time.Second),
+		torrent_service.List)
 	// 种子详情
 	torrent.GET("detail",
 		jwt.RequireAuth(false),
