@@ -34,6 +34,6 @@ func Detail(c *gin.Context) {
 		return
 	}
 
-	resp.OKWithData(c, torrentInfo)
+	resp.OKWithData(c, &torrentInfo)
 	log.Logger.Infof("get torrent detail success: %v", req.TorrentID)
 }

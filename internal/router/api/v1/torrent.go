@@ -35,6 +35,11 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 		jwt.RequireAuth(false),
 		rbac.RABC(role.REVIEWER),
 		torrent_service.Review)
+	// 种子首页官种
+	torrent.GET("official",
+		jwt.RequireAuth(false),
+		middleware_cache.Response(6*time.Hour),
+		torrent_service.Official)
 	// 种子详情
 	torrent.GET("detail",
 		jwt.RequireAuth(false),

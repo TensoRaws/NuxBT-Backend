@@ -68,7 +68,7 @@ func GetInvitationCodeListByUserID(userID int32) ([]UserInvitation, error) {
 		return nil, err
 	}
 
-	var invitationList []UserInvitation
+	invitationList := make([]UserInvitation, 0, len(invitations))
 	for code, info := range invitations {
 		var uim UserInvitationMapValue
 		err := util.StringToStruct(info, &uim)
