@@ -62,7 +62,8 @@ func GetTorrentByID(torrentID int32) (*model.Torrent, error) {
 }
 
 // GetTorrentList 获取种子列表，返回种子列表和分页数量
-func GetTorrentList(zone TorrentZone, orderBy OrderByType, order OrderType, page int, perPage int, search string) ([]*model.Torrent, int, error) {
+func GetTorrentList(zone TorrentZone, orderBy OrderByType, order OrderType,
+	page int, perPage int, search string) ([]*model.Torrent, int, error) {
 	if !order.Validate() || !orderBy.Validate() || !zone.Validate() {
 		return nil, 0, fmt.Errorf("invalid order: %v, %v", order, orderBy)
 	}
@@ -73,13 +74,14 @@ func GetTorrentList(zone TorrentZone, orderBy OrderByType, order OrderType, page
 
 	// 分区
 	var Query query.ITorrentDo
-	if zone == TORRENT_ZONE_OFFICIAL {
+	switch zone {
+	case TORRENT_ZONE_OFFICIAL:
 		Query = q.Where(q.Official)
-	} else if zone == TORRENT_ZONE_GENERAL {
+	case TORRENT_ZONE_GENERAL:
 		Query = q.Where(q.Status.Eq(STATUS_APPROVED))
-	} else if zone == TORRENT_ZONE_PENDING {
+	case TORRENT_ZONE_PENDING:
 		Query = q.Where(q.Status.Eq(STATUS_PENDING)).Or(q.Status.Eq(STATUS_REJECTED))
-	} else {
+	default:
 		return nil, 0, fmt.Errorf("invalid zone: %v", zone)
 	}
 

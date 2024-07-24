@@ -37,7 +37,9 @@ func Official(c *gin.Context) {
 	}
 
 	// 获取种子列表
-	bts, totalPage, err := db.GetTorrentList(db.TORRENT_ZONE_OFFICIAL, db.OrderByType(req.OrderBy), db.OrderType(req.Order), req.Page, req.PerPage, search)
+	bts, totalPage, err := db.GetTorrentList(
+		db.TORRENT_ZONE_OFFICIAL, db.OrderByType(req.OrderBy), db.OrderType(req.Order),
+		req.Page, req.PerPage, search)
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordNotFound, err.Error())
 		log.Logger.Error("failed to get official torrent list" + err.Error())
