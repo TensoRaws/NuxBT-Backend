@@ -35,14 +35,7 @@ func ProfileUpdate(c *gin.Context) {
 
 	userID, _ := resp.GetUserIDFromGinContext(c)
 
-	// 没传数字，直接序列化嗯造
-	updateInfo, err := util.StructToMap(req)
-	if err != nil {
-		resp.AbortWithMsg(c, code.UnknownError, err.Error())
-		return
-	}
-	// 执行更新
-	err = db.PatchUser(userID, updateInfo)
+	err = db.PatchUser(userID, &req)
 
 	if err != nil {
 		resp.AbortWithMsg(c, code.DatabaseErrorRecordPatchFailed, err.Error())

@@ -30,6 +30,11 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 		jwt.RequireAuth(false),
 		rbac.RABC(role.ADMIN),
 		torrent_service.Delete)
+	// 种子审核
+	torrent.POST("review",
+		jwt.RequireAuth(false),
+		rbac.RABC(role.REVIEWER),
+		torrent_service.Review)
 	// 获取种子文件列表
 	torrent.GET("filelist",
 		jwt.RequireAuth(false),
