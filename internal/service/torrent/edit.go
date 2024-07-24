@@ -1,6 +1,7 @@
 package torrent
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -63,6 +64,7 @@ func Edit(c *gin.Context) {
 	}
 
 	resp.OK(c)
+	cache.ClearTorrentDetailCacheByTorrentID(req.TorrentID)
 
 	log.Logger.Infof("update torrent info success, torrent id: %v", req.TorrentID)
 }

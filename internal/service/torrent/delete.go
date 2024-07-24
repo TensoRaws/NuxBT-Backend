@@ -1,6 +1,7 @@
 package torrent
 
 import (
+	"github.com/TensoRaws/NuxBT-Backend/internal/common/cache"
 	"github.com/TensoRaws/NuxBT-Backend/internal/common/db"
 	"github.com/TensoRaws/NuxBT-Backend/module/code"
 	"github.com/TensoRaws/NuxBT-Backend/module/log"
@@ -29,6 +30,7 @@ func Delete(c *gin.Context) {
 	}
 
 	resp.OK(c)
+	cache.ClearTorrentDetailCacheByTorrentID(req.TorrentID)
 
 	log.Logger.Infof("delete torrent success, torrent_id: %d", req.TorrentID)
 }
