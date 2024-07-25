@@ -16,7 +16,7 @@ import (
 var CmdWeb = &cli.Command{
 	Name:        "server",
 	Usage:       "Start NuxBT api server",
-	Description: `Star NuxBT api server`,
+	Description: "Start NuxBT api server",
 	Action:      runWeb,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
