@@ -55,7 +55,7 @@ func UserRouterGroup(api *gin.RouterGroup) {
 	// 用户邀请码生成
 	user.POST("invitation/gen",
 		jwt.RequireAuth(false),
-		rbac.RABC(role.ADVANCED_USER, role.VIP), // 高级用户权限
+		rbac.RBAC(role.ADVANCED_USER, role.VIP), // 高级用户权限
 		user_service.InvitationGen)
 	// 用户邀请码列表
 	user.GET("invitation/me",

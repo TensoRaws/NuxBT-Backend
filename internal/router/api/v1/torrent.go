@@ -18,22 +18,22 @@ func TorrentRouterGroup(api *gin.RouterGroup) {
 	// 种子上传
 	torrent.POST("upload",
 		jwt.RequireAuth(false),
-		rbac.RABC(role.ADMIN, role.UPLOADER, role.ADVANCED_USER),
+		rbac.RBAC(role.ADMIN, role.UPLOADER, role.ADVANCED_USER),
 		torrent_service.Upload)
 	// 种子编辑
 	torrent.POST("edit",
 		jwt.RequireAuth(false),
-		rbac.RABC(),
+		rbac.RBAC(),
 		torrent_service.Edit)
 	// 种子删除
 	torrent.POST("delete",
 		jwt.RequireAuth(false),
-		rbac.RABC(role.ADMIN),
+		rbac.RBAC(role.ADMIN),
 		torrent_service.Delete)
 	// 种子审核
 	torrent.POST("review",
 		jwt.RequireAuth(false),
-		rbac.RABC(role.REVIEWER),
+		rbac.RBAC(role.REVIEWER),
 		torrent_service.Review)
 	// 种子首页官种
 	torrent.GET("official",

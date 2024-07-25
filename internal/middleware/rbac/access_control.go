@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RABC 获取用户角色，存入上下文，进行权限控制，allowRoles 为允许的角色，为空则不限制
-func RABC(allowRoles ...string) gin.HandlerFunc {
+// RBAC 获取用户角色，存入上下文，进行权限控制，allowRoles 为允许的角色，为空则不限制
+func RBAC(allowRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID, _ := resp.GetUserIDFromGinContext(c)
 
@@ -18,7 +18,7 @@ func RABC(allowRoles ...string) gin.HandlerFunc {
 		roles, err := cache_logic.GetUserRolesByID(userID)
 		if err != nil {
 			// 处理 Redis 查询错误
-			log.Logger.Error("RABC GetUserRolesByID Error: " + err.Error())
+			log.Logger.Error("RBAC GetUserRolesByID Error: " + err.Error())
 			resp.AbortWithMsg(c, code.UnknownError, err.Error())
 			return
 		}
@@ -36,7 +36,7 @@ func RABC(allowRoles ...string) gin.HandlerFunc {
 			// 用户没有合适的角色，拦截请求
 			if !hasAllowedRole {
 				resp.AbortWithMsg(c, code.AuthErrorNoPermission, "Role has no permission")
-				log.Logger.Errorf("RABC Role has no permission, userID: %d, roles: %v", userID, roles)
+				log.Logger.Errorf("RBAC Role has no permission, userID: %d, roles: %v", userID, roles)
 				return
 			}
 		}
