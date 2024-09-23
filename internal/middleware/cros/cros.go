@@ -1,6 +1,8 @@
 package cros
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +23,12 @@ func CorsByRules(whiteList []string) gin.HandlerFunc {
 				break
 			}
 		}
+
+		if c.Request.Method == "OPTIONS" {
+			c.JSON(http.StatusOK, "Options Request!")
+			return
+		}
+
 		c.Next()
 	}
 }
