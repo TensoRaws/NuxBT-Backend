@@ -25,7 +25,7 @@ test: tidy ## go test
 	${GO} test ./...
 
 .PHONY: lint
-lint: gen_error_code
+lint: gen_error_code ## pip install pre-commit
 	golangci-lint run
-	pre-commit install # pip install pre-commit
+	pre-commit install
 	pre-commit run --all-files
